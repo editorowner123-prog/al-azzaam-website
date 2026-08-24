@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil — PPTQ Al Azzaam</title>
+<meta name="description" content="Sejarah, visi, misi, dan struktur pengurus PPTQ Al Azzaam Gunungpati, Semarang.">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+:root{
+  --maroon-950:#2b0810; --maroon-900:#3d0c14; --maroon-800:#5c1120; --maroon-700:#7a0f1f;
+  --maroon-600:#9b1c2e; --maroon-500:#c22638;
+  --gold-300:#f7e7ab; --gold-400:#e8c766; --gold-500:#d4af37; --gold-600:#b8892b;
+  --gold-shine:linear-gradient(120deg, var(--gold-300) 0%, var(--gold-500) 35%, var(--gold-600) 60%, var(--gold-400) 100%);
+  --cream-50:#fff8f3; --cream-100:#fdf1e8; --ink-900:#241012; --ink-600:#6b4750;
+  --line:#f0d9c9; --surface:#fff; --shadow:0 10px 28px -12px rgba(61,12,20,.18); --radius:18px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink-900);background:var(--cream-50);}
+h1,h2,h3{font-family:'Outfit',sans-serif;margin:0;}
+a{text-decoration:none;color:inherit;}
+.wrap{max-width:900px;margin:0 auto;padding:0 20px;}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-600);}
+
+.navbar{position:sticky;top:0;z-index:50;background:rgba(255,248,243,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+.navbar-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;max-width:1120px;margin:0 auto;}
+.nav-brand{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-weight:700;font-size:16px;color:var(--maroon-900);}
+.nav-brand .ring{width:34px;height:34px;border-radius:50%;background:var(--maroon-950);box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-size:14px;font-weight:800;font-family:'Playfair Display',serif;flex:none;}
+.nav-links{display:flex;gap:26px;font-size:13.5px;font-weight:600;color:var(--ink-600);}
+.nav-links a.active{color:var(--maroon-700);}
+.nav-links a:hover{color:var(--maroon-600);}
+.nav-cta{background:var(--gold-shine);color:var(--maroon-950);font-weight:800;font-size:12.5px;padding:9px 18px;border-radius:20px;white-space:nowrap;}
+.nav-toggle{display:none;background:none;border:none;font-size:22px;color:var(--maroon-900);cursor:pointer;}
+@media(max-width:820px){
+  .nav-links{position:absolute;top:100%;left:0;right:0;background:var(--surface);flex-direction:column;gap:0;padding:8px 20px;border-bottom:1px solid var(--line);display:none;}
+  .nav-links.open{display:flex;}
+  .nav-links a{padding:12px 0;border-bottom:1px solid var(--line);}
+  .nav-toggle{display:block;}
+}
+
+.page-hero{background:linear-gradient(180deg,var(--maroon-950),var(--maroon-900));padding:50px 20px 60px;text-align:center;}
+.page-hero .hero-arabic{font-family:'Aref Ruqaa',serif;color:var(--gold-400);font-size:20px;margin-bottom:10px;}
+.page-hero h1{font-family:'Playfair Display',serif;color:#fff;font-size:clamp(26px,4vw,38px);}
+.page-hero p{color:rgba(255,255,255,.7);font-size:13.5px;margin-top:10px;max-width:480px;margin-left:auto;margin-right:auto;}
+
+.section{padding:50px 20px;}
+.card{background:var(--surface);border-radius:var(--radius);padding:28px 26px;box-shadow:var(--shadow);margin-bottom:20px;}
+.card h2{font-size:19px;color:var(--maroon-900);margin-bottom:12px;font-family:'Outfit',sans-serif;}
+.card p{font-size:13.5px;color:var(--ink-600);line-height:1.8;white-space:pre-line;}
+
+.vm-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:700px){.vm-grid{grid-template-columns:1fr;}}
+.vm-card{background:var(--cream-100);border-radius:var(--radius);padding:22px;border-left:4px solid var(--gold-500);}
+.vm-card h3{font-size:14px;color:var(--maroon-800);margin-bottom:8px;}
+.vm-card p{font-size:13px;color:var(--ink-600);line-height:1.7;white-space:pre-line;}
+
+.struktur-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;}
+.struktur-item{background:var(--cream-100);border-radius:14px;padding:16px;text-align:center;}
+.struktur-item .avatar{width:50px;height:50px;border-radius:50%;background:var(--maroon-950);margin:0 auto 8px;box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--gold-500);}
+.struktur-item .nama{font-size:12.5px;font-weight:700;color:var(--ink-900);}
+.struktur-item .jabatan{font-size:11px;color:var(--ink-600);margin-top:2px;}
+
+footer{background:var(--maroon-950);color:rgba(255,255,255,.55);padding:30px 20px;text-align:center;font-size:11.5px;}
+footer a{color:var(--gold-400);font-weight:700;}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</div>
+    <div class="nav-links" id="navLinks">
+      <a href="profil.html" class="active">Profil</a>
+      <a href="program.html">Program</a>
+      <a href="berita.html">Berita</a>
+      <a href="galeri.html">Galeri</a>
+      <a href="ppdb.html">Pendaftaran</a>
+      <a href="index.html#kontak">Kontak</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="ppdb.html" class="nav-cta">Daftar Sekarang</a>
+      <button class="nav-toggle" id="navToggle">☰</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="hero-arabic">اَلْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِيْنَ</div>
+  <h1>Profil Lembaga</h1>
+  <p>Mengenal lebih dekat sejarah, visi-misi, dan orang-orang di balik PPTQ Al Azzaam.</p>
+</div>
+
+<section class="section wrap">
+  <div class="card">
+    <div class="eyebrow">Sejarah</div>
+    <h2 style="margin-top:6px">Perjalanan Kami</h2>
+    <p id="sejarahText">Memuat…</p>
+  </div>
+
+  <div class="vm-grid">
+    <div class="vm-card">
+      <h3>🎯 Visi</h3>
+      <p id="visiText">Memuat…</p>
+    </div>
+    <div class="vm-card">
+      <h3>🧭 Misi</h3>
+      <p id="misiText">Memuat…</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <div class="eyebrow">Struktur Pengurus</div>
+    <h2 style="margin-top:6px;margin-bottom:18px">Diasuh & Dikelola Oleh</h2>
+    <div class="struktur-grid" id="strukturGrid">
+      <div class="empty-state" style="grid-column:1/-1;text-align:center;padding:24px;color:var(--ink-600);font-size:13px;">Memuat…</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang. &middot; <a href="index.html">Kembali ke Beranda</a>
+</footer>
+
+<script>
+const SB_URL = "https://ttpkztaxfpjhkwtnbpec.supabase.co";
+const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0cGt6dGF4ZnBqaGt3dG5icGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MDExOTUsImV4cCI6MjEwMjk3NzE5NX0.yfeSSewI_CDw64WxYU4qUVeEbVLsHXVqpDpeCGDT5PI";
+const sb = supabase.createClient(SB_URL, SB_ANON);
+
+async function applyLogo(){
+  const {data} = await sb.from('pengaturan_situs').select('value').eq('key','logo_url').maybeSingle();
+  if(data && data.value){
+    document.querySelectorAll('.nav-brand .ring').forEach(el=>{
+      el.style.cssText += `background-image:url('${data.value}');background-size:cover;background-position:center;`;
+      el.textContent = '';
+    });
+  }
+}
+applyLogo();
+document.getElementById('yearNow').textContent = new Date().getFullYear();
+document.getElementById('navToggle').addEventListener('click', ()=>{
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+// Konten Sejarah/Visi/Misi diambil dari tabel pengaturan_situs
+// (isi lewat panel admin, tab "Pengaturan Situs", dengan key:
+//  profil_sejarah, profil_visi, profil_misi)
+async function loadProfil(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value');
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  document.getElementById('sejarahText').textContent = map.profil_sejarah || 'Konten sejarah belum diisi. Tambahkan lewat panel admin (Pengaturan Situs → key: profil_sejarah).';
+  document.getElementById('visiText').textContent = map.profil_visi || 'Konten visi belum diisi (key: profil_visi).';
+  document.getElementById('misiText').textContent = map.profil_misi || 'Konten misi belum diisi (key: profil_misi).';
+}
+async function loadStruktur(){
+  const {data, error} = await sb.from('struktur_pengurus').select('*').order('urutan');
+  const grid = document.getElementById('strukturGrid');
+  if(error || !data || data.length===0){
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--ink-600);font-size:13px;">Data pengurus belum diisi. Tambahkan lewat panel admin.</div>';
+    return;
+  }
+  grid.innerHTML = data.map(p=>`
+    <div class="struktur-item">
+      <div class="avatar" style="${p.foto_url ? `background-image:url('${p.foto_url}');background-size:cover;background-position:center;` : ''}"></div>
+      <div class="nama">${p.nama}</div>
+      <div class="jabatan">${p.jabatan || ''}</div>
+    </div>
+  `).join('');
+}
+loadProfil();
+loadStruktur();
+</script>
+</body>
+</html>
