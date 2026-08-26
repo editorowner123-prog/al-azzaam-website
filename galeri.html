@@ -120,7 +120,7 @@ async function applyLogo(){
   const {data} = await sb.from('pengaturan_situs').select('value').eq('key','logo_url').maybeSingle();
   if(data && data.value){
     document.querySelectorAll('.nav-brand .ring').forEach(el=>{
-      el.style.cssText += `background-image:url('${data.value}');background-size:cover;background-position:center;`;
+      el.style.cssText += `background-color:#fff;background-image:url('${data.value}');background-size:contain;background-repeat:no-repeat;background-position:center;background-origin:content-box;background-clip:content-box;padding:5px;`;
       el.textContent = '';
     });
   }
@@ -143,7 +143,7 @@ async function loadGaleri(){
   allGaleri = data;
   const kategoriSet = [...new Set(data.map(g=>g.kategori).filter(Boolean))];
   const tabsEl = document.getElementById('kategoriTabs');
-  tabsEl.innerHTML = '<button class="kategori-tab active" data-k="Semua" onclick="filterKategori(\\'Semua\\')">Semua</button>' +
+  tabsEl.innerHTML = '<button class="kategori-tab active" data-k="Semua" onclick="filterKategori(\'Semua\')">Semua</button>' +
     kategoriSet.map(k=>`<button class="kategori-tab" data-k="${k}" onclick="filterKategori('${k}')">${k}</button>`).join('');
   renderGaleri(allGaleri);
 }
