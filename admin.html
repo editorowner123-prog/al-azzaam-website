@@ -254,7 +254,8 @@ async function loadList(){
 
   let logoHtml = '';
   if(currentTab === 'pengaturan_situs'){
-    logoHtml = await renderLogoCard();
+    const profilHtml = await renderProfilCard();
+    logoHtml = profilHtml + await renderLogoCard();
   }
 
   const {data, error} = await sb.from(currentTab).select('*').order(cfg.orderBy, {ascending: cfg.ascending});
@@ -351,7 +352,36 @@ async function uploadImage(input, targetId, folder){
   statusEl.textContent = 'Berhasil diunggah ✓';
 }
 
-// ---------- LOGO (perlakuan khusus, bukan CRUD generik) ----------
+// ---------- KONTEN PROFIL (Sejarah/Visi/Misi, perlakuan khusus) ----------
+async function renderProfilCard(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['profil_sejarah','profil_visi','profil_misi']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  return `
+    <div class="item-card" style="flex-direction:column;align-items:stretch;">
+      <div class="item-title" style="margin-bottom:10px;">📖 Konten Profil (Sejarah, Visi, Misi)</div>
+      <div class="field"><label>Sejarah</label><textarea id="profilSejarah" rows="4">${map.profil_sejarah||''}</textarea></div>
+      <div class="field"><label>Visi</label><textarea id="profilVisi" rows="2">${map.profil_visi||''}</textarea></div>
+      <div class="field" style="margin-bottom:10px;"><label>Misi</label><textarea id="profilMisi" rows="4">${map.profil_misi||''}</textarea></div>
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start" onclick="saveProfilKonten()">Simpan Konten Profil</button>
+      <div class="upload-status" id="profilStatus"></div>
+    </div>
+  `;
+}
+async function saveProfilKonten(){
+  const rows = [
+    {key:'profil_sejarah', value: document.getElementById('profilSejarah').value},
+    {key:'profil_visi', value: document.getElementById('profilVisi').value},
+    {key:'profil_misi', value: document.getElementById('profilMisi').value},
+  ];
+  const statusEl = document.getElementById('profilStatus');
+  statusEl.textContent = 'Menyimpan…';
+  const {error} = await sb.from('pengaturan_situs').upsert(rows);
+  if(error){ statusEl.textContent = 'Gagal simpan: ' + error.message; return; }
+  statusEl.textContent = 'Tersimpan ✓';
+  showToast('Konten Profil tersimpan ✓');
+}
+
+
 async function renderLogoCard(){
   const {data} = await sb.from('pengaturan_situs').select('value').eq('key','logo_url').maybeSingle();
   const currentUrl = data ? data.value : '';
