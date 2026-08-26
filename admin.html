@@ -359,7 +359,7 @@ async function renderLogoCard(){
     <div class="item-card" style="flex-direction:column;align-items:flex-start;">
       <div class="item-title" style="margin-bottom:10px;">🖼️ Logo Website</div>
       <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;width:100%;">
-        <div style="width:64px;height:64px;border-radius:50%;background:${currentUrl ? `url('${currentUrl}') center/cover` : 'var(--cream-100)'};border:2px solid var(--gold-500);flex:none;"></div>
+        <div style="width:64px;height:64px;border-radius:50%;background-color:${currentUrl ? '#fff' : 'var(--cream-100)'};${currentUrl ? `background-image:url('${currentUrl}');background-size:contain;background-repeat:no-repeat;background-position:center;background-origin:content-box;background-clip:content-box;` : ''}padding:6px;box-sizing:border-box;border:2px solid var(--gold-500);flex:none;"></div>
         <div style="flex:1;min-width:200px;">
           <input type="file" accept="image/*" onchange="uploadLogo(this)">
           <div class="upload-status" id="logoStatus"></div>
