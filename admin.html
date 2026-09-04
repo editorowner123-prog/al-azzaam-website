@@ -255,7 +255,8 @@ async function loadList(){
   let logoHtml = '';
   if(currentTab === 'pengaturan_situs'){
     const profilHtml = await renderProfilCard();
-    logoHtml = profilHtml + await renderLogoCard();
+    const kontakHtml = await renderKontakSosmedCard();
+    logoHtml = profilHtml + kontakHtml + await renderLogoCard();
   }
 
   const {data, error} = await sb.from(currentTab).select('*').order(cfg.orderBy, {ascending: cfg.ascending});
@@ -381,6 +382,40 @@ async function saveProfilKonten(){
   showToast('Konten Profil tersimpan ✓');
 }
 
+
+// ---------- KONTAK & MEDIA SOSIAL (perlakuan khusus) ----------
+async function renderKontakSosmedCard(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',
+    ['alamat','no_wa','email','instagram','facebook','youtube','tiktok','google_maps_url']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  const f = (id,label,ph='') => `<div class="field"><label>${label}</label><input id="${id}" value="${(map[id]||'').replace(/"/g,'&quot;')}" placeholder="${ph}"></div>`;
+  return `
+    <div class="item-card" style="flex-direction:column;align-items:stretch;">
+      <div class="item-title" style="margin-bottom:10px;">📍 Kontak & Media Sosial</div>
+      ${f('alamat','Alamat Lengkap')}
+      ${f('no_wa','Nomor WhatsApp','contoh: 085888848424')}
+      ${f('email','Email','contoh: info@alazzaam.id')}
+      ${f('google_maps_url','Link Google Maps','https://maps.app.goo.gl/...')}
+      <div style="height:6px"></div>
+      ${f('instagram','Instagram (link penuh)','https://instagram.com/al.azzaam.id')}
+      ${f('facebook','Facebook (link penuh)','https://facebook.com/al.azzaam.id')}
+      ${f('youtube','YouTube (link penuh)','https://youtube.com/@AlAzzaamTV')}
+      ${f('tiktok','TikTok (link penuh)','https://tiktok.com/@al.azzaam.id')}
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:6px;" onclick="saveKontakSosmed()">Simpan Kontak & Sosmed</button>
+      <div class="upload-status" id="kontakSosmedStatus"></div>
+    </div>
+  `;
+}
+async function saveKontakSosmed(){
+  const keys = ['alamat','no_wa','email','google_maps_url','instagram','facebook','youtube','tiktok'];
+  const rows = keys.map(k => ({key:k, value: document.getElementById(k).value}));
+  const statusEl = document.getElementById('kontakSosmedStatus');
+  statusEl.textContent = 'Menyimpan…';
+  const {error} = await sb.from('pengaturan_situs').upsert(rows);
+  if(error){ statusEl.textContent = 'Gagal simpan: ' + error.message; return; }
+  statusEl.textContent = 'Tersimpan ✓';
+  showToast('Kontak & Sosmed tersimpan ✓');
+}
 
 async function renderLogoCard(){
   const {data} = await sb.from('pengaturan_situs').select('value').eq('key','logo_url').maybeSingle();
