@@ -118,6 +118,10 @@ footer{background:var(--maroon-950);color:rgba(255,255,255,.65);padding:44px 20p
 .footer-brand{font-family:'Playfair Display',serif;color:#fff;font-size:17px;font-weight:700;margin-bottom:10px;}
 footer h4{color:var(--gold-400);font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
 footer ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;font-size:13px;}
+footer a:hover{color:var(--gold-400);}
+.social-row{display:flex;gap:8px;margin-top:16px;}
+.social-badge{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(232,199,102,.35);color:var(--gold-400);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;transition:.15s;text-decoration:none;}
+.social-badge:hover{background:var(--gold-shine);color:var(--maroon-950)!important;border-color:transparent;}
 .footer-bottom{max-width:1120px;margin:30px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);font-size:11.5px;text-align:center;}
 </style>
 </head>
@@ -223,13 +227,16 @@ footer ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;
     <div>
       <div class="footer-brand">PPTQ Al Azzaam</div>
       <p style="font-size:12.5px;line-height:1.7;">Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
+      <div class="social-row" id="socialRow"></div>
     </div>
     <div>
       <h4>Tautan</h4>
       <ul>
-        <li><a href="#profil">Profil</a></li>
-        <li><a href="#program">Program</a></li>
-        <li><a href="#ppdb">Pendaftaran</a></li>
+        <li><a href="profil.html">Profil</a></li>
+        <li><a href="program.html">Program</a></li>
+        <li><a href="berita.html">Berita</a></li>
+        <li><a href="galeri.html">Galeri</a></li>
+        <li><a href="ppdb.html">Pendaftaran</a></li>
         <li><a href="https://tahfidzalazzaam.com">Portal Wali Santri</a></li>
       </ul>
     </div>
@@ -279,12 +286,33 @@ async function loadPengaturan(){
   document.getElementById('stUstadz').textContent = map.jumlah_ustadz || '—';
   document.getElementById('stTahun').textContent = map.tahun_berdiri || '—';
   document.getElementById('stAlumni').textContent = map.jumlah_alumni || '—';
+}
+
+async function loadFooterData(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value');
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+
   const list = document.getElementById('kontakList');
-  list.innerHTML = `
-    <li>${map.alamat || 'Alamat belum diisi'}</li>
-    <li>${map.no_wa ? 'WA: '+map.no_wa : ''}</li>
-    <li>${map.email || ''}</li>
-  `;
+  if(list){
+    let items = '';
+    items += `<li>${map.alamat || 'Alamat belum diisi'}</li>`;
+    if(map.google_maps_url) items += `<li><a href="${map.google_maps_url}" target="_blank">📍 Lihat di Peta</a></li>`;
+    if(map.no_wa) items += `<li><a href="https://wa.me/${map.no_wa.replace(/[^0-9]/g,'').replace(/^0/,'62')}" target="_blank">WA: ${map.no_wa}</a></li>`;
+    if(map.email) items += `<li><a href="mailto:${map.email}">${map.email}</a></li>`;
+    list.innerHTML = items;
+  }
+
+  const socialRow = document.getElementById('socialRow');
+  if(socialRow){
+    const socials = [
+      {key:'instagram', label:'IG'},
+      {key:'facebook', label:'FB'},
+      {key:'youtube', label:'YT'},
+      {key:'tiktok', label:'TT'},
+    ];
+    socialRow.innerHTML = socials.filter(s=>map[s.key])
+      .map(s=>`<a href="${map[s.key]}" target="_blank" class="social-badge" title="${s.key}">${s.label}</a>`).join('');
+  }
 }
 
 async function loadProgram(){
@@ -323,6 +351,7 @@ async function loadBerita(){
 }
 
 loadPengaturan();
+loadFooterData();
 loadProgram();
 loadBerita();
 </script>
