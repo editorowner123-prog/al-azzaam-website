@@ -62,8 +62,18 @@ a{text-decoration:none;color:inherit;}
 .btn-wa{background:#25D366;color:#fff;}
 .empty-state{text-align:center;padding:40px 20px;color:var(--ink-600);font-size:13px;border:1.5px dashed var(--line);border-radius:var(--radius);}
 
-footer{background:var(--maroon-950);color:rgba(255,255,255,.55);padding:30px 20px;text-align:center;font-size:11.5px;}
-footer a{color:var(--gold-400);font-weight:700;}
+footer{background:var(--maroon-950);color:rgba(255,255,255,.65);padding:44px 20px 24px;}
+.footer-grid{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px;}
+@media(max-width:700px){.footer-grid{grid-template-columns:1fr;}}
+.footer-brand{font-family:'Playfair Display',serif;color:#fff;font-size:17px;font-weight:700;margin-bottom:10px;}
+footer h4{color:var(--gold-400);font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+footer ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;font-size:13px;}
+footer a{color:rgba(255,255,255,.65);}
+footer a:hover{color:var(--gold-400);}
+.social-row{display:flex;gap:8px;margin-top:16px;}
+.social-badge{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(232,199,102,.35);color:var(--gold-400);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;transition:.15s;text-decoration:none;}
+.social-badge:hover{background:var(--gold-shine);color:var(--maroon-950)!important;border-color:transparent;}
+.footer-bottom{max-width:1120px;margin:30px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);font-size:11.5px;text-align:center;}
 </style>
 </head>
 <body>
@@ -77,7 +87,7 @@ footer a{color:var(--gold-400);font-weight:700;}
       <a href="berita.html">Berita</a>
       <a href="galeri.html">Galeri</a>
       <a href="ppdb.html" class="active">Pendaftaran</a>
-      <a href="index.html#kontak">Kontak</a>
+      <a href="#kontak">Kontak</a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
       <a href="ppdb.html" class="nav-cta">Daftar Sekarang</a>
@@ -97,8 +107,33 @@ footer a{color:var(--gold-400);font-weight:700;}
   <div class="empty-state">Memuat info pendaftaran…</div>
 </section>
 
-<footer>
-  © <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang. &middot; <a href="index.html">Kembali ke Beranda</a>
+<footer id="kontak">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">PPTQ Al Azzaam</div>
+      <p style="font-size:12.5px;line-height:1.7;">Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
+      <div class="social-row" id="socialRow"></div>
+    </div>
+    <div>
+      <h4>Tautan</h4>
+      <ul>
+        <li><a href="index.html">Beranda</a></li>
+        <li><a href="profil.html">Profil</a></li>
+        <li><a href="program.html">Program</a></li>
+        <li><a href="berita.html">Berita</a></li>
+        <li><a href="galeri.html">Galeri</a></li>
+        <li><a href="ppdb.html">Pendaftaran</a></li>
+        <li><a href="https://tahfidzalazzaam.com">Portal Wali Santri</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Kontak</h4>
+      <ul id="kontakList">
+        <li>Memuat…</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang.</div>
 </footer>
 
 <script>
@@ -116,6 +151,35 @@ async function applyLogo(){
   }
 }
 applyLogo();
+
+async function loadFooterData(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value');
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+
+  const list = document.getElementById('kontakList');
+  if(list){
+    let items = '';
+    items += `<li>${map.alamat || 'Alamat belum diisi'}</li>`;
+    if(map.google_maps_url) items += `<li><a href="${map.google_maps_url}" target="_blank">📍 Lihat di Peta</a></li>`;
+    if(map.no_wa) items += `<li><a href="https://wa.me/${map.no_wa.replace(/[^0-9]/g,'').replace(/^0/,'62')}" target="_blank">WA: ${map.no_wa}</a></li>`;
+    if(map.email) items += `<li><a href="mailto:${map.email}">${map.email}</a></li>`;
+    list.innerHTML = items;
+  }
+
+  const socialRow = document.getElementById('socialRow');
+  if(socialRow){
+    const socials = [
+      {key:'instagram', label:'IG'},
+      {key:'facebook', label:'FB'},
+      {key:'youtube', label:'YT'},
+      {key:'tiktok', label:'TT'},
+    ];
+    socialRow.innerHTML = socials.filter(s=>map[s.key])
+      .map(s=>`<a href="${map[s.key]}" target="_blank" class="social-badge" title="${s.key}">${s.label}</a>`).join('');
+  }
+}
+loadFooterData();
+
 document.getElementById('yearNow').textContent = new Date().getFullYear();
 document.getElementById('navToggle').addEventListener('click', ()=>{
   document.getElementById('navLinks').classList.toggle('open');
