@@ -1,811 +1,579 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-tema="maroon">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel Admin — PPTQ Al Azzaam</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>PPTQ Al Azzaam — Pesantren Tahfidz Al-Qur'an Gunungpati, Semarang</title>
+<meta name="description" content="PPTQ Al Azzaam adalah pesantren tahfidz Al-Qur'an di Gunungpati, Semarang, dengan program Tahfidz, Diniyah, dan pendidikan formal SMP-MA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 :root{
   --maroon-950:#2b0810; --maroon-900:#3d0c14; --maroon-800:#5c1120; --maroon-700:#7a0f1f;
-  --maroon-600:#9b1c2e; --maroon-500:#c22638;
+  --maroon-600:#9b1c2e; --maroon-500:#c22638; --maroon-400:#e0455a;
   --gold-300:#f7e7ab; --gold-400:#e8c766; --gold-500:#d4af37; --gold-600:#b8892b;
   --gold-shine:linear-gradient(120deg, var(--gold-300) 0%, var(--gold-500) 35%, var(--gold-600) 60%, var(--gold-400) 100%);
   --cream-50:#fff8f3; --cream-100:#fdf1e8; --ink-900:#241012; --ink-600:#6b4750;
-  --line:#f0d9c9; --surface:#fff; --shadow:0 10px 28px -12px rgba(61,12,20,.18); --radius:16px;
-  --ok:#2f9e44; --bad:#d1364a;
+  --line:#f0d9c9; --surface:#fff; --body-glow:#fbe4d4;
+  --shadow:0 10px 28px -12px rgba(61,12,20,.18); --radius:18px;
 }
 *{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream-50);color:var(--ink-900);min-height:100vh;}
-h1,h2,h3{font-family:'Outfit',sans-serif;margin:0;}
-button{font-family:inherit;cursor:pointer;}
-input,textarea,select{font-family:inherit;width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:13.5px;background:#fff;color:var(--ink-900);}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold-500);}
-label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-bottom:5px;}
-.field{margin-bottom:14px;}
-.btn{border:none;font-weight:800;font-size:13px;padding:10px 18px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;}
-.btn-gold{background:var(--gold-shine);color:var(--maroon-950);}
-.btn-outline{background:#fff;border:1.5px solid var(--line);color:var(--ink-900);}
-.btn-danger{background:#fdecec;color:var(--bad);}
-.btn-sm{padding:6px 12px;font-size:11.5px;}
+html,body{margin:0;padding:0;scroll-behavior:smooth;}
+body{
+  font-family:'Plus Jakarta Sans',sans-serif; color:var(--ink-900);
+  background:var(--cream-50);
+}
+h1,h2,h3{font-family:'Outfit',sans-serif; margin:0;}
+img{max-width:100%;display:block;}
+a{text-decoration:none;color:inherit;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px;}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-600);}
 
-/* ---------- LOGIN ---------- */
-#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(1000px 500px at 20% -10%, rgba(212,175,55,.15), transparent 60%), var(--maroon-950);padding:20px;}
-.login-card{background:#fff;border-radius:20px;padding:36px 30px;max-width:360px;width:100%;box-shadow:0 30px 60px -20px rgba(0,0,0,.5);text-align:center;}
-.login-ring{width:60px;height:60px;border-radius:50%;background:var(--maroon-950);margin:0 auto 16px;box-shadow:0 0 0 3px #fff,0 0 0 5px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-family:'Playfair Display',serif;font-size:24px;font-weight:700;}
-.login-card h1{font-family:'Playfair Display',serif;font-size:20px;color:var(--maroon-900);margin-bottom:4px;}
-.login-card p{font-size:12.5px;color:var(--ink-600);margin-bottom:22px;}
-#loginError{color:var(--bad);font-size:12px;margin-top:10px;display:none;}
+/* ---------- NAVBAR ---------- */
+.navbar{position:sticky;top:0;z-index:50;background:rgba(255,248,243,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+.navbar-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;max-width:1120px;margin:0 auto;}
+.nav-brand{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-weight:700;font-size:16px;color:var(--maroon-900);}
+.nav-brand .ring{width:34px;height:34px;border-radius:50%;background:var(--maroon-950);box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-size:14px;font-weight:800;font-family:'Playfair Display',serif;flex:none;}
+.nav-links{display:flex;gap:26px;font-size:13.5px;font-weight:600;color:var(--ink-600);}
+.nav-links a:hover{color:var(--maroon-600);}
+.nav-cta{background:var(--gold-shine);color:var(--maroon-950);font-weight:800;font-size:12.5px;padding:9px 18px;border-radius:20px;white-space:nowrap;}
+.nav-toggle{display:none;background:none;border:none;font-size:22px;color:var(--maroon-900);cursor:pointer;}
+@media(max-width:820px){
+  .nav-links{position:absolute;top:100%;left:0;right:0;background:var(--surface);flex-direction:column;gap:0;padding:8px 20px;border-bottom:1px solid var(--line);display:none;}
+  .nav-links.open{display:flex;}
+  .nav-links a{padding:12px 0;border-bottom:1px solid var(--line);}
+  .nav-toggle{display:block;}
+}
 
-/* ---------- APP SHELL ---------- */
-#app{display:none;}
-.topbar{background:var(--maroon-950);color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
-.topbar-brand{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px;}
-.topbar-brand .ring{width:30px;height:30px;border-radius:50%;background:var(--maroon-900);box-shadow:0 0 0 2px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-size:12px;}
-.tabs{display:flex;gap:4px;overflow-x:auto;background:#fff;border-bottom:1px solid var(--line);padding:0 16px;}
-.tab-btn{background:none;border:none;padding:14px 16px;font-weight:700;font-size:13px;color:var(--ink-600);border-bottom:3px solid transparent;white-space:nowrap;}
-.tab-btn.active{color:var(--maroon-700);border-color:var(--gold-500);}
-.content{max-width:900px;margin:0 auto;padding:22px 16px 60px;}
-.content-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
-.content-head h2{font-size:18px;color:var(--maroon-900);}
+.nav-item{position:relative;}
+.nav-top-link{display:inline-flex;align-items:center;gap:4px;cursor:pointer;}
+.nav-caret{font-size:8px;opacity:.6;}
+.nav-links > a.active, .nav-top-link.active{background:var(--cream-100);color:var(--maroon-700)!important;padding:6px 10px;border-radius:8px;font-weight:800;}
+.dropdown-menu{position:absolute;top:100%;left:0;margin-top:10px;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);min-width:175px;padding:6px;display:none;z-index:60;}
+.nav-item:hover .dropdown-menu{display:block;}
+.dropdown-menu a{display:block;padding:8px 12px;font-size:12.5px;color:var(--ink-600);border-radius:6px;}
+.dropdown-menu a:hover{background:var(--cream-100);color:var(--maroon-700);}
+@media(max-width:820px){
+  .nav-item{border-bottom:1px solid var(--line);}
+  .nav-top-link{padding:12px 0;border-bottom:none;}
+  .dropdown-menu{position:static;box-shadow:none;border:none;margin-top:0;padding:0 0 8px 14px;display:block;background:none;}
+  .dropdown-menu a{padding:8px 0;font-size:12px;border-bottom:none;}
+}
 
-/* ---------- LIST ---------- */
-.item-card{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
-.item-main{flex:1;min-width:180px;}
-.item-title{font-weight:700;font-size:14px;color:var(--ink-900);}
-.item-meta{font-size:11.5px;color:var(--ink-600);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap;}
-.pill{font-size:10px;font-weight:800;padding:3px 9px;border-radius:10px;background:var(--cream-100);color:var(--gold-600);text-transform:uppercase;}
-.pill.published{background:#e6f6ea;color:var(--ok);}
-.pill.draft{background:#fdf1e8;color:var(--ink-600);}
-.item-actions{display:flex;gap:6px;flex:none;}
-.empty{text-align:center;padding:40px 20px;color:var(--ink-600);font-size:13px;border:1.5px dashed var(--line);border-radius:var(--radius);}
 
-/* ---------- MODAL FORM ---------- */
-.modal-overlay{position:fixed;inset:0;background:rgba(43,8,16,.55);display:none;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto;z-index:100;}
-.modal-overlay.open{display:flex;}
-.modal{background:#fff;border-radius:18px;max-width:520px;width:100%;padding:26px 24px;margin-top:20px;}
-.modal h3{font-size:16px;color:var(--maroon-900);margin-bottom:18px;}
-.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px;}
-.img-preview{width:100%;height:140px;object-fit:cover;border-radius:10px;margin-bottom:8px;background:var(--cream-100);}
-.upload-status{font-size:11.5px;color:var(--ink-600);margin-top:4px;}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--maroon-950);color:#fff;padding:12px 20px;border-radius:24px;font-size:13px;font-weight:600;z-index:200;display:none;}
+/* ---------- HERO ---------- */
+.hero{position:relative;background:linear-gradient(160deg, rgba(43,8,16,.9), rgba(61,12,20,.86)), radial-gradient(1200px 600px at 15% -10%, rgba(212,175,55,.18) 0%, transparent 60%), linear-gradient(180deg, var(--maroon-950), var(--maroon-900) 60%, var(--maroon-950));background-size:cover;background-position:center;padding:60px 20px 56px;overflow:hidden;}
+.hero-inner{max-width:720px;margin:0 auto;position:relative;text-align:left;}
+.hero-arabic{font-family:'Aref Ruqaa',serif;color:var(--gold-400);font-size:26px;margin-bottom:14px;}
+.hero-title{font-family:'Playfair Display',serif;color:#fff;font-size:clamp(28px,4vw,42px);font-weight:700;line-height:1.25;margin-bottom:16px;}
+.hero-title em{font-style:normal;color:var(--gold-400);}
+.hero-sub{color:rgba(255,255,255,.75);font-size:15px;line-height:1.7;max-width:520px;margin-bottom:26px;}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:13.5px;padding:13px 24px;border-radius:24px;display:inline-flex;align-items:center;gap:8px;}
+.btn-gold{background:var(--gold-shine);color:var(--maroon-950);box-shadow:0 10px 22px -8px rgba(212,175,55,.5);}
+.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.35);}
+
+/* ---------- RUNNING TEXT ---------- */
+.ticker-wrap{overflow:hidden;white-space:nowrap;background:var(--maroon-950);height:38px;display:flex;align-items:center;}
+.ticker-track{display:inline-block;padding-left:100%;font-size:12.5px;font-weight:700;color:var(--gold-400);animation:ticker-scroll 22s linear infinite;}
+@keyframes ticker-scroll{from{transform:translateX(0);}to{transform:translateX(-100%);}}
+
+/* ---------- HOME GRID (Beranda 2 kolom) ---------- */
+.home-grid{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr;gap:20px;}
+@media(max-width:900px){.home-grid{grid-template-columns:1fr;}}
+.home-left{display:flex;flex-direction:column;gap:20px;}
+.home-left-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:600px){.home-left-row{grid-template-columns:1fr;}}
+.card{background:var(--surface);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);}
+.btn-outline-mini{display:inline-flex;font-size:12px;font-weight:800;color:var(--maroon-600);border:1.5px solid var(--line);padding:8px 18px;border-radius:20px;}
+.btn-outline-mini:hover{background:var(--cream-100);}
+
+.mini-stat-card{padding:20px;}
+.mini-stat-row{display:flex;gap:12px;margin-top:12px;}
+.mini-stat-row > div{flex:1;text-align:center;background:var(--cream-100);border-radius:12px;padding:14px 6px;}
+.mini-stat-row .stat-num{font-size:24px;}
+
+.vismisi-card{padding:8px 20px;}
+.acc-item{border-bottom:1px solid var(--line);}
+.acc-item:last-child{border-bottom:none;}
+.acc-head{width:100%;background:none;border:none;text-align:left;padding:14px 0;font-size:13.5px;font-weight:700;color:var(--maroon-900);cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:'Outfit',sans-serif;}
+.acc-caret{color:var(--gold-600);font-size:15px;font-weight:400;transition:transform .2s;}
+.acc-item.open .acc-caret{transform:rotate(45deg);}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .25s ease;font-size:12.5px;color:var(--ink-600);line-height:1.75;text-align:left;margin:0;padding-left:18px;}
+.acc-item.open .acc-body{max-height:400px;padding-bottom:14px;}
+.acc-list li{margin-bottom:5px;}
+
+.mini-galeri-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.mini-galeri-grid img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;}
+.mini-berita-item{display:block;padding:9px 0;border-bottom:1px solid var(--line);}
+.mini-berita-item:last-child{border-bottom:none;}
+.mini-berita-item h4{font-size:12.5px;color:var(--maroon-900);font-weight:700;margin:0 0 3px;line-height:1.4;}
+.mini-berita-item .tgl{font-size:10.5px;color:var(--ink-600);}
+
+.home-right{display:flex;}
+.informasi-pondok-card{background:var(--maroon-950);border-radius:var(--radius);padding:26px 22px;box-shadow:var(--shadow);flex:1;display:flex;flex-direction:column;gap:18px;border-top:4px solid var(--gold-500);}
+.ip-title{font-family:'Outfit',sans-serif;color:var(--gold-400);font-size:14.5px;font-weight:800;letter-spacing:1.5px;border-bottom:1px solid rgba(255,255,255,.12);padding-bottom:14px;}
+.ip-item{display:flex;gap:12px;}
+.ip-icon{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:18px;flex:none;}
+.ip-item h3{font-size:14px;color:#fff;margin-bottom:4px;}
+.ip-item p{font-size:12px;color:rgba(255,255,255,.65);line-height:1.6;margin-bottom:8px;}
+.ip-link{color:var(--gold-400);font-size:11.5px;font-weight:800;}
+
+/* ---------- SECTION GENERIC ---------- */
+.section{padding:64px 20px;}
+.section-head{text-align:center;max-width:560px;margin:0 auto 36px;}
+.section-head h2{font-size:clamp(22px,3vw,30px);color:var(--maroon-900);margin-top:8px;}
+.section-head p{color:var(--ink-600);font-size:13.5px;margin-top:10px;line-height:1.7;}
+
+/* ---------- STATS ---------- */
+.stats-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:center;}
+@media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+.stat-num{font-family:'Outfit',sans-serif;font-size:32px;font-weight:800;color:var(--maroon-700);}
+.stat-label{font-size:12px;color:var(--ink-600);font-weight:600;margin-top:4px;}
+
+/* ---------- PROGRAM ---------- */
+.program-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;max-width:1120px;margin:0 auto;}
+.program-card{background:var(--surface);border-radius:var(--radius);padding:22px;border:1px solid var(--line);}
+.program-card .icon{font-size:26px;margin-bottom:10px;}
+.program-card h3{font-size:15px;color:var(--maroon-900);margin-bottom:6px;}
+.program-card p{font-size:12.5px;color:var(--ink-600);line-height:1.6;}
+
+/* ---------- BERITA ---------- */
+.section-cream{background:var(--cream-100);}
+.berita-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;max-width:1120px;margin:0 auto;}
+.berita-card{background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+.berita-card .thumb{aspect-ratio:16/10;background:linear-gradient(135deg,var(--cream-100),var(--line));display:flex;align-items:center;justify-content:center;color:var(--ink-600);font-size:12px;}
+.berita-card .thumb img{width:100%;height:100%;object-fit:cover;}
+.berita-body{padding:16px;}
+.berita-kategori{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-600);}
+.berita-card h3{font-size:14.5px;color:var(--maroon-900);margin:6px 0 8px;line-height:1.4;}
+.berita-card .tanggal{font-size:11.5px;color:var(--ink-600);}
+.empty-state{text-align:center;padding:30px;color:var(--ink-600);font-size:13px;border:1.5px dashed var(--line);border-radius:var(--radius);max-width:1120px;margin:0 auto;}
+
+/* ---------- CTA STRIP ---------- */
+.cta-strip{background:linear-gradient(120deg,var(--maroon-900),var(--maroon-700));border-radius:24px;max-width:1000px;margin:0 auto;padding:40px 30px;text-align:center;box-shadow:var(--shadow);}
+.cta-strip h2{color:#fff;font-family:'Playfair Display',serif;font-size:24px;margin-bottom:10px;}
+.cta-strip p{color:rgba(255,255,255,.72);font-size:13.5px;margin-bottom:22px;}
+
+/* ---------- FOOTER ---------- */
+footer{background:var(--maroon-950);color:rgba(255,255,255,.65);padding:44px 20px 24px;}
+.footer-grid{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px;}
+@media(max-width:700px){.footer-grid{grid-template-columns:1fr;}}
+.footer-brand{font-family:'Playfair Display',serif;color:#fff;font-size:17px;font-weight:700;margin-bottom:10px;}
+footer h4{color:var(--gold-400);font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+footer ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;font-size:13px;}
+footer a:hover{color:var(--gold-400);}
+.social-row{display:flex;gap:8px;margin-top:16px;}
+.social-badge{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(232,199,102,.35);color:var(--gold-400);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;transition:.15s;text-decoration:none;}
+.social-badge:hover{background:var(--gold-shine);color:var(--maroon-950)!important;border-color:transparent;}
+.footer-bottom{max-width:1120px;margin:30px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);font-size:11.5px;text-align:center;}
+/* ---------- FLYER POP-UP AWAL ---------- */
+.flyer-overlay{position:fixed;inset:0;background:rgba(43,8,16,.75);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.flyer-overlay.open{display:flex;}
+.flyer-box{position:relative;max-width:380px;width:100%;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);}
+.flyer-box img{width:100%;display:block;cursor:pointer;}
+.flyer-close{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(43,8,16,.85);color:#fff;border:none;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
 </style>
 </head>
 <body>
 
-<!-- ================= LOGIN ================= -->
-<div id="loginScreen">
-  <div class="login-card">
-    <div class="login-ring">A</div>
-    <h1>Panel Admin</h1>
-    <p>PPTQ Al Azzaam — Website Informasi</p>
-    <div class="field" style="text-align:left"><label>Email</label><input type="email" id="loginEmail" placeholder="admin@email.com"></div>
-    <div class="field" style="text-align:left"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
-    <button class="btn btn-gold" style="width:100%;justify-content:center" onclick="doLogin()">Masuk</button>
-    <div id="loginError"></div>
-  </div>
-</div>
-
-<!-- ================= APP ================= -->
-<div id="app">
-  <div class="topbar">
-    <div class="topbar-brand"><span class="ring">A</span> Panel Admin</div>
-    <button class="btn btn-outline btn-sm" onclick="doLogout()">Keluar</button>
-  </div>
-  <div class="tabs" id="tabBar"></div>
-  <div class="content">
-    <div class="content-head">
-      <h2 id="contentTitle">—</h2>
-      <button class="btn btn-gold btn-sm" id="addBtn" onclick="openForm()">+ Tambah</button>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</div>
+    <div class="nav-links" id="navLinks">
+      <div class="nav-item">
+        <a href="profil.html" class="nav-top-link">Profil <span class="nav-caret">▾</span></a>
+        <div class="dropdown-menu">
+          <a href="profil.html#sejarah">Sejarah</a>
+          <a href="profil.html#visimisi">Visi &amp; Misi</a>
+          <a href="profil.html#struktur">Struktur Pengurus</a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="program.html" class="nav-top-link">Program <span class="nav-caret">▾</span></a>
+        <div class="dropdown-menu">
+          <a href="program.html?jenjang=Tahfidz">Tahfidz</a>
+          <a href="program.html?jenjang=Diniyah">Diniyah</a>
+          <a href="program.html?jenjang=SMP">SMP</a>
+          <a href="program.html?jenjang=MA">MA</a>
+        </div>
+      </div>
+      <a href="berita.html">Berita</a>
+      <a href="galeri.html">Galeri</a>
+      <a href="ppdb.html">Pendaftaran</a>
+      <a href="#kontak">Kontak</a>
     </div>
-    <div id="listArea"></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <h3 id="modalTitle">Tambah Data</h3>
-    <div id="formArea"></div>
-    <div class="modal-actions">
-      <button class="btn btn-outline" onclick="closeForm()">Batal</button>
-      <button class="btn btn-gold" onclick="saveRecord()">Simpan</button>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="ppdb.html" class="nav-cta">Daftar Sekarang</a>
+      <button class="nav-toggle" id="navToggle">☰</button>
     </div>
   </div>
+</nav>
+
+<section class="hero" id="heroSection">
+  <div class="hero-inner">
+    <div class="hero-arabic">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+    <div class="hero-title">Membentuk Generasi <em>Penghafal Al-Qur'an</em> yang Berakhlak Mulia</div>
+    <p class="hero-sub">PPTQ Al Azzaam Gunungpati, Semarang — memadukan pendidikan tahfidz, diniyah, dan formal SMP-MA dalam satu lingkungan pesantren yang mendidik hati dan pikiran.</p>
+    <div class="hero-ctas">
+      <a href="ppdb.html" class="btn btn-gold">Info Pendaftaran →</a>
+      <a href="profil.html" class="btn btn-ghost">Kenali Kami</a>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-wrap" id="tickerWrap">
+  <div class="ticker-track" id="tickerTrack">Memuat info terkini…</div>
 </div>
 
-<div class="toast" id="toast"></div>
+<section class="section" style="padding-top:36px;padding-bottom:36px;">
+  <div class="home-grid">
+    <div class="home-left">
+
+      <div class="card tentang-card">
+        <div class="eyebrow">Tentang Kami</div>
+        <h2 style="margin:8px 0 12px;">Tentang Pondok</h2>
+        <p id="tentangText" style="font-size:13.5px;color:var(--ink-600);line-height:1.8;margin:0 0 14px;">Memuat…</p>
+        <a href="profil.html" class="btn-outline-mini">Selengkapnya →</a>
+      </div>
+
+      <div class="home-left-row">
+        <div class="card mini-stat-card">
+          <div class="eyebrow">Data Pondok</div>
+          <div class="mini-stat-row">
+            <div><div class="stat-num" id="stSantri">–</div><div class="stat-label">Santri Aktif</div></div>
+            <div><div class="stat-num" id="stUstadz">–</div><div class="stat-label">Asatidzah</div></div>
+          </div>
+        </div>
+        <div class="card vismisi-card">
+          <div class="acc-item" id="accItemVisi">
+            <button class="acc-head" onclick="toggleAcc('accItemVisi')">🎯 Visi <span class="acc-caret">＋</span></button>
+            <ol class="acc-body acc-list" id="accVisi"></ol>
+          </div>
+          <div class="acc-item" id="accItemMisi">
+            <button class="acc-head" onclick="toggleAcc('accItemMisi')">🧭 Misi <span class="acc-caret">＋</span></button>
+            <ol class="acc-body acc-list" id="accMisi"></ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-left-row">
+        <div class="card mini-galeri-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <div class="eyebrow" style="margin:0;">Galeri</div>
+            <a href="galeri.html" style="font-size:11.5px;font-weight:800;color:var(--maroon-600);">Lihat Semua →</a>
+          </div>
+          <div class="mini-galeri-grid" id="miniGaleriGrid"></div>
+        </div>
+        <div class="card mini-berita-card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div class="eyebrow" style="margin:0;">Info Terkini</div>
+            <a href="berita.html" style="font-size:11.5px;font-weight:800;color:var(--maroon-600);">Lihat Semua →</a>
+          </div>
+          <div id="miniBeritaList"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="home-right">
+      <div class="informasi-pondok-card">
+        <div class="ip-title">INFORMASI PONDOK</div>
+        <div class="ip-item">
+          <div class="ip-icon">🎓</div>
+          <div>
+            <h3>Calon Santri & Wali</h3>
+            <p>Cari tahu syarat, jadwal, dan biaya pendaftaran santri baru tahun ini.</p>
+            <a href="ppdb.html" class="ip-link">Lihat info PPDB →</a>
+          </div>
+        </div>
+        <div class="ip-item">
+          <div class="ip-icon">📖</div>
+          <div>
+            <h3>Wali Santri</h3>
+            <p>Pantau perkembangan hafalan dan kehadiran putra-putri Anda lewat Portal Al-Hafizh.</p>
+            <a href="https://tahfidzalazzaam.com" class="ip-link">Masuk Portal →</a>
+          </div>
+        </div>
+        <div class="ip-item">
+          <div class="ip-icon">🤝</div>
+          <div>
+            <h3>Umum & Donatur</h3>
+            <p>Kenali profil lembaga dan salurkan infaq untuk mendukung pendidikan santri.</p>
+            <a href="#kontak" class="ip-link">Lihat cara berdonasi →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="program">
+  <div class="section-head">
+    <div class="eyebrow">Program Pendidikan</div>
+    <h2>Jalan Menghafal, Jalan Berilmu</h2>
+    <p>Tiga pilar pendidikan yang berjalan beriringan, membentuk santri yang hafal Qur'an sekaligus siap menghadapi dunia.</p>
+  </div>
+  <div class="program-grid" id="programGrid">
+    <div class="empty-state">Memuat program…</div>
+  </div>
+</section>
+
+<section class="section section-cream" id="berita">
+  <div class="section-head">
+    <div class="eyebrow">Kabar Terbaru</div>
+    <h2>Berita & Kegiatan Santri</h2>
+    <p>Update kegiatan, prestasi, dan momen wisuda tahfidz — supaya wali santri dan masyarakat tetap terhubung.</p>
+  </div>
+  <div class="berita-grid" id="beritaGrid">
+    <div class="empty-state">Memuat berita…</div>
+  </div>
+</section>
+
+<section class="section" id="ppdb">
+  <div class="cta-strip">
+    <h2>Pendaftaran Santri Baru Dibuka</h2>
+    <p>Amanahkan pendidikan Al-Qur'an putra-putri Anda bersama kami.</p>
+    <a href="#kontak" class="btn btn-gold">Hubungi Panitia PPDB →</a>
+  </div>
+</section>
+
+<footer id="kontak">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">PPTQ Al Azzaam</div>
+      <p style="font-size:12.5px;line-height:1.7;">Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
+      <div class="social-row" id="socialRow"></div>
+    </div>
+    <div>
+      <h4>Tautan</h4>
+      <ul>
+        <li><a href="profil.html">Profil</a></li>
+        <li><a href="program.html">Program</a></li>
+        <li><a href="berita.html">Berita</a></li>
+        <li><a href="galeri.html">Galeri</a></li>
+        <li><a href="ppdb.html">Pendaftaran</a></li>
+        <li><a href="https://tahfidzalazzaam.com">Portal Wali Santri</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Kontak</h4>
+      <ul id="kontakList">
+        <li>Memuat…</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang.</div>
+</footer>
 
 <script>
+// ---------- Koneksi Supabase (project website, terpisah dari app Al-Hafizh) ----------
 const SB_URL = "https://ttpkztaxfpjhkwtnbpec.supabase.co";
 const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0cGt6dGF4ZnBqaGt3dG5icGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MDExOTUsImV4cCI6MjEwMjk3NzE5NX0.yfeSSewI_CDw64WxYU4qUVeEbVLsHXVqpDpeCGDT5PI";
 const sb = supabase.createClient(SB_URL, SB_ANON);
 
-// ---------- Konfigurasi tabel (generik, biar 1 mesin CRUD dipakai semua) ----------
-const TABLES = {
-  berita: {
-    label: 'Berita', pk: 'id', orderBy: 'created_at', ascending: false,
-    titleField: 'judul',
-    meta: r => [r.kategori, `<span class="pill ${r.status}">${r.status}</span>`, r.tanggal_publish ? new Date(r.tanggal_publish).toLocaleDateString('id-ID') : ''],
-    fields: [
-      {key:'judul', label:'Judul', type:'text', required:true},
-      {key:'slug', label:'Slug (URL, huruf kecil tanpa spasi)', type:'text', required:true},
-      {key:'ringkasan', label:'Ringkasan Singkat', type:'textarea'},
-      {key:'isi', label:'Isi Berita', type:'textarea-lg', required:true},
-      {key:'foto_url', label:'Foto', type:'image', folder:'berita'},
-      {key:'kategori', label:'Kategori', type:'select', options:['Prestasi','Kegiatan','Pengumuman']},
-      {key:'status', label:'Status', type:'select', options:['draft','published']},
-      {key:'tanggal_publish', label:'Tanggal Publish', type:'date'},
-    ]
-  },
-  program: {
-    label: 'Program', pk: 'id', orderBy: 'urutan', ascending: true,
-    titleField: 'nama',
-    meta: r => [r.jenjang, `Urutan: ${r.urutan ?? 0}`],
-    fields: [
-      {key:'nama', label:'Nama Program', type:'text', required:true},
-      {key:'jenjang', label:'Jenjang', type:'select', options:['Tahfidz','Diniyah','SMP','MA']},
-      {key:'deskripsi', label:'Deskripsi', type:'textarea'},
-      {key:'icon', label:'Ikon (emoji, misal 📿)', type:'text'},
-      {key:'urutan', label:'Urutan Tampil (angka, kecil = di depan)', type:'number'},
-    ]
-  },
-  galeri: {
-    label: 'Galeri', pk: 'id', orderBy: 'urutan', ascending: true,
-    titleField: 'judul',
-    meta: r => [r.tipe, r.kategori, `Urutan: ${r.urutan ?? 0}`],
-    fields: [
-      {key:'judul', label:'Judul', type:'text'},
-      {key:'media_url', label:'Foto / Thumbnail', type:'image', folder:'galeri'},
-      {key:'tipe', label:'Tipe', type:'select', options:['foto','video']},
-      {key:'kategori', label:'Kategori (misal: Fasilitas, Wisuda)', type:'text'},
-      {key:'urutan', label:'Urutan Tampil', type:'number'},
-    ]
-  },
-  info_ppdb: {
-    label: 'Info PPDB', pk: 'id', orderBy: 'updated_at', ascending: false,
-    titleField: 'tahun_ajaran',
-    meta: r => [`<span class="pill ${r.status}">${r.status}</span>`],
-    fields: [
-      {key:'tahun_ajaran', label:'Tahun Ajaran (misal 2027/2028)', type:'text', required:true},
-      {key:'syarat', label:'Syarat Pendaftaran', type:'textarea'},
-      {key:'jadwal', label:'Jadwal Pendaftaran', type:'textarea'},
-      {key:'biaya', label:'Rincian Biaya', type:'textarea'},
-      {key:'kontak_wa', label:'Nomor WA Panitia', type:'text'},
-      {key:'formulir_url', label:'Link Formulir (Google Form / PDF)', type:'text'},
-      {key:'status', label:'Status', type:'select', options:['draft','published']},
-    ]
-  },
-  struktur_pengurus: {
-    label: 'Struktur Pengurus', pk: 'id', orderBy: 'urutan', ascending: true,
-    titleField: 'nama',
-    meta: r => [r.jabatan, `Urutan: ${r.urutan ?? 0}`],
-    fields: [
-      {key:'nama', label:'Nama', type:'text', required:true},
-      {key:'jabatan', label:'Jabatan', type:'text'},
-      {key:'foto_url', label:'Foto', type:'image', folder:'pengurus'},
-      {key:'urutan', label:'Urutan Tampil', type:'number'},
-    ]
-  },
-  running_text: {
-    label: 'Running Text', pk: 'id', orderBy: 'urutan', ascending: true,
-    titleField: 'teks',
-    meta: r => [`<span class="pill ${r.status}">${r.status}</span>`, `Urutan: ${r.urutan ?? 0}`],
-    fields: [
-      {key:'teks', label:'Isi Teks Berjalan', type:'textarea'},
-      {key:'urutan', label:'Urutan Tampil', type:'number'},
-      {key:'status', label:'Status', type:'select', options:['draft','published']},
-    ]
-  },
-  pengaturan_situs: {
-    label: 'Pengaturan Situs', pk: 'key', orderBy: 'key', ascending: true,
-    titleField: 'key', keyIsFixed: true,
-    meta: r => [r.value ? r.value.slice(0,60) : ''],
-    fields: [
-      {key:'key', label:'Key (misal: alamat, no_wa, email, jumlah_santri)', type:'text', required:true},
-      {key:'value', label:'Value', type:'textarea'},
-    ]
-  }
-};
-
-let currentTab = 'berita';
-let currentRecord = null; // null = tambah baru, object = sedang edit
-
-// ---------- AUTH ----------
-async function doLogin(){
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  const errBox = document.getElementById('loginError');
-  errBox.style.display = 'none';
-  const {error} = await sb.auth.signInWithPassword({email, password});
-  if(error){
-    errBox.textContent = 'Login gagal: ' + error.message;
-    errBox.style.display = 'block';
-    return;
-  }
-  showApp();
-}
-async function doLogout(){
-  await sb.auth.signOut();
-  location.reload();
-}
-async function checkSession(){
-  const {data} = await sb.auth.getSession();
-  if(data.session) showApp();
-}
-function showApp(){
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  renderTabs();
-  switchTab('berita');
-}
-
-// ---------- TABS ----------
-function renderTabs(){
-  const bar = document.getElementById('tabBar');
-  bar.innerHTML = Object.keys(TABLES).map(k =>
-    `<button class="tab-btn" id="tab-${k}" onclick="switchTab('${k}')">${TABLES[k].label}</button>`
-  ).join('');
-}
-function switchTab(key){
-  currentTab = key;
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+key).classList.add('active');
-  document.getElementById('contentTitle').textContent = TABLES[key].label;
-  loadList();
-}
-
-// ---------- LIST ----------
-async function loadList(){
-  const cfg = TABLES[currentTab];
-  const area = document.getElementById('listArea');
-  area.innerHTML = '<div class="empty">Memuat data…</div>';
-
-  let logoHtml = '';
-  if(currentTab === 'pengaturan_situs'){
-    const profilHtml = await renderProfilCard();
-    const kontakHtml = await renderKontakSosmedCard();
-    const heroPhotoHtml = await renderHeroPhotoCard();
-    const tickerStyleHtml = await renderTickerStyleCard();
-    const flyerHtml = await renderFlyerCard();
-    logoHtml = profilHtml + kontakHtml + heroPhotoHtml + tickerStyleHtml + flyerHtml + await renderLogoCard();
-  }
-
-  const {data, error} = await sb.from(currentTab).select('*').order(cfg.orderBy, {ascending: cfg.ascending});
-  if(error){
-    area.innerHTML = logoHtml + `<div class="empty">Gagal memuat: ${error.message}</div>`;
-    if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); updateFlyerPreview(); }
-    return;
-  }
-  if(!data || data.length===0){
-    area.innerHTML = logoHtml + `<div class="empty">Belum ada data ${cfg.label.toLowerCase()}. Klik "+ Tambah" untuk mulai.</div>`;
-    if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); updateFlyerPreview(); }
-    return;
-  }
-  area.innerHTML = logoHtml + data.map(r => `
-    <div class="item-card">
-      <div class="item-main">
-        <div class="item-title">${r[cfg.titleField] || '(tanpa judul)'}</div>
-        <div class="item-meta">${cfg.meta(r).filter(Boolean).join(' &bull; ')}</div>
-      </div>
-      <div class="item-actions">
-        <button class="btn btn-outline btn-sm" onclick='openForm(${JSON.stringify(r).replace(/'/g,"&apos;")})'>Edit</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteRecord('${r[cfg.pk]}')">Hapus</button>
-      </div>
-    </div>
-  `).join('');
-  if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); updateFlyerPreview(); }
-}
-
-// ---------- FORM ----------
-function openForm(record){
-  currentRecord = record || null;
-  const cfg = TABLES[currentTab];
-  document.getElementById('modalTitle').textContent = record ? `Edit ${cfg.label}` : `Tambah ${cfg.label}`;
-  const area = document.getElementById('formArea');
-  area.innerHTML = cfg.fields.map(f => renderField(f, record ? record[f.key] : '')).join('');
-  document.getElementById('modalOverlay').classList.add('open');
-
-  // auto-generate slug dari judul untuk berita baru
-  const judulInput = document.getElementById('f_judul');
-  const slugInput = document.getElementById('f_slug');
-  if(judulInput && slugInput && !record){
-    judulInput.addEventListener('blur', ()=>{
-      if(!slugInput.value){
-        slugInput.value = judulInput.value.toLowerCase().trim()
-          .replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-');
-      }
-    });
-  }
-}
-function closeForm(){
-  document.getElementById('modalOverlay').classList.remove('open');
-  currentRecord = null;
-}
-function renderField(f, value){
-  value = value ?? '';
-  const id = 'f_' + f.key;
-  if(f.type==='textarea' || f.type==='textarea-lg'){
-    const rows = f.type==='textarea-lg' ? 7 : 3;
-    return `<div class="field"><label>${f.label}</label><textarea id="${id}" rows="${rows}">${value}</textarea></div>`;
-  }
-  if(f.type==='select'){
-    return `<div class="field"><label>${f.label}</label><select id="${id}">
-      ${f.options.map(o=>`<option value="${o}" ${o===value?'selected':''}>${o}</option>`).join('')}
-    </select></div>`;
-  }
-  if(f.type==='number'){
-    return `<div class="field"><label>${f.label}</label><input type="number" id="${id}" value="${value}"></div>`;
-  }
-  if(f.type==='date'){
-    const d = value ? new Date(value).toISOString().slice(0,10) : '';
-    return `<div class="field"><label>${f.label}</label><input type="date" id="${id}" value="${d}"></div>`;
-  }
-  if(f.type==='image'){
-    return `<div class="field"><label>${f.label}</label>
-      ${value ? `<img src="${value}" class="img-preview">` : ''}
-      <input type="hidden" id="${id}" value="${value}">
-      <input type="file" accept="image/*" onchange="uploadImage(this,'${id}','${f.folder}')">
-      <div class="upload-status" id="${id}_status"></div>
-    </div>`;
-  }
-  return `<div class="field"><label>${f.label}</label><input type="text" id="${id}" value="${value}"></div>`;
-}
-
-async function uploadImage(input, targetId, folder){
-  const file = input.files[0];
-  if(!file) return;
-  const statusEl = document.getElementById(targetId+'_status');
-  statusEl.textContent = 'Mengunggah…';
-  const path = `${folder}/${Date.now()}-${file.name.replace(/\s+/g,'-')}`;
-  const {error} = await sb.storage.from('media-website').upload(path, file);
-  if(error){
-    statusEl.textContent = 'Gagal unggah: ' + error.message;
-    return;
-  }
-  const {data} = sb.storage.from('media-website').getPublicUrl(path);
-  document.getElementById(targetId).value = data.publicUrl;
-  statusEl.textContent = 'Berhasil diunggah ✓';
-}
-
-// ---------- KONTEN PROFIL (Sejarah/Visi/Misi, perlakuan khusus) ----------
-async function renderProfilCard(){
-  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['profil_sejarah','profil_visi','profil_misi','ringkasan_tentang']);
-  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
-  return `
-    <div class="item-card" style="flex-direction:column;align-items:stretch;">
-      <div class="item-title" style="margin-bottom:10px;">📖 Konten Profil (Sejarah, Visi, Misi)</div>
-      <div class="field"><label>Ringkasan Singkat (tampil di card "Tentang Pondok" Beranda, 2-3 kalimat)</label><textarea id="ringkasanTentang" rows="3">${map.ringkasan_tentang||''}</textarea></div>
-      <div class="field"><label>Sejarah (halaman Profil lengkap)</label><textarea id="profilSejarah" rows="4">${map.profil_sejarah||''}</textarea></div>
-      <div class="field"><label>Visi (1 poin per baris, akan otomatis diberi nomor)</label><textarea id="profilVisi" rows="2">${map.profil_visi||''}</textarea></div>
-      <div class="field" style="margin-bottom:10px;"><label>Misi (1 poin per baris, akan otomatis diberi nomor)</label><textarea id="profilMisi" rows="4">${map.profil_misi||''}</textarea></div>
-      <button class="btn btn-gold btn-sm" style="align-self:flex-start" onclick="saveProfilKonten()">Simpan Konten Profil</button>
-      <div class="upload-status" id="profilStatus"></div>
-    </div>
-  `;
-}
-async function saveProfilKonten(){
-  const rows = [
-    {key:'ringkasan_tentang', value: document.getElementById('ringkasanTentang').value},
-    {key:'profil_sejarah', value: document.getElementById('profilSejarah').value},
-    {key:'profil_visi', value: document.getElementById('profilVisi').value},
-    {key:'profil_misi', value: document.getElementById('profilMisi').value},
-  ];
-  const statusEl = document.getElementById('profilStatus');
-  statusEl.textContent = 'Menyimpan…';
-  const {error} = await sb.from('pengaturan_situs').upsert(rows);
-  if(error){ statusEl.textContent = 'Gagal simpan: ' + error.message; return; }
-  statusEl.textContent = 'Tersimpan ✓';
-  showToast('Konten Profil tersimpan ✓');
-}
-
-
-
-// ---------- FLYER POP-UP AWAL (perlakuan khusus) ----------
-let pendingFlyerFile = null;
-let pendingFlyerObjectUrl = null;
-
-async function renderFlyerCard(){
-  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['flyer_image_url','flyer_link_url','flyer_active']);
-  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
-  pendingFlyerFile = null;
-  pendingFlyerObjectUrl = null;
-
-  return `
-    <div class="item-card" style="flex-direction:column;align-items:stretch;">
-      <div class="item-title" style="margin-bottom:10px;">🎈 Flyer Pop-up Awal</div>
-      <p style="font-size:11.5px;color:var(--ink-600);margin:0 0 10px;">Muncul otomatis sekali saat pengunjung pertama kali buka website. Bisa ditutup (✕) atau diklik untuk menuju link.</p>
-
-      <div class="field">
-        <label>Aktifkan Pop-up?</label>
-        <select id="flyerActive" onchange="updateFlyerPreview()">
-          <option value="tidak" ${map.flyer_active!=='ya'?'selected':''}>Tidak aktif</option>
-          <option value="ya" ${map.flyer_active==='ya'?'selected':''}>Aktif</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Gambar Flyer</label>
-        <input type="file" id="flyerFileInput" accept="image/*" onchange="onFlyerFileChosen(this)">
-      </div>
-      <div class="field">
-        <label>Link Tujuan (saat gambar diklik)</label>
-        <input type="text" id="flyerLink" value="${(map.flyer_link_url||'').replace(/"/g,'&quot;')}" placeholder="https://... atau ppdb.html">
-      </div>
-
-      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:8px 0 6px;">PRATINJAU</div>
-      <div style="background:rgba(43,8,16,.75);border-radius:12px;padding:24px;display:flex;align-items:center;justify-content:center;min-height:140px;">
-        <div id="flyerPreviewBox" style="position:relative;max-width:220px;width:100%;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 14px 30px -10px rgba(0,0,0,.5);">
-          <div style="position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(43,8,16,.85);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;z-index:2;">✕</div>
-          <div id="flyerPreviewImg" style="aspect-ratio:3/4;background:var(--cream-100);display:flex;align-items:center;justify-content:center;color:var(--ink-600);font-size:11px;text-align:center;padding:10px;">Belum ada gambar</div>
-        </div>
-      </div>
-
-      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyFlyerFinal()">Terapkan ke Website</button>
-      <div class="upload-status" id="flyerStatus"></div>
-    </div>
-  `;
-}
-
-function renderFlyerPreviewImg(url){
-  const box = document.getElementById('flyerPreviewImg');
-  if(!box) return;
-  box.style.padding = url ? '0' : '10px';
-  box.innerHTML = url ? `<img src="${url}" style="width:100%;height:100%;object-fit:cover;">` : 'Belum ada gambar';
-}
-
-async function updateFlyerPreview(){
-  if(pendingFlyerObjectUrl){
-    renderFlyerPreviewImg(pendingFlyerObjectUrl);
-  } else {
-    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','flyer_image_url').maybeSingle();
-    renderFlyerPreviewImg(data ? data.value : '');
-  }
-}
-
-function onFlyerFileChosen(input){
-  const file = input.files[0];
-  if(!file) return;
-  pendingFlyerFile = file;
-  if(pendingFlyerObjectUrl) URL.revokeObjectURL(pendingFlyerObjectUrl);
-  pendingFlyerObjectUrl = URL.createObjectURL(file);
-  renderFlyerPreviewImg(pendingFlyerObjectUrl);
-}
-
-async function applyFlyerFinal(){
-  const statusEl = document.getElementById('flyerStatus');
-  const active = document.getElementById('flyerActive').value;
-  const link = document.getElementById('flyerLink').value;
-  let finalUrl = null;
-
-  if(pendingFlyerFile){
-    statusEl.textContent = 'Mengunggah…';
-    const path = `flyer/${Date.now()}-${pendingFlyerFile.name.replace(/\s+/g,'-')}`;
-    const {error} = await sb.storage.from('media-website').upload(path, pendingFlyerFile);
-    if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
-    finalUrl = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
-  } else {
-    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','flyer_image_url').maybeSingle();
-    finalUrl = data ? data.value : null;
-  }
-
-  if(active === 'ya' && !finalUrl){
-    statusEl.textContent = 'Upload gambar dulu sebelum mengaktifkan pop-up.';
-    return;
-  }
-
-  statusEl.textContent = 'Menyimpan…';
-  const rows = [
-    {key:'flyer_active', value: active},
-    {key:'flyer_link_url', value: link},
-  ];
-  if(finalUrl) rows.push({key:'flyer_image_url', value: finalUrl});
-  const {error: upsertErr} = await sb.from('pengaturan_situs').upsert(rows);
-  if(upsertErr){ statusEl.textContent = 'Gagal simpan: ' + upsertErr.message; return; }
-
-  statusEl.textContent = 'Flyer diterapkan ✓';
-  showToast('Flyer pop-up diterapkan ✓');
-  loadList();
-}
-
-
-async function renderKontakSosmedCard(){
-  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',
-    ['alamat','no_wa','email','instagram','facebook','youtube','tiktok','google_maps_url']);
-  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
-  const f = (id,label,ph='') => `<div class="field"><label>${label}</label><input id="${id}" value="${(map[id]||'').replace(/"/g,'&quot;')}" placeholder="${ph}"></div>`;
-  return `
-    <div class="item-card" style="flex-direction:column;align-items:stretch;">
-      <div class="item-title" style="margin-bottom:10px;">📍 Kontak & Media Sosial</div>
-      ${f('alamat','Alamat Lengkap')}
-      ${f('no_wa','Nomor WhatsApp','contoh: 085888848424')}
-      ${f('email','Email','contoh: info@alazzaam.id')}
-      ${f('google_maps_url','Link Google Maps','https://maps.app.goo.gl/...')}
-      <div style="height:6px"></div>
-      ${f('instagram','Instagram (link penuh)','https://instagram.com/al.azzaam.id')}
-      ${f('facebook','Facebook (link penuh)','https://facebook.com/al.azzaam.id')}
-      ${f('youtube','YouTube (link penuh)','https://youtube.com/@AlAzzaamTV')}
-      ${f('tiktok','TikTok (link penuh)','https://tiktok.com/@al.azzaam.id')}
-      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:6px;" onclick="saveKontakSosmed()">Simpan Kontak & Sosmed</button>
-      <div class="upload-status" id="kontakSosmedStatus"></div>
-    </div>
-  `;
-}
-async function saveKontakSosmed(){
-  const keys = ['alamat','no_wa','email','google_maps_url','instagram','facebook','youtube','tiktok'];
-  const rows = keys.map(k => ({key:k, value: document.getElementById(k).value}));
-  const statusEl = document.getElementById('kontakSosmedStatus');
-  statusEl.textContent = 'Menyimpan…';
-  const {error} = await sb.from('pengaturan_situs').upsert(rows);
-  if(error){ statusEl.textContent = 'Gagal simpan: ' + error.message; return; }
-  statusEl.textContent = 'Tersimpan ✓';
-  showToast('Kontak & Sosmed tersimpan ✓');
-}
-
-let pendingLogoFile = null;
-let pendingLogoObjectUrl = null;
-
-// ---------- FOTO LATAR SPANDUK (Hero Beranda) ----------
-let pendingHeroFile = null;
-let pendingHeroObjectUrl = null;
-
-async function renderHeroPhotoCard(){
-  const {data} = await sb.from('pengaturan_situs').select('value').eq('key','hero_photo_url').maybeSingle();
-  const currentUrl = data ? data.value : '';
-  pendingHeroFile = null;
-  pendingHeroObjectUrl = null;
-  return `
-    <div class="item-card" style="flex-direction:column;align-items:stretch;">
-      <div class="item-title" style="margin-bottom:10px;">🖼️ Foto Latar Spanduk (Hero Beranda)</div>
-      <div class="field"><label>Pilih Foto (otomatis diberi filter warna tema maroon-emas)</label>
-        <input type="file" id="heroFileInput" accept="image/*" onchange="onHeroFileChosen(this)">
-      </div>
-      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:8px 0 6px;">PRATINJAU</div>
-      <div id="heroPreviewBox" style="border-radius:12px;overflow:hidden;min-height:110px;background:linear-gradient(160deg,var(--maroon-950),var(--maroon-900));background-size:cover;background-position:center;display:flex;align-items:center;padding:18px;">
-        <div style="color:#fff;font-family:'Playfair Display',serif;font-size:15px;max-width:70%;">Pendidikan Al-Qur'an untuk Generasi Masa Depan</div>
-      </div>
-      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyHeroPhotoFinal()">Terapkan ke Website</button>
-      <div class="upload-status" id="heroPhotoStatus"></div>
-    </div>
-  `;
-}
-function onHeroFileChosen(input){
-  const file = input.files[0];
-  if(!file) return;
-  pendingHeroFile = file;
-  if(pendingHeroObjectUrl) URL.revokeObjectURL(pendingHeroObjectUrl);
-  pendingHeroObjectUrl = URL.createObjectURL(file);
-  const box = document.getElementById('heroPreviewBox');
-  box.style.backgroundImage = `linear-gradient(160deg, rgba(43,8,16,.82), rgba(61,12,20,.75)), url('${pendingHeroObjectUrl}')`;
-}
-async function applyHeroPhotoFinal(){
-  const statusEl = document.getElementById('heroPhotoStatus');
-  if(!pendingHeroFile){ statusEl.textContent = 'Pilih foto dulu sebelum menerapkan.'; return; }
-  statusEl.textContent = 'Mengunggah…';
-  const path = `hero/${Date.now()}-${pendingHeroFile.name.replace(/\s+/g,'-')}`;
-  const {error} = await sb.storage.from('media-website').upload(path, pendingHeroFile);
-  if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
-  const url = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
-  const {error: upsertErr} = await sb.from('pengaturan_situs').upsert({key:'hero_photo_url', value:url});
-  if(upsertErr){ statusEl.textContent = 'Gagal simpan: ' + upsertErr.message; return; }
-  statusEl.textContent = 'Foto spanduk diterapkan ✓';
-  showToast('Foto spanduk diterapkan ✓');
-  loadList();
-}
-
-// ---------- TAMPILAN RUNNING TEXT (warna & ukuran, dengan preview) ----------
-async function renderTickerStyleCard(){
-  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height']);
-  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
-  const bg = map.ticker_bg || '#2b0810';
-  const textColor = map.ticker_text_color || '#e8c766';
-  const height = map.ticker_height || '38';
-  return `
-    <div class="item-card" style="flex-direction:column;align-items:stretch;">
-      <div class="item-title" style="margin-bottom:10px;">📢 Tampilan Running Text</div>
-      <div style="display:flex;gap:14px;flex-wrap:wrap;">
-        <div class="field" style="flex:1;min-width:120px;"><label>Warna Latar</label><input type="color" id="tickerBg" value="${bg}" oninput="updateTickerPreview()" style="height:40px;padding:4px;"></div>
-        <div class="field" style="flex:1;min-width:120px;"><label>Warna Teks</label><input type="color" id="tickerTextColor" value="${textColor}" oninput="updateTickerPreview()" style="height:40px;padding:4px;"></div>
-        <div class="field" style="flex:1;min-width:140px;"><label>Tinggi Kotak (px)</label><input type="number" id="tickerHeight" value="${height}" min="24" max="80" oninput="updateTickerPreview()"></div>
-      </div>
-      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:6px 0 6px;">PRATINJAU</div>
-      <div id="tickerPreviewBox" style="border-radius:8px;overflow:hidden;display:flex;align-items:center;white-space:nowrap;">
-        <div id="tickerPreviewText" style="padding:0 16px;font-size:12px;font-weight:700;"></div>
-      </div>
-      <div style="font-size:10.5px;color:var(--ink-600);margin-top:6px;">Isi teksnya diatur lewat tab <b>Running Text</b> di menu atas.</div>
-      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyTickerStyle()">Terapkan ke Website</button>
-      <div class="upload-status" id="tickerStyleStatus"></div>
-    </div>
-  `;
-}
-function updateTickerPreview(){
-  const bg = document.getElementById('tickerBg').value;
-  const textColor = document.getElementById('tickerTextColor').value;
-  const height = document.getElementById('tickerHeight').value;
-  const box = document.getElementById('tickerPreviewBox');
-  box.style.background = bg;
-  box.style.height = height + 'px';
-  const textEl = document.getElementById('tickerPreviewText');
-  textEl.style.color = textColor;
-  textEl.style.lineHeight = height + 'px';
-  textEl.textContent = 'Contoh: Pendaftaran Santri Baru Tahun Ajaran 2027/2028 telah dibuka  •  Info lebih lanjut hubungi panitia PPDB';
-}
-async function applyTickerStyle(){
-  const statusEl = document.getElementById('tickerStyleStatus');
-  statusEl.textContent = 'Menyimpan…';
-  const rows = [
-    {key:'ticker_bg', value: document.getElementById('tickerBg').value},
-    {key:'ticker_text_color', value: document.getElementById('tickerTextColor').value},
-    {key:'ticker_height', value: document.getElementById('tickerHeight').value},
-  ];
-  const {error} = await sb.from('pengaturan_situs').upsert(rows);
-  if(error){ statusEl.textContent = 'Gagal simpan: ' + error.message; return; }
-  statusEl.textContent = 'Tersimpan ✓';
-  showToast('Tampilan Running Text diterapkan ✓');
-}
-
-async function renderLogoCard(){
+async function applyLogo(){
   const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['logo_url','logo_type']);
   const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
-  const currentUrl = map.logo_url || '';
-  const currentType = map.logo_type || 'icon';
-  pendingLogoFile = null;
-  pendingLogoObjectUrl = null;
+  if(!map.logo_url) return;
+  const type = map.logo_type || 'icon';
 
-  return `
-    <div class="item-card" style="flex-direction:column;align-items:stretch;">
-      <div class="item-title" style="margin-bottom:10px;">🖼️ Logo Website</div>
-
-      <div class="field">
-        <label>Tipe Logo</label>
-        <select id="logoType" onchange="updateLogoPreview()">
-          <option value="icon" ${currentType==='icon'?'selected':''}>Ikon saja (ditampilkan bulat + tulisan "PPTQ Al Azzaam")</option>
-          <option value="full" ${currentType==='full'?'selected':''}>Logo lengkap (sudah ada tulisan nama di gambar)</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Pilih Gambar Logo</label>
-        <input type="file" id="logoFileInput" accept="image/*" onchange="onLogoFileChosen(this)">
-      </div>
-
-      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:10px 0 6px;">PRATINJAU (belum tersimpan sebelum kamu klik Terapkan)</div>
-      <div style="border:1.5px dashed var(--line);border-radius:12px;overflow:hidden;">
-        <div id="previewNavbar" style="background:#fff;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);"></div>
-        <div id="previewHero" style="background:linear-gradient(160deg,var(--maroon-950),var(--maroon-900));padding:24px;display:flex;align-items:center;justify-content:center;min-height:100px;"></div>
-      </div>
-
-      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyLogoFinal()">Terapkan ke Website</button>
-      <div class="upload-status" id="logoStatus"></div>
-    </div>
-  `;
-}
-
-function renderLogoPreviewInto(url, type){
-  const brand = document.getElementById('previewNavbar');
-  const emblem = document.getElementById('previewHero');
-  if(!brand || !emblem) return;
-
-  if(!url){
-    brand.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-weight:700;font-size:13px;color:var(--maroon-900);">
-      <span style="width:26px;height:26px;border-radius:50%;background:var(--maroon-950);box-shadow:0 0 0 2px #fff,0 0 0 3px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-size:11px;">A</span> PPTQ Al Azzaam</div>
-      <div style="background:var(--gold-shine);color:var(--maroon-950);font-size:9.5px;font-weight:800;padding:5px 12px;border-radius:14px;">Daftar</div>`;
-    emblem.innerHTML = `<div style="width:70px;height:70px;border-radius:50%;background:var(--maroon-950);box-shadow:0 0 0 2px rgba(255,255,255,.2),0 0 0 4px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-family:'Playfair Display',serif;font-size:26px;">ا</div>`;
-    return;
-  }
-
-  if(type === 'full'){
-    brand.innerHTML = `<img src="${url}" style="height:28px;max-width:170px;object-fit:contain;display:block;">
-      <div style="background:var(--gold-shine);color:var(--maroon-950);font-size:9.5px;font-weight:800;padding:5px 12px;border-radius:14px;">Daftar</div>`;
-    emblem.innerHTML = `<div style="background:#fff;padding:14px 20px;border-radius:16px;box-shadow:0 0 0 3px var(--gold-500);display:inline-flex;"><img src="${url}" style="max-height:56px;max-width:220px;object-fit:contain;"></div>`;
-  } else {
-    brand.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-weight:700;font-size:13px;color:var(--maroon-900);">
-      <span style="width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--gold-500);overflow:hidden;display:inline-flex;align-items:center;justify-content:center;"><img src="${url}" style="width:100%;height:100%;object-fit:contain;"></span> PPTQ Al Azzaam</div>
-      <div style="background:var(--gold-shine);color:var(--maroon-950);font-size:9.5px;font-weight:800;padding:5px 12px;border-radius:14px;">Daftar</div>`;
-    emblem.innerHTML = `<div style="width:70px;height:70px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.2),0 0 0 4px var(--gold-500);display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box;"><img src="${url}" style="max-width:100%;max-height:100%;object-fit:contain;"></div>`;
-  }
-}
-
-async function updateLogoPreview(){
-  const type = document.getElementById('logoType').value;
-  if(pendingLogoObjectUrl){
-    renderLogoPreviewInto(pendingLogoObjectUrl, type);
-  } else {
-    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','logo_url').maybeSingle();
-    renderLogoPreviewInto(data ? data.value : '', type);
-  }
-}
-
-function onLogoFileChosen(input){
-  const file = input.files[0];
-  if(!file) return;
-  pendingLogoFile = file;
-  if(pendingLogoObjectUrl) URL.revokeObjectURL(pendingLogoObjectUrl);
-  pendingLogoObjectUrl = URL.createObjectURL(file);
-  const type = document.getElementById('logoType').value;
-  renderLogoPreviewInto(pendingLogoObjectUrl, type);
-}
-
-async function applyLogoFinal(){
-  const statusEl = document.getElementById('logoStatus');
-  const type = document.getElementById('logoType').value;
-  let finalUrl = null;
-
-  if(pendingLogoFile){
-    statusEl.textContent = 'Mengunggah…';
-    const path = `logo/${Date.now()}-${pendingLogoFile.name.replace(/\s+/g,'-')}`;
-    const {error} = await sb.storage.from('media-website').upload(path, pendingLogoFile);
-    if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
-    finalUrl = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
-  } else {
-    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','logo_url').maybeSingle();
-    finalUrl = data ? data.value : null;
-  }
-
-  if(!finalUrl){
-    statusEl.textContent = 'Pilih gambar logo dulu sebelum menerapkan.';
-    return;
-  }
-
-  statusEl.textContent = 'Menyimpan…';
-  const {error: upsertErr} = await sb.from('pengaturan_situs').upsert([
-    {key:'logo_url', value: finalUrl},
-    {key:'logo_type', value: type},
-  ]);
-  if(upsertErr){ statusEl.textContent = 'Gagal simpan: ' + upsertErr.message; return; }
-
-  statusEl.textContent = 'Logo diterapkan ke website ✓';
-  showToast('Logo diterapkan ke website ✓');
-  loadList();
-}
-
-
-async function saveRecord(){
-  const cfg = TABLES[currentTab];
-  const payload = {};
-  cfg.fields.forEach(f => {
-    const el = document.getElementById('f_'+f.key);
-    let v = el.value;
-    if(f.type==='number') v = v === '' ? null : Number(v);
-    payload[f.key] = v === '' ? null : v;
+  document.querySelectorAll('.nav-brand').forEach(el=>{
+    if(type === 'full'){
+      el.innerHTML = `<img src="${map.logo_url}" style="height:32px;max-width:170px;object-fit:contain;display:block;">`;
+    } else {
+      el.innerHTML = `<span class="ring" style="background-color:#fff;background-image:url('${map.logo_url}');background-size:contain;background-repeat:no-repeat;background-position:center;background-origin:content-box;background-clip:content-box;padding:5px;"></span> PPTQ Al Azzaam`;
+    }
   });
+}
+applyLogo();
 
-  let error;
-  if(currentRecord){
-    // update berdasarkan primary key
-    const pkVal = currentRecord[cfg.pk];
-    ({error} = await sb.from(currentTab).update(payload).eq(cfg.pk, pkVal));
-  } else {
-    ({error} = await sb.from(currentTab).insert(payload));
+async function applyHeroPhoto(){
+  const {data} = await sb.from('pengaturan_situs').select('value').eq('key','hero_photo_url').maybeSingle();
+  if(data && data.value){
+    const hero = document.getElementById('heroSection');
+    hero.style.backgroundImage = `linear-gradient(160deg, rgba(43,8,16,.88), rgba(61,12,20,.82)), url('${data.value}')`;
   }
-  if(error){
-    showToast('Gagal menyimpan: ' + error.message);
+}
+applyHeroPhoto();
+
+document.getElementById('yearNow').textContent = new Date().getFullYear();
+document.getElementById('navToggle').addEventListener('click', ()=>{
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+const ICONS = {'Tahfidz':'📿','Diniyah':'🕌','SMP':'📘','MA':'📗'};
+
+async function loadPengaturan(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value');
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  document.getElementById('stSantri').textContent = map.jumlah_santri || '—';
+  document.getElementById('stUstadz').textContent = map.jumlah_ustadz || '—';
+}
+
+async function loadTentangPondok(){
+  const {data} = await sb.from('pengaturan_situs').select('value').eq('key','ringkasan_tentang').maybeSingle();
+  document.getElementById('tentangText').textContent = (data && data.value) || 'Ringkasan profil pondok akan tampil di sini. Isi lewat panel admin (Pengaturan Situs → Ringkasan Singkat).';
+}
+
+async function loadVisiMisi(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['profil_visi','profil_misi']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  const toItems = (text, fallback) => {
+    const items = (text||'').split('\n').map(s=>s.trim()).filter(Boolean);
+    return items.length ? items.map(s=>`<li>${s}</li>`).join('') : `<li>${fallback}</li>`;
+  };
+  document.getElementById('accVisi').innerHTML = toItems(map.profil_visi, 'Konten visi belum diisi.');
+  document.getElementById('accMisi').innerHTML = toItems(map.profil_misi, 'Konten misi belum diisi.');
+}
+function toggleAcc(itemId){
+  document.getElementById(itemId).classList.toggle('open');
+}
+
+async function loadGaleriMini(){
+  const {data} = await sb.from('galeri').select('*').order('urutan').limit(6);
+  const grid = document.getElementById('miniGaleriGrid');
+  if(!data || data.length===0){
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;padding:16px;font-size:11.5px;">Belum ada foto.</div>';
     return;
   }
-  closeForm();
-  showToast('Tersimpan ✓');
-  loadList();
+  grid.innerHTML = data.map(g=>`<img src="${g.media_url}" alt="${g.judul||''}" loading="lazy">`).join('');
 }
 
-async function deleteRecord(pkVal){
-  if(!confirm('Hapus data ini? Tindakan tidak bisa dibatalkan.')) return;
-  const cfg = TABLES[currentTab];
-  const {error} = await sb.from(currentTab).delete().eq(cfg.pk, pkVal);
-  if(error){
-    showToast('Gagal menghapus: ' + error.message);
+async function loadBeritaMini(){
+  const {data} = await sb.from('berita').select('*').eq('status','published').order('tanggal_publish',{ascending:false}).limit(3);
+  const list = document.getElementById('miniBeritaList');
+  if(!data || data.length===0){
+    list.innerHTML = '<div class="empty-state" style="padding:16px;font-size:11.5px;">Belum ada berita.</div>';
     return;
   }
-  showToast('Data dihapus');
-  loadList();
+  list.innerHTML = data.map(b=>`
+    <a href="berita.html?slug=${b.slug}" class="mini-berita-item">
+      <h4>${b.judul}</h4>
+      <div class="tgl">${new Date(b.tanggal_publish).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})}</div>
+    </a>
+  `).join('');
 }
 
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.display = 'block';
-  setTimeout(()=> t.style.display='none', 2500);
+async function loadTicker(){
+  const [{data: items}, {data: settings}] = await Promise.all([
+    sb.from('running_text').select('teks').eq('status','published').order('urutan'),
+    sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height']),
+  ]);
+  const map = {}; (settings||[]).forEach(r=>map[r.key]=r.value);
+  const wrap = document.getElementById('tickerWrap');
+  const track = document.getElementById('tickerTrack');
+
+  wrap.style.background = map.ticker_bg || 'var(--maroon-950)';
+  wrap.style.height = (map.ticker_height || '38') + 'px';
+  track.style.color = map.ticker_text_color || 'var(--gold-400)';
+
+  if(!items || items.length===0){
+    wrap.style.display = 'none';
+    return;
+  }
+  const text = items.map(i=>i.teks).join('   •   ') + '   •   ';
+  track.textContent = text + text; // duplikat biar looping mulus
 }
 
-checkSession();
+loadTicker();
+
+async function loadFooterData(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value');
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+
+  const list = document.getElementById('kontakList');
+  if(list){
+    let items = '';
+    items += `<li>${map.alamat || 'Alamat belum diisi'}</li>`;
+    if(map.google_maps_url) items += `<li><a href="${map.google_maps_url}" target="_blank">📍 Lihat di Peta</a></li>`;
+    if(map.no_wa) items += `<li><a href="https://wa.me/${map.no_wa.replace(/[^0-9]/g,'').replace(/^0/,'62')}" target="_blank">WA: ${map.no_wa}</a></li>`;
+    if(map.email) items += `<li><a href="mailto:${map.email}">${map.email}</a></li>`;
+    list.innerHTML = items;
+  }
+
+  const socialRow = document.getElementById('socialRow');
+  if(socialRow){
+    const socials = [
+      {key:'instagram', label:'IG'},
+      {key:'facebook', label:'FB'},
+      {key:'youtube', label:'YT'},
+      {key:'tiktok', label:'TT'},
+    ];
+    socialRow.innerHTML = socials.filter(s=>map[s.key])
+      .map(s=>`<a href="${map[s.key]}" target="_blank" class="social-badge" title="${s.key}">${s.label}</a>`).join('');
+  }
+}
+
+async function loadProgram(){
+  const {data, error} = await sb.from('program').select('*').order('urutan');
+  const grid = document.getElementById('programGrid');
+  if(error || !data || data.length===0){
+    grid.innerHTML = '<div class="empty-state">Belum ada data program. Tambahkan lewat panel admin.</div>';
+    return;
+  }
+  grid.innerHTML = data.map(p=>`
+    <div class="program-card">
+      <div class="icon">${p.icon || ICONS[p.jenjang] || '📘'}</div>
+      <h3>${p.nama}</h3>
+      <p>${p.deskripsi || ''}</p>
+    </div>
+  `).join('');
+}
+
+async function loadBerita(){
+  const {data, error} = await sb.from('berita').select('*').eq('status','published').order('tanggal_publish',{ascending:false}).limit(3);
+  const grid = document.getElementById('beritaGrid');
+  if(error || !data || data.length===0){
+    grid.innerHTML = '<div class="empty-state">Belum ada berita. Tambahkan lewat panel admin.</div>';
+    return;
+  }
+  grid.innerHTML = data.map(b=>`
+    <a href="berita.html?slug=${b.slug}" class="berita-card">
+      <div class="thumb">${b.foto_url ? `<img src="${b.foto_url}" alt="${b.judul}">` : 'Tanpa foto'}</div>
+      <div class="berita-body">
+        <div class="berita-kategori">${b.kategori}</div>
+        <h3>${b.judul}</h3>
+        <div class="tanggal">${new Date(b.tanggal_publish).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
+      </div>
+    </a>
+  `).join('');
+}
+
+loadPengaturan();
+loadFooterData();
+loadTentangPondok();
+loadVisiMisi();
+loadGaleriMini();
+loadBeritaMini();
+loadProgram();
+loadBerita();
+
+async function loadFlyer(){
+  if(sessionStorage.getItem('flyer_dismissed')) return;
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['flyer_image_url','flyer_link_url','flyer_active']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  if(map.flyer_active !== 'ya' || !map.flyer_image_url) return;
+  document.getElementById('flyerImage').src = map.flyer_image_url;
+  window._flyerLink = map.flyer_link_url || '';
+  setTimeout(()=>{ document.getElementById('flyerOverlay').classList.add('open'); }, 600);
+}
+function closeFlyer(){
+  document.getElementById('flyerOverlay').classList.remove('open');
+  sessionStorage.setItem('flyer_dismissed','1');
+}
+function clickFlyer(){
+  if(window._flyerLink) window.open(window._flyerLink, '_blank');
+  closeFlyer();
+}
+loadFlyer();
 </script>
+<div class="flyer-overlay" id="flyerOverlay" onclick="if(event.target.id==='flyerOverlay') closeFlyer()">
+  <div class="flyer-box">
+    <button class="flyer-close" onclick="closeFlyer()">✕</button>
+    <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
+  </div>
+</div>
 </body>
 </html>
