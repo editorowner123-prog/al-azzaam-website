@@ -188,6 +188,16 @@ const TABLES = {
       {key:'urutan', label:'Urutan Tampil', type:'number'},
     ]
   },
+  running_text: {
+    label: 'Running Text', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'teks',
+    meta: r => [`<span class="pill ${r.status}">${r.status}</span>`, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'teks', label:'Isi Teks Berjalan', type:'textarea'},
+      {key:'urutan', label:'Urutan Tampil', type:'number'},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
+    ]
+  },
   pengaturan_situs: {
     label: 'Pengaturan Situs', pk: 'key', orderBy: 'key', ascending: true,
     titleField: 'key', keyIsFixed: true,
@@ -256,16 +266,21 @@ async function loadList(){
   if(currentTab === 'pengaturan_situs'){
     const profilHtml = await renderProfilCard();
     const kontakHtml = await renderKontakSosmedCard();
-    logoHtml = profilHtml + kontakHtml + await renderLogoCard();
+    const heroPhotoHtml = await renderHeroPhotoCard();
+    const tickerStyleHtml = await renderTickerStyleCard();
+    const flyerHtml = await renderFlyerCard();
+    logoHtml = profilHtml + kontakHtml + heroPhotoHtml + tickerStyleHtml + flyerHtml + await renderLogoCard();
   }
 
   const {data, error} = await sb.from(currentTab).select('*').order(cfg.orderBy, {ascending: cfg.ascending});
   if(error){
     area.innerHTML = logoHtml + `<div class="empty">Gagal memuat: ${error.message}</div>`;
+    if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); updateFlyerPreview(); }
     return;
   }
   if(!data || data.length===0){
     area.innerHTML = logoHtml + `<div class="empty">Belum ada data ${cfg.label.toLowerCase()}. Klik "+ Tambah" untuk mulai.</div>`;
+    if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); updateFlyerPreview(); }
     return;
   }
   area.innerHTML = logoHtml + data.map(r => `
@@ -280,6 +295,7 @@ async function loadList(){
       </div>
     </div>
   `).join('');
+  if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); updateFlyerPreview(); }
 }
 
 // ---------- FORM ----------
@@ -355,14 +371,15 @@ async function uploadImage(input, targetId, folder){
 
 // ---------- KONTEN PROFIL (Sejarah/Visi/Misi, perlakuan khusus) ----------
 async function renderProfilCard(){
-  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['profil_sejarah','profil_visi','profil_misi']);
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['profil_sejarah','profil_visi','profil_misi','ringkasan_tentang']);
   const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
   return `
     <div class="item-card" style="flex-direction:column;align-items:stretch;">
       <div class="item-title" style="margin-bottom:10px;">📖 Konten Profil (Sejarah, Visi, Misi)</div>
-      <div class="field"><label>Sejarah</label><textarea id="profilSejarah" rows="4">${map.profil_sejarah||''}</textarea></div>
-      <div class="field"><label>Visi</label><textarea id="profilVisi" rows="2">${map.profil_visi||''}</textarea></div>
-      <div class="field" style="margin-bottom:10px;"><label>Misi</label><textarea id="profilMisi" rows="4">${map.profil_misi||''}</textarea></div>
+      <div class="field"><label>Ringkasan Singkat (tampil di card "Tentang Pondok" Beranda, 2-3 kalimat)</label><textarea id="ringkasanTentang" rows="3">${map.ringkasan_tentang||''}</textarea></div>
+      <div class="field"><label>Sejarah (halaman Profil lengkap)</label><textarea id="profilSejarah" rows="4">${map.profil_sejarah||''}</textarea></div>
+      <div class="field"><label>Visi (1 poin per baris, akan otomatis diberi nomor)</label><textarea id="profilVisi" rows="2">${map.profil_visi||''}</textarea></div>
+      <div class="field" style="margin-bottom:10px;"><label>Misi (1 poin per baris, akan otomatis diberi nomor)</label><textarea id="profilMisi" rows="4">${map.profil_misi||''}</textarea></div>
       <button class="btn btn-gold btn-sm" style="align-self:flex-start" onclick="saveProfilKonten()">Simpan Konten Profil</button>
       <div class="upload-status" id="profilStatus"></div>
     </div>
@@ -370,6 +387,7 @@ async function renderProfilCard(){
 }
 async function saveProfilKonten(){
   const rows = [
+    {key:'ringkasan_tentang', value: document.getElementById('ringkasanTentang').value},
     {key:'profil_sejarah', value: document.getElementById('profilSejarah').value},
     {key:'profil_visi', value: document.getElementById('profilVisi').value},
     {key:'profil_misi', value: document.getElementById('profilMisi').value},
@@ -383,7 +401,114 @@ async function saveProfilKonten(){
 }
 
 
-// ---------- KONTAK & MEDIA SOSIAL (perlakuan khusus) ----------
+
+// ---------- FLYER POP-UP AWAL (perlakuan khusus) ----------
+let pendingFlyerFile = null;
+let pendingFlyerObjectUrl = null;
+
+async function renderFlyerCard(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['flyer_image_url','flyer_link_url','flyer_active']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  pendingFlyerFile = null;
+  pendingFlyerObjectUrl = null;
+
+  return `
+    <div class="item-card" style="flex-direction:column;align-items:stretch;">
+      <div class="item-title" style="margin-bottom:10px;">🎈 Flyer Pop-up Awal</div>
+      <p style="font-size:11.5px;color:var(--ink-600);margin:0 0 10px;">Muncul otomatis sekali saat pengunjung pertama kali buka website. Bisa ditutup (✕) atau diklik untuk menuju link.</p>
+
+      <div class="field">
+        <label>Aktifkan Pop-up?</label>
+        <select id="flyerActive" onchange="updateFlyerPreview()">
+          <option value="tidak" ${map.flyer_active!=='ya'?'selected':''}>Tidak aktif</option>
+          <option value="ya" ${map.flyer_active==='ya'?'selected':''}>Aktif</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Gambar Flyer</label>
+        <input type="file" id="flyerFileInput" accept="image/*" onchange="onFlyerFileChosen(this)">
+      </div>
+      <div class="field">
+        <label>Link Tujuan (saat gambar diklik)</label>
+        <input type="text" id="flyerLink" value="${(map.flyer_link_url||'').replace(/"/g,'&quot;')}" placeholder="https://... atau ppdb.html">
+      </div>
+
+      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:8px 0 6px;">PRATINJAU</div>
+      <div style="background:rgba(43,8,16,.75);border-radius:12px;padding:24px;display:flex;align-items:center;justify-content:center;min-height:140px;">
+        <div id="flyerPreviewBox" style="position:relative;max-width:220px;width:100%;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 14px 30px -10px rgba(0,0,0,.5);">
+          <div style="position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(43,8,16,.85);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;z-index:2;">✕</div>
+          <div id="flyerPreviewImg" style="aspect-ratio:3/4;background:var(--cream-100);display:flex;align-items:center;justify-content:center;color:var(--ink-600);font-size:11px;text-align:center;padding:10px;">Belum ada gambar</div>
+        </div>
+      </div>
+
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyFlyerFinal()">Terapkan ke Website</button>
+      <div class="upload-status" id="flyerStatus"></div>
+    </div>
+  `;
+}
+
+function renderFlyerPreviewImg(url){
+  const box = document.getElementById('flyerPreviewImg');
+  if(!box) return;
+  box.style.padding = url ? '0' : '10px';
+  box.innerHTML = url ? `<img src="${url}" style="width:100%;height:100%;object-fit:cover;">` : 'Belum ada gambar';
+}
+
+async function updateFlyerPreview(){
+  if(pendingFlyerObjectUrl){
+    renderFlyerPreviewImg(pendingFlyerObjectUrl);
+  } else {
+    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','flyer_image_url').maybeSingle();
+    renderFlyerPreviewImg(data ? data.value : '');
+  }
+}
+
+function onFlyerFileChosen(input){
+  const file = input.files[0];
+  if(!file) return;
+  pendingFlyerFile = file;
+  if(pendingFlyerObjectUrl) URL.revokeObjectURL(pendingFlyerObjectUrl);
+  pendingFlyerObjectUrl = URL.createObjectURL(file);
+  renderFlyerPreviewImg(pendingFlyerObjectUrl);
+}
+
+async function applyFlyerFinal(){
+  const statusEl = document.getElementById('flyerStatus');
+  const active = document.getElementById('flyerActive').value;
+  const link = document.getElementById('flyerLink').value;
+  let finalUrl = null;
+
+  if(pendingFlyerFile){
+    statusEl.textContent = 'Mengunggah…';
+    const path = `flyer/${Date.now()}-${pendingFlyerFile.name.replace(/\s+/g,'-')}`;
+    const {error} = await sb.storage.from('media-website').upload(path, pendingFlyerFile);
+    if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
+    finalUrl = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
+  } else {
+    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','flyer_image_url').maybeSingle();
+    finalUrl = data ? data.value : null;
+  }
+
+  if(active === 'ya' && !finalUrl){
+    statusEl.textContent = 'Upload gambar dulu sebelum mengaktifkan pop-up.';
+    return;
+  }
+
+  statusEl.textContent = 'Menyimpan…';
+  const rows = [
+    {key:'flyer_active', value: active},
+    {key:'flyer_link_url', value: link},
+  ];
+  if(finalUrl) rows.push({key:'flyer_image_url', value: finalUrl});
+  const {error: upsertErr} = await sb.from('pengaturan_situs').upsert(rows);
+  if(upsertErr){ statusEl.textContent = 'Gagal simpan: ' + upsertErr.message; return; }
+
+  statusEl.textContent = 'Flyer diterapkan ✓';
+  showToast('Flyer pop-up diterapkan ✓');
+  loadList();
+}
+
+
 async function renderKontakSosmedCard(){
   const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',
     ['alamat','no_wa','email','instagram','facebook','youtube','tiktok','google_maps_url']);
@@ -417,35 +542,219 @@ async function saveKontakSosmed(){
   showToast('Kontak & Sosmed tersimpan ✓');
 }
 
-async function renderLogoCard(){
-  const {data} = await sb.from('pengaturan_situs').select('value').eq('key','logo_url').maybeSingle();
+let pendingLogoFile = null;
+let pendingLogoObjectUrl = null;
+
+// ---------- FOTO LATAR SPANDUK (Hero Beranda) ----------
+let pendingHeroFile = null;
+let pendingHeroObjectUrl = null;
+
+async function renderHeroPhotoCard(){
+  const {data} = await sb.from('pengaturan_situs').select('value').eq('key','hero_photo_url').maybeSingle();
   const currentUrl = data ? data.value : '';
+  pendingHeroFile = null;
+  pendingHeroObjectUrl = null;
   return `
-    <div class="item-card" style="flex-direction:column;align-items:flex-start;">
-      <div class="item-title" style="margin-bottom:10px;">🖼️ Logo Website</div>
-      <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;width:100%;">
-        <div style="width:64px;height:64px;border-radius:50%;background-color:${currentUrl ? '#fff' : 'var(--cream-100)'};${currentUrl ? `background-image:url('${currentUrl}');background-size:contain;background-repeat:no-repeat;background-position:center;background-origin:content-box;background-clip:content-box;` : ''}padding:6px;box-sizing:border-box;border:2px solid var(--gold-500);flex:none;"></div>
-        <div style="flex:1;min-width:200px;">
-          <input type="file" accept="image/*" onchange="uploadLogo(this)">
-          <div class="upload-status" id="logoStatus"></div>
-        </div>
+    <div class="item-card" style="flex-direction:column;align-items:stretch;">
+      <div class="item-title" style="margin-bottom:10px;">🖼️ Foto Latar Spanduk (Hero Beranda)</div>
+      <div class="field"><label>Pilih Foto (otomatis diberi filter warna tema maroon-emas)</label>
+        <input type="file" id="heroFileInput" accept="image/*" onchange="onHeroFileChosen(this)">
       </div>
+      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:8px 0 6px;">PRATINJAU</div>
+      <div id="heroPreviewBox" style="border-radius:12px;overflow:hidden;min-height:110px;background:linear-gradient(160deg,var(--maroon-950),var(--maroon-900));background-size:cover;background-position:center;display:flex;align-items:center;padding:18px;">
+        <div style="color:#fff;font-family:'Playfair Display',serif;font-size:15px;max-width:70%;">Pendidikan Al-Qur'an untuk Generasi Masa Depan</div>
+      </div>
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyHeroPhotoFinal()">Terapkan ke Website</button>
+      <div class="upload-status" id="heroPhotoStatus"></div>
     </div>
   `;
 }
-async function uploadLogo(input){
+function onHeroFileChosen(input){
   const file = input.files[0];
   if(!file) return;
-  const statusEl = document.getElementById('logoStatus');
+  pendingHeroFile = file;
+  if(pendingHeroObjectUrl) URL.revokeObjectURL(pendingHeroObjectUrl);
+  pendingHeroObjectUrl = URL.createObjectURL(file);
+  const box = document.getElementById('heroPreviewBox');
+  box.style.backgroundImage = `linear-gradient(160deg, rgba(43,8,16,.82), rgba(61,12,20,.75)), url('${pendingHeroObjectUrl}')`;
+}
+async function applyHeroPhotoFinal(){
+  const statusEl = document.getElementById('heroPhotoStatus');
+  if(!pendingHeroFile){ statusEl.textContent = 'Pilih foto dulu sebelum menerapkan.'; return; }
   statusEl.textContent = 'Mengunggah…';
-  const path = `logo/${Date.now()}-${file.name.replace(/\s+/g,'-')}`;
-  const {error} = await sb.storage.from('media-website').upload(path, file);
+  const path = `hero/${Date.now()}-${pendingHeroFile.name.replace(/\s+/g,'-')}`;
+  const {error} = await sb.storage.from('media-website').upload(path, pendingHeroFile);
   if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
-  const {data} = sb.storage.from('media-website').getPublicUrl(path);
-  const {error: upsertErr} = await sb.from('pengaturan_situs').upsert({key:'logo_url', value:data.publicUrl});
+  const url = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
+  const {error: upsertErr} = await sb.from('pengaturan_situs').upsert({key:'hero_photo_url', value:url});
   if(upsertErr){ statusEl.textContent = 'Gagal simpan: ' + upsertErr.message; return; }
-  statusEl.textContent = 'Logo berhasil diganti ✓';
-  showToast('Logo tersimpan ✓');
+  statusEl.textContent = 'Foto spanduk diterapkan ✓';
+  showToast('Foto spanduk diterapkan ✓');
+  loadList();
+}
+
+// ---------- TAMPILAN RUNNING TEXT (warna & ukuran, dengan preview) ----------
+async function renderTickerStyleCard(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  const bg = map.ticker_bg || '#2b0810';
+  const textColor = map.ticker_text_color || '#e8c766';
+  const height = map.ticker_height || '38';
+  return `
+    <div class="item-card" style="flex-direction:column;align-items:stretch;">
+      <div class="item-title" style="margin-bottom:10px;">📢 Tampilan Running Text</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <div class="field" style="flex:1;min-width:120px;"><label>Warna Latar</label><input type="color" id="tickerBg" value="${bg}" oninput="updateTickerPreview()" style="height:40px;padding:4px;"></div>
+        <div class="field" style="flex:1;min-width:120px;"><label>Warna Teks</label><input type="color" id="tickerTextColor" value="${textColor}" oninput="updateTickerPreview()" style="height:40px;padding:4px;"></div>
+        <div class="field" style="flex:1;min-width:140px;"><label>Tinggi Kotak (px)</label><input type="number" id="tickerHeight" value="${height}" min="24" max="80" oninput="updateTickerPreview()"></div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:6px 0 6px;">PRATINJAU</div>
+      <div id="tickerPreviewBox" style="border-radius:8px;overflow:hidden;display:flex;align-items:center;white-space:nowrap;">
+        <div id="tickerPreviewText" style="padding:0 16px;font-size:12px;font-weight:700;"></div>
+      </div>
+      <div style="font-size:10.5px;color:var(--ink-600);margin-top:6px;">Isi teksnya diatur lewat tab <b>Running Text</b> di menu atas.</div>
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyTickerStyle()">Terapkan ke Website</button>
+      <div class="upload-status" id="tickerStyleStatus"></div>
+    </div>
+  `;
+}
+function updateTickerPreview(){
+  const bg = document.getElementById('tickerBg').value;
+  const textColor = document.getElementById('tickerTextColor').value;
+  const height = document.getElementById('tickerHeight').value;
+  const box = document.getElementById('tickerPreviewBox');
+  box.style.background = bg;
+  box.style.height = height + 'px';
+  const textEl = document.getElementById('tickerPreviewText');
+  textEl.style.color = textColor;
+  textEl.style.lineHeight = height + 'px';
+  textEl.textContent = 'Contoh: Pendaftaran Santri Baru Tahun Ajaran 2027/2028 telah dibuka  •  Info lebih lanjut hubungi panitia PPDB';
+}
+async function applyTickerStyle(){
+  const statusEl = document.getElementById('tickerStyleStatus');
+  statusEl.textContent = 'Menyimpan…';
+  const rows = [
+    {key:'ticker_bg', value: document.getElementById('tickerBg').value},
+    {key:'ticker_text_color', value: document.getElementById('tickerTextColor').value},
+    {key:'ticker_height', value: document.getElementById('tickerHeight').value},
+  ];
+  const {error} = await sb.from('pengaturan_situs').upsert(rows);
+  if(error){ statusEl.textContent = 'Gagal simpan: ' + error.message; return; }
+  statusEl.textContent = 'Tersimpan ✓';
+  showToast('Tampilan Running Text diterapkan ✓');
+}
+
+async function renderLogoCard(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['logo_url','logo_type']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  const currentUrl = map.logo_url || '';
+  const currentType = map.logo_type || 'icon';
+  pendingLogoFile = null;
+  pendingLogoObjectUrl = null;
+
+  return `
+    <div class="item-card" style="flex-direction:column;align-items:stretch;">
+      <div class="item-title" style="margin-bottom:10px;">🖼️ Logo Website</div>
+
+      <div class="field">
+        <label>Tipe Logo</label>
+        <select id="logoType" onchange="updateLogoPreview()">
+          <option value="icon" ${currentType==='icon'?'selected':''}>Ikon saja (ditampilkan bulat + tulisan "PPTQ Al Azzaam")</option>
+          <option value="full" ${currentType==='full'?'selected':''}>Logo lengkap (sudah ada tulisan nama di gambar)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Pilih Gambar Logo</label>
+        <input type="file" id="logoFileInput" accept="image/*" onchange="onLogoFileChosen(this)">
+      </div>
+
+      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:10px 0 6px;">PRATINJAU (belum tersimpan sebelum kamu klik Terapkan)</div>
+      <div style="border:1.5px dashed var(--line);border-radius:12px;overflow:hidden;">
+        <div id="previewNavbar" style="background:#fff;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);"></div>
+        <div id="previewHero" style="background:linear-gradient(160deg,var(--maroon-950),var(--maroon-900));padding:24px;display:flex;align-items:center;justify-content:center;min-height:100px;"></div>
+      </div>
+
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyLogoFinal()">Terapkan ke Website</button>
+      <div class="upload-status" id="logoStatus"></div>
+    </div>
+  `;
+}
+
+function renderLogoPreviewInto(url, type){
+  const brand = document.getElementById('previewNavbar');
+  const emblem = document.getElementById('previewHero');
+  if(!brand || !emblem) return;
+
+  if(!url){
+    brand.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-weight:700;font-size:13px;color:var(--maroon-900);">
+      <span style="width:26px;height:26px;border-radius:50%;background:var(--maroon-950);box-shadow:0 0 0 2px #fff,0 0 0 3px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-size:11px;">A</span> PPTQ Al Azzaam</div>
+      <div style="background:var(--gold-shine);color:var(--maroon-950);font-size:9.5px;font-weight:800;padding:5px 12px;border-radius:14px;">Daftar</div>`;
+    emblem.innerHTML = `<div style="width:70px;height:70px;border-radius:50%;background:var(--maroon-950);box-shadow:0 0 0 2px rgba(255,255,255,.2),0 0 0 4px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-family:'Playfair Display',serif;font-size:26px;">ا</div>`;
+    return;
+  }
+
+  if(type === 'full'){
+    brand.innerHTML = `<img src="${url}" style="height:28px;max-width:170px;object-fit:contain;display:block;">
+      <div style="background:var(--gold-shine);color:var(--maroon-950);font-size:9.5px;font-weight:800;padding:5px 12px;border-radius:14px;">Daftar</div>`;
+    emblem.innerHTML = `<div style="background:#fff;padding:14px 20px;border-radius:16px;box-shadow:0 0 0 3px var(--gold-500);display:inline-flex;"><img src="${url}" style="max-height:56px;max-width:220px;object-fit:contain;"></div>`;
+  } else {
+    brand.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-weight:700;font-size:13px;color:var(--maroon-900);">
+      <span style="width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--gold-500);overflow:hidden;display:inline-flex;align-items:center;justify-content:center;"><img src="${url}" style="width:100%;height:100%;object-fit:contain;"></span> PPTQ Al Azzaam</div>
+      <div style="background:var(--gold-shine);color:var(--maroon-950);font-size:9.5px;font-weight:800;padding:5px 12px;border-radius:14px;">Daftar</div>`;
+    emblem.innerHTML = `<div style="width:70px;height:70px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.2),0 0 0 4px var(--gold-500);display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box;"><img src="${url}" style="max-width:100%;max-height:100%;object-fit:contain;"></div>`;
+  }
+}
+
+async function updateLogoPreview(){
+  const type = document.getElementById('logoType').value;
+  if(pendingLogoObjectUrl){
+    renderLogoPreviewInto(pendingLogoObjectUrl, type);
+  } else {
+    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','logo_url').maybeSingle();
+    renderLogoPreviewInto(data ? data.value : '', type);
+  }
+}
+
+function onLogoFileChosen(input){
+  const file = input.files[0];
+  if(!file) return;
+  pendingLogoFile = file;
+  if(pendingLogoObjectUrl) URL.revokeObjectURL(pendingLogoObjectUrl);
+  pendingLogoObjectUrl = URL.createObjectURL(file);
+  const type = document.getElementById('logoType').value;
+  renderLogoPreviewInto(pendingLogoObjectUrl, type);
+}
+
+async function applyLogoFinal(){
+  const statusEl = document.getElementById('logoStatus');
+  const type = document.getElementById('logoType').value;
+  let finalUrl = null;
+
+  if(pendingLogoFile){
+    statusEl.textContent = 'Mengunggah…';
+    const path = `logo/${Date.now()}-${pendingLogoFile.name.replace(/\s+/g,'-')}`;
+    const {error} = await sb.storage.from('media-website').upload(path, pendingLogoFile);
+    if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
+    finalUrl = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
+  } else {
+    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','logo_url').maybeSingle();
+    finalUrl = data ? data.value : null;
+  }
+
+  if(!finalUrl){
+    statusEl.textContent = 'Pilih gambar logo dulu sebelum menerapkan.';
+    return;
+  }
+
+  statusEl.textContent = 'Menyimpan…';
+  const {error: upsertErr} = await sb.from('pengaturan_situs').upsert([
+    {key:'logo_url', value: finalUrl},
+    {key:'logo_type', value: type},
+  ]);
+  if(upsertErr){ statusEl.textContent = 'Gagal simpan: ' + upsertErr.message; return; }
+
+  statusEl.textContent = 'Logo diterapkan ke website ✓';
+  showToast('Logo diterapkan ke website ✓');
   loadList();
 }
 
