@@ -40,6 +40,22 @@ a{text-decoration:none;color:inherit;}
   .nav-toggle{display:block;}
 }
 
+.nav-item{position:relative;}
+.nav-top-link{display:inline-flex;align-items:center;gap:4px;cursor:pointer;}
+.nav-caret{font-size:8px;opacity:.6;}
+.nav-links > a.active, .nav-top-link.active{background:var(--cream-100);color:var(--maroon-700)!important;padding:6px 10px;border-radius:8px;font-weight:800;}
+.dropdown-menu{position:absolute;top:100%;left:0;margin-top:10px;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);min-width:175px;padding:6px;display:none;z-index:60;}
+.nav-item:hover .dropdown-menu{display:block;}
+.dropdown-menu a{display:block;padding:8px 12px;font-size:12.5px;color:var(--ink-600);border-radius:6px;}
+.dropdown-menu a:hover{background:var(--cream-100);color:var(--maroon-700);}
+@media(max-width:820px){
+  .nav-item{border-bottom:1px solid var(--line);}
+  .nav-top-link{padding:12px 0;border-bottom:none;}
+  .dropdown-menu{position:static;box-shadow:none;border:none;margin-top:0;padding:0 0 8px 14px;display:block;background:none;}
+  .dropdown-menu a{padding:8px 0;font-size:12px;border-bottom:none;}
+}
+
+
 .page-hero{background:linear-gradient(180deg,var(--maroon-950),var(--maroon-900));padding:50px 20px 60px;text-align:center;}
 .page-hero .hero-arabic{font-family:'Aref Ruqaa',serif;color:var(--gold-400);font-size:20px;margin-bottom:10px;}
 .page-hero h1{font-family:'Playfair Display',serif;color:#fff;font-size:clamp(26px,4vw,38px);}
@@ -55,6 +71,8 @@ a{text-decoration:none;color:inherit;}
 .vm-card{background:var(--cream-100);border-radius:var(--radius);padding:22px;border-left:4px solid var(--gold-500);}
 .vm-card h3{font-size:14px;color:var(--maroon-800);margin-bottom:8px;}
 .vm-card p{font-size:13px;color:var(--ink-600);line-height:1.7;white-space:pre-line;}
+.vm-list{font-size:13px;color:var(--ink-600);line-height:1.8;text-align:left;margin:0;padding-left:18px;}
+.vm-list li{margin-bottom:4px;}
 
 .struktur-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;}
 .struktur-item{background:var(--cream-100);border-radius:14px;padding:16px;text-align:center;}
@@ -74,6 +92,12 @@ footer a:hover{color:var(--gold-400);}
 .social-badge{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(232,199,102,.35);color:var(--gold-400);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;transition:.15s;text-decoration:none;}
 .social-badge:hover{background:var(--gold-shine);color:var(--maroon-950)!important;border-color:transparent;}
 .footer-bottom{max-width:1120px;margin:30px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);font-size:11.5px;text-align:center;}
+/* ---------- FLYER POP-UP AWAL ---------- */
+.flyer-overlay{position:fixed;inset:0;background:rgba(43,8,16,.75);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.flyer-overlay.open{display:flex;}
+.flyer-box{position:relative;max-width:380px;width:100%;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);}
+.flyer-box img{width:100%;display:block;cursor:pointer;}
+.flyer-close{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(43,8,16,.85);color:#fff;border:none;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
 </style>
 </head>
 <body>
@@ -82,8 +106,23 @@ footer a:hover{color:var(--gold-400);}
   <div class="navbar-inner">
     <div class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</div>
     <div class="nav-links" id="navLinks">
-      <a href="profil.html" class="active">Profil</a>
-      <a href="program.html">Program</a>
+      <div class="nav-item">
+        <a href="profil.html" class="nav-top-link active">Profil <span class="nav-caret">▾</span></a>
+        <div class="dropdown-menu">
+          <a href="profil.html#sejarah">Sejarah</a>
+          <a href="profil.html#visimisi">Visi &amp; Misi</a>
+          <a href="profil.html#struktur">Struktur Pengurus</a>
+        </div>
+      </div>
+      <div class="nav-item">
+        <a href="program.html" class="nav-top-link">Program <span class="nav-caret">▾</span></a>
+        <div class="dropdown-menu">
+          <a href="program.html?jenjang=Tahfidz">Tahfidz</a>
+          <a href="program.html?jenjang=Diniyah">Diniyah</a>
+          <a href="program.html?jenjang=SMP">SMP</a>
+          <a href="program.html?jenjang=MA">MA</a>
+        </div>
+      </div>
       <a href="berita.html">Berita</a>
       <a href="galeri.html">Galeri</a>
       <a href="ppdb.html">Pendaftaran</a>
@@ -103,24 +142,24 @@ footer a:hover{color:var(--gold-400);}
 </div>
 
 <section class="section wrap">
-  <div class="card">
+  <div class="card" id="sejarah" style="scroll-margin-top:80px;">
     <div class="eyebrow">Sejarah</div>
     <h2 style="margin-top:6px">Perjalanan Kami</h2>
     <p id="sejarahText">Memuat…</p>
   </div>
 
-  <div class="vm-grid">
+  <div class="vm-grid" id="visimisi" style="scroll-margin-top:80px;">
     <div class="vm-card">
       <h3>🎯 Visi</h3>
-      <p id="visiText">Memuat…</p>
+      <ol id="visiText" class="vm-list">Memuat…</ol>
     </div>
     <div class="vm-card">
       <h3>🧭 Misi</h3>
-      <p id="misiText">Memuat…</p>
+      <ol id="misiText" class="vm-list">Memuat…</ol>
     </div>
   </div>
 
-  <div class="card" style="margin-top:20px">
+  <div class="card" id="struktur" style="margin-top:20px;scroll-margin-top:80px;">
     <div class="eyebrow">Struktur Pengurus</div>
     <h2 style="margin-top:6px;margin-bottom:18px">Diasuh & Dikelola Oleh</h2>
     <div class="struktur-grid" id="strukturGrid">
@@ -164,13 +203,18 @@ const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsIn
 const sb = supabase.createClient(SB_URL, SB_ANON);
 
 async function applyLogo(){
-  const {data} = await sb.from('pengaturan_situs').select('value').eq('key','logo_url').maybeSingle();
-  if(data && data.value){
-    document.querySelectorAll('.nav-brand .ring').forEach(el=>{
-      el.style.cssText += `background-color:#fff;background-image:url('${data.value}');background-size:contain;background-repeat:no-repeat;background-position:center;background-origin:content-box;background-clip:content-box;padding:5px;`;
-      el.textContent = '';
-    });
-  }
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['logo_url','logo_type']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  if(!map.logo_url) return;
+  const type = map.logo_type || 'icon';
+
+  document.querySelectorAll('.nav-brand').forEach(el=>{
+    if(type === 'full'){
+      el.innerHTML = `<img src="${map.logo_url}" style="height:32px;max-width:170px;object-fit:contain;display:block;">`;
+    } else {
+      el.innerHTML = `<span class="ring" style="background-color:#fff;background-image:url('${map.logo_url}');background-size:contain;background-repeat:no-repeat;background-position:center;background-origin:content-box;background-clip:content-box;padding:5px;"></span> PPTQ Al Azzaam`;
+    }
+  });
 }
 applyLogo();
 
@@ -214,8 +258,11 @@ async function loadProfil(){
   const {data} = await sb.from('pengaturan_situs').select('key,value');
   const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
   document.getElementById('sejarahText').textContent = map.profil_sejarah || 'Konten sejarah belum diisi. Tambahkan lewat panel admin (Pengaturan Situs → key: profil_sejarah).';
-  document.getElementById('visiText').textContent = map.profil_visi || 'Konten visi belum diisi (key: profil_visi).';
-  document.getElementById('misiText').textContent = map.profil_misi || 'Konten misi belum diisi (key: profil_misi).';
+  const toListItems = (text) => (text||'').split('\n').map(s=>s.trim()).filter(Boolean).map(s=>`<li>${s}</li>`).join('');
+  const visiItems = toListItems(map.profil_visi);
+  const misiItems = toListItems(map.profil_misi);
+  document.getElementById('visiText').innerHTML = visiItems || '<li>Konten visi belum diisi (key: profil_visi).</li>';
+  document.getElementById('misiText').innerHTML = misiItems || '<li>Konten misi belum diisi (key: profil_misi).</li>';
 }
 async function loadStruktur(){
   const {data, error} = await sb.from('struktur_pengurus').select('*').order('urutan');
@@ -234,6 +281,31 @@ async function loadStruktur(){
 }
 loadProfil();
 loadStruktur();
+
+async function loadFlyer(){
+  if(sessionStorage.getItem('flyer_dismissed')) return;
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['flyer_image_url','flyer_link_url','flyer_active']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  if(map.flyer_active !== 'ya' || !map.flyer_image_url) return;
+  document.getElementById('flyerImage').src = map.flyer_image_url;
+  window._flyerLink = map.flyer_link_url || '';
+  setTimeout(()=>{ document.getElementById('flyerOverlay').classList.add('open'); }, 600);
+}
+function closeFlyer(){
+  document.getElementById('flyerOverlay').classList.remove('open');
+  sessionStorage.setItem('flyer_dismissed','1');
+}
+function clickFlyer(){
+  if(window._flyerLink) window.open(window._flyerLink, '_blank');
+  closeFlyer();
+}
+loadFlyer();
 </script>
+<div class="flyer-overlay" id="flyerOverlay" onclick="if(event.target.id==='flyerOverlay') closeFlyer()">
+  <div class="flyer-box">
+    <button class="flyer-close" onclick="closeFlyer()">✕</button>
+    <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
+  </div>
+</div>
 </body>
 </html>
