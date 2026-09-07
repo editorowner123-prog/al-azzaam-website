@@ -435,11 +435,12 @@ async function renderFlyerCard(){
 
       <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:8px 0 6px;">PRATINJAU</div>
       <div style="background:rgba(43,8,16,.75);border-radius:12px;padding:24px;display:flex;align-items:center;justify-content:center;min-height:140px;">
-        <div id="flyerPreviewBox" style="position:relative;max-width:220px;width:100%;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 14px 30px -10px rgba(0,0,0,.5);">
+        <div id="flyerPreviewBox" style="position:relative;max-width:340px;width:100%;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 14px 30px -10px rgba(0,0,0,.5);">
           <div style="position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(43,8,16,.85);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;z-index:2;">✕</div>
-          <div id="flyerPreviewImg" style="aspect-ratio:3/4;background:var(--cream-100);display:flex;align-items:center;justify-content:center;color:var(--ink-600);font-size:11px;text-align:center;padding:10px;">Belum ada gambar</div>
+          <div id="flyerPreviewImg" style="aspect-ratio:2.4/1;background:var(--cream-100);display:flex;align-items:center;justify-content:center;color:var(--ink-600);font-size:11px;text-align:center;padding:10px;">Belum ada gambar</div>
         </div>
       </div>
+      <div style="font-size:10.5px;color:var(--ink-600);margin-top:4px;">Disarankan ukuran gambar landscape 1200×500 px.</div>
 
       <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyFlyerFinal()">Terapkan ke Website</button>
       <div class="upload-status" id="flyerStatus"></div>
@@ -595,11 +596,12 @@ async function applyHeroPhotoFinal(){
 
 // ---------- TAMPILAN RUNNING TEXT (warna & ukuran, dengan preview) ----------
 async function renderTickerStyleCard(){
-  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height']);
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height','ticker_speed']);
   const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
   const bg = map.ticker_bg || '#2b0810';
   const textColor = map.ticker_text_color || '#e8c766';
   const height = map.ticker_height || '38';
+  const speed = map.ticker_speed || '22';
   return `
     <div class="item-card" style="flex-direction:column;align-items:stretch;">
       <div class="item-title" style="margin-bottom:10px;">📢 Tampilan Running Text</div>
@@ -608,9 +610,13 @@ async function renderTickerStyleCard(){
         <div class="field" style="flex:1;min-width:120px;"><label>Warna Teks</label><input type="color" id="tickerTextColor" value="${textColor}" oninput="updateTickerPreview()" style="height:40px;padding:4px;"></div>
         <div class="field" style="flex:1;min-width:140px;"><label>Tinggi Kotak (px)</label><input type="number" id="tickerHeight" value="${height}" min="24" max="80" oninput="updateTickerPreview()"></div>
       </div>
-      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:6px 0 6px;">PRATINJAU</div>
+      <div class="field">
+        <label>Kecepatan Jalan Teks: <span id="tickerSpeedLabel">${speed}</span> detik per putaran (makin besar angka = makin lambat)</label>
+        <input type="range" id="tickerSpeed" value="${speed}" min="8" max="60" step="1" oninput="document.getElementById('tickerSpeedLabel').textContent=this.value; updateTickerPreview()" style="width:100%;">
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:6px 0 6px;">PRATINJAU (coba lihat kecepatannya berjalan)</div>
       <div id="tickerPreviewBox" style="border-radius:8px;overflow:hidden;display:flex;align-items:center;white-space:nowrap;">
-        <div id="tickerPreviewText" style="padding:0 16px;font-size:12px;font-weight:700;"></div>
+        <div id="tickerPreviewText" style="padding-left:100%;font-size:12px;font-weight:700;display:inline-block;"></div>
       </div>
       <div style="font-size:10.5px;color:var(--ink-600);margin-top:6px;">Isi teksnya diatur lewat tab <b>Running Text</b> di menu atas.</div>
       <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyTickerStyle()">Terapkan ke Website</button>
@@ -622,12 +628,14 @@ function updateTickerPreview(){
   const bg = document.getElementById('tickerBg').value;
   const textColor = document.getElementById('tickerTextColor').value;
   const height = document.getElementById('tickerHeight').value;
+  const speed = document.getElementById('tickerSpeed').value;
   const box = document.getElementById('tickerPreviewBox');
   box.style.background = bg;
   box.style.height = height + 'px';
   const textEl = document.getElementById('tickerPreviewText');
   textEl.style.color = textColor;
   textEl.style.lineHeight = height + 'px';
+  textEl.style.animation = `ticker-scroll ${speed}s linear infinite`;
   textEl.textContent = 'Contoh: Pendaftaran Santri Baru Tahun Ajaran 2027/2028 telah dibuka  •  Info lebih lanjut hubungi panitia PPDB';
 }
 async function applyTickerStyle(){
@@ -637,6 +645,7 @@ async function applyTickerStyle(){
     {key:'ticker_bg', value: document.getElementById('tickerBg').value},
     {key:'ticker_text_color', value: document.getElementById('tickerTextColor').value},
     {key:'ticker_height', value: document.getElementById('tickerHeight').value},
+    {key:'ticker_speed', value: document.getElementById('tickerSpeed').value},
   ];
   const {error} = await sb.from('pengaturan_situs').upsert(rows);
   if(error){ statusEl.textContent = 'Gagal simpan: ' + error.message; return; }
