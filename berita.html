@@ -166,6 +166,18 @@ function filterKategori(k){
   renderList(k==='Semua' ? allBerita : allBerita.filter(b=>b.kategori===k));
 }
 
+// Mengubah kode [[gambar:URL]] yang disisipkan admin di tengah teks
+// menjadi elemen <img> sungguhan saat ditampilkan ke pengunjung.
+function renderIsiWithImages(isi){
+  const parts = (isi || '').split(/\[\[gambar:(.*?)\]\]/g);
+  return parts.map((part, i) => {
+    if(i % 2 === 0){
+      return part ? `<span style="display:block;white-space:pre-line;">${part}</span>` : '';
+    }
+    return `<img src="${part}" alt="" style="width:100%;border-radius:12px;margin:18px 0;box-shadow:var(--shadow);">`;
+  }).join('');
+}
+
 async function loadDetail(slugVal){
   document.getElementById('listView').style.display = 'none';
   document.getElementById('detailView').style.display = 'block';
@@ -182,7 +194,7 @@ async function loadDetail(slugVal){
     <div class="artikel-kategori">${b.kategori}</div>
     <h1 class="artikel-judul">${b.judul}</h1>
     <div class="artikel-tanggal">${new Date(b.tanggal_publish).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
-    <div class="artikel-isi">${b.isi}</div>
+    <div class="artikel-isi">${renderIsiWithImages(b.isi)}</div>
   `;
 }
 </script>
