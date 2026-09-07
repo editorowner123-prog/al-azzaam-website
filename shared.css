@@ -1,0 +1,124 @@
+/* ============================================================
+   SHARED.CSS — dipakai oleh semua halaman (index, profil, program,
+   ppdb, galeri, berita). Edit di SINI cukup 1x, tidak perlu per halaman.
+   ============================================================ */
+
+:root{
+  --maroon-950:#2b0810; --maroon-900:#3d0c14; --maroon-800:#5c1120; --maroon-700:#7a0f1f;
+  --maroon-600:#9b1c2e; --maroon-500:#c22638; --maroon-400:#e0455a;
+  --gold-300:#f7e7ab; --gold-400:#e8c766; --gold-500:#d4af37; --gold-600:#b8892b;
+  --gold-shine:linear-gradient(120deg, var(--gold-300) 0%, var(--gold-500) 35%, var(--gold-600) 60%, var(--gold-400) 100%);
+  --cream-50:#fff8f3; --cream-100:#fdf1e8; --ink-900:#241012; --ink-600:#6b4750;
+  --line:#f0d9c9; --surface:#fff; --body-glow:#fbe4d4;
+  --shadow:0 10px 28px -12px rgba(61,12,20,.18); --radius:18px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif; color:var(--ink-900); background:var(--cream-50);}
+h1,h2,h3{font-family:'Outfit',sans-serif; margin:0;}
+img{max-width:100%;display:block;}
+a{text-decoration:none;color:inherit;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px;}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-600);}
+
+/* ---------- NAVBAR ---------- */
+.navbar{position:sticky;top:0;z-index:50;background:rgba(255,248,243,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);}
+.navbar-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;max-width:1120px;margin:0 auto;}
+.nav-brand{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-weight:700;font-size:16px;color:var(--maroon-900);}
+.nav-brand .ring{width:34px;height:34px;border-radius:50%;background:var(--maroon-950);box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-size:14px;font-weight:800;font-family:'Playfair Display',serif;flex:none;}
+.nav-links{display:flex;gap:26px;font-size:13.5px;font-weight:600;color:var(--ink-600);}
+.nav-links a:hover{color:var(--maroon-600);}
+.nav-cta{background:var(--gold-shine);color:var(--maroon-950);font-weight:800;font-size:10.5px;padding:6px 13px;border-radius:16px;white-space:nowrap;}
+.nav-toggle{display:none;background:none;border:none;font-size:18px;color:var(--maroon-900);cursor:pointer;padding:4px;}
+@media(max-width:820px){
+  .nav-links{position:absolute;top:100%;left:0;right:0;background:var(--surface);flex-direction:column;gap:0;padding:8px 20px;border-bottom:1px solid var(--line);display:none;}
+  .nav-links.open{display:flex;}
+  .nav-links a{padding:12px 0;border-bottom:1px solid var(--line);}
+  .nav-toggle{display:block;}
+}
+
+.nav-item{position:relative;}
+.nav-top-link{display:inline-flex;align-items:center;gap:4px;cursor:pointer;}
+.nav-caret{font-size:8px;opacity:.6;}
+.nav-links > a.active, .nav-top-link.active{background:var(--cream-100);color:var(--maroon-700)!important;padding:6px 10px;border-radius:8px;font-weight:800;}
+.dropdown-menu{position:absolute;top:100%;left:0;margin-top:10px;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);min-width:175px;padding:6px;display:none;z-index:60;}
+.nav-item:hover .dropdown-menu{display:block;}
+.dropdown-menu a{display:block;padding:8px 12px;font-size:12.5px;color:var(--ink-600);border-radius:6px;}
+.dropdown-menu a:hover{background:var(--cream-100);color:var(--maroon-700);}
+@media(max-width:820px){
+  .nav-item{border-bottom:1px solid var(--line);}
+  .nav-top-link{padding:12px 0;border-bottom:none;}
+  .dropdown-menu{position:static;box-shadow:none;border:none;margin-top:0;padding:0 0 8px 14px;display:block;background:none;}
+  .dropdown-menu a{padding:8px 0;font-size:12px;border-bottom:none;}
+}
+
+/* ---------- TOMBOL ---------- */
+.btn{border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:13.5px;padding:13px 24px;border-radius:24px;display:inline-flex;align-items:center;gap:8px;}
+.btn-gold{background:var(--gold-shine);color:var(--maroon-950);box-shadow:0 10px 22px -8px rgba(212,175,55,.5);}
+.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.35);}
+.btn-outline-mini{display:inline-flex;font-size:12px;font-weight:800;color:var(--maroon-600);border:1.5px solid var(--line);padding:8px 18px;border-radius:20px;}
+.btn-outline-mini:hover{background:var(--cream-100);}
+
+/* ---------- RUNNING TEXT ---------- */
+.ticker-wrap{overflow:hidden;white-space:nowrap;background:var(--maroon-950);height:38px;display:flex;align-items:center;}
+.ticker-track{display:inline-block;padding-left:100%;font-size:12.5px;font-weight:700;color:var(--gold-400);animation:ticker-scroll 22s linear infinite;}
+@keyframes ticker-scroll{from{transform:translateX(0);}to{transform:translateX(-100%);}}
+
+/* ---------- SECTION GENERIC ---------- */
+.section{padding:64px 20px;}
+.section-head{text-align:center;max-width:560px;margin:0 auto 36px;}
+.section-head h2{font-size:clamp(22px,3vw,30px);color:var(--maroon-900);margin-top:8px;}
+.section-head p{color:var(--ink-600);font-size:13.5px;margin-top:10px;line-height:1.7;}
+.section-cream{background:var(--cream-100);}
+.card{background:var(--surface);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);}
+.empty-state{text-align:center;padding:30px;color:var(--ink-600);font-size:13px;border:1.5px dashed var(--line);border-radius:var(--radius);max-width:1120px;margin:0 auto;}
+
+/* halaman dalam (Profil/Program/PPDB/Galeri/Berita) pakai header banner kecil ini */
+.page-hero{background:linear-gradient(180deg,var(--maroon-950),var(--maroon-900));padding:50px 20px 60px;text-align:center;}
+.page-hero .hero-arabic{font-family:'Aref Ruqaa',serif;color:var(--gold-400);font-size:20px;margin-bottom:10px;}
+.page-hero h1{font-family:'Playfair Display',serif;color:#fff;font-size:clamp(26px,4vw,38px);}
+.page-hero p{color:rgba(255,255,255,.7);font-size:13.5px;margin-top:10px;max-width:480px;margin-left:auto;margin-right:auto;}
+
+/* ---------- CTA STRIP ---------- */
+.cta-strip{background:linear-gradient(120deg,var(--maroon-900),var(--maroon-700));border-radius:24px;max-width:1000px;margin:0 auto;padding:40px 30px;text-align:center;box-shadow:var(--shadow);}
+.cta-strip h2{color:#fff;font-family:'Playfair Display',serif;font-size:24px;margin-bottom:10px;}
+.cta-strip p{color:rgba(255,255,255,.72);font-size:13.5px;margin-bottom:22px;}
+
+/* ---------- FOOTER ---------- */
+footer{background:var(--maroon-950);color:rgba(255,255,255,.65);padding:44px 20px 24px;}
+.footer-grid{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px;}
+@media(max-width:700px){.footer-grid{grid-template-columns:1fr;}}
+.footer-brand{font-family:'Playfair Display',serif;color:#fff;font-size:17px;font-weight:700;margin-bottom:10px;}
+footer h4{color:var(--gold-400);font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+footer ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;font-size:13px;}
+footer a:hover{color:var(--gold-400);}
+.social-row{display:flex;gap:8px;margin-top:16px;}
+.social-badge{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(232,199,102,.35);color:var(--gold-400);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;transition:.15s;text-decoration:none;}
+.social-badge:hover{background:var(--gold-shine);color:var(--maroon-950)!important;border-color:transparent;}
+.footer-bottom{max-width:1120px;margin:30px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.1);font-size:11.5px;text-align:center;}
+
+/* ---------- FLYER POP-UP AWAL (ukuran diatur JS per-flyer via style.maxWidth) ---------- */
+.flyer-overlay{position:fixed;inset:0;background:rgba(43,8,16,.75);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.flyer-overlay.open{display:flex;}
+.flyer-box{position:relative;max-width:480px;width:100%;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);transition:max-width .2s;}
+.flyer-box img{width:100%;display:block;cursor:pointer;}
+.flyer-close{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(43,8,16,.85);color:#fff;border:none;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
+
+/* ---------- STRUKTUR PENGURUS: POHON ORGANISASI ---------- */
+.org-scroll{overflow-x:auto;padding:20px 10px 30px;}
+.org-tree, .org-tree ul{list-style:none;margin:0;padding:0;display:flex;justify-content:center;}
+.org-tree ul{padding-top:26px;}
+.org-tree li{position:relative;text-align:center;padding:26px 10px 0;display:flex;flex-direction:column;align-items:center;}
+.org-tree li::before, .org-tree li::after{content:'';position:absolute;top:0;right:50%;border-top:2px solid var(--line);width:50%;height:26px;}
+.org-tree li::after{right:auto;left:50%;border-left:2px solid var(--line);}
+.org-tree li:only-child::after, .org-tree li:only-child::before{display:none;}
+.org-tree li:only-child{padding-top:0;}
+.org-tree li:first-child::before{border:0 none;}
+.org-tree li:last-child::after{border:0 none;}
+.org-tree li:last-child::before{border-right:2px solid var(--line);border-radius:0 5px 0 0;}
+.org-tree li:first-child::after{border-radius:5px 0 0 0;}
+.org-tree ul ul::before{content:'';position:absolute;top:0;left:50%;border-left:2px solid var(--line);width:0;height:26px;}
+.org-node{display:inline-flex;flex-direction:column;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);min-width:120px;}
+.org-node .avatar{width:44px;height:44px;border-radius:50%;background-color:var(--maroon-950);background-size:cover;background-position:center;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--gold-500);margin-bottom:7px;}
+.org-node .nama{font-size:12.5px;font-weight:700;color:var(--maroon-900);white-space:nowrap;}
+.org-node .jabatan{font-size:10.5px;color:var(--ink-600);white-space:nowrap;}
