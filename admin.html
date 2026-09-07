@@ -145,10 +145,12 @@ const TABLES = {
     meta: r => [r.jenjang, `Urutan: ${r.urutan ?? 0}`],
     fields: [
       {key:'nama', label:'Nama Program', type:'text', required:true},
-      {key:'jenjang', label:'Jenjang', type:'select', options:['Tahfidz','Diniyah','SMP','MA']},
+      {key:'jenjang', label:'Kategori/Jenjang (bebas isi apa saja)', type:'text'},
       {key:'deskripsi', label:'Deskripsi', type:'textarea'},
       {key:'icon', label:'Ikon (emoji, misal 📿)', type:'text'},
       {key:'urutan', label:'Urutan Tampil (angka, kecil = di depan)', type:'number'},
+      {key:'tombol_label', label:'Teks Tombol Tambahan (kosongkan jika tidak perlu)', type:'text'},
+      {key:'tombol_link', label:'Link Tombol Tambahan', type:'text'},
     ]
   },
   galeri: {
@@ -185,7 +187,21 @@ const TABLES = {
       {key:'nama', label:'Nama', type:'text', required:true},
       {key:'jabatan', label:'Jabatan', type:'text'},
       {key:'foto_url', label:'Foto', type:'image', folder:'pengurus'},
+      {key:'parent_id', label:'Atasan Langsung (kosongkan jika paling atas)', type:'dynamic-select-pengurus'},
       {key:'urutan', label:'Urutan Tampil', type:'number'},
+    ]
+  },
+  flyer_popup: {
+    label: 'Flyer Pop-up', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'judul_internal',
+    meta: r => [r.ukuran, `<span class="pill ${r.status}">${r.status}</span>`, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'judul_internal', label:'Label Internal (hanya untuk kamu, tidak tampil di website)', type:'text', required:true},
+      {key:'gambar_url', label:'Gambar Flyer (disarankan landscape 1200×500)', type:'image', folder:'flyer'},
+      {key:'link_url', label:'Link Tujuan (saat gambar diklik)', type:'text'},
+      {key:'ukuran', label:'Ukuran Tampil', type:'select', options:['kecil','sedang','besar']},
+      {key:'urutan', label:'Urutan Kemunculan (kalau lebih dari 1 aktif)', type:'number'},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
     ]
   },
   running_text: {
@@ -268,19 +284,18 @@ async function loadList(){
     const kontakHtml = await renderKontakSosmedCard();
     const heroPhotoHtml = await renderHeroPhotoCard();
     const tickerStyleHtml = await renderTickerStyleCard();
-    const flyerHtml = await renderFlyerCard();
-    logoHtml = profilHtml + kontakHtml + heroPhotoHtml + tickerStyleHtml + flyerHtml + await renderLogoCard();
+    logoHtml = profilHtml + kontakHtml + heroPhotoHtml + tickerStyleHtml + await renderLogoCard();
   }
 
   const {data, error} = await sb.from(currentTab).select('*').order(cfg.orderBy, {ascending: cfg.ascending});
   if(error){
     area.innerHTML = logoHtml + `<div class="empty">Gagal memuat: ${error.message}</div>`;
-    if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); updateFlyerPreview(); }
+    if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); }
     return;
   }
   if(!data || data.length===0){
     area.innerHTML = logoHtml + `<div class="empty">Belum ada data ${cfg.label.toLowerCase()}. Klik "+ Tambah" untuk mulai.</div>`;
-    if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); updateFlyerPreview(); }
+    if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); }
     return;
   }
   area.innerHTML = logoHtml + data.map(r => `
@@ -295,7 +310,7 @@ async function loadList(){
       </div>
     </div>
   `).join('');
-  if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); updateFlyerPreview(); }
+  if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); }
 }
 
 // ---------- FORM ----------
@@ -306,6 +321,10 @@ function openForm(record){
   const area = document.getElementById('formArea');
   area.innerHTML = cfg.fields.map(f => renderField(f, record ? record[f.key] : '')).join('');
   document.getElementById('modalOverlay').classList.add('open');
+
+  if(cfg.fields.some(f => f.type === 'dynamic-select-pengurus')){
+    populateParentDropdown(record);
+  }
 
   // auto-generate slug dari judul untuk berita baru
   const judulInput = document.getElementById('f_judul');
@@ -322,6 +341,16 @@ function openForm(record){
 function closeForm(){
   document.getElementById('modalOverlay').classList.remove('open');
   currentRecord = null;
+}
+async function populateParentDropdown(record){
+  const {data} = await sb.from('struktur_pengurus').select('id,nama');
+  const selectEl = document.getElementById('f_parent_id');
+  if(!selectEl) return;
+  const currentVal = selectEl.dataset.current || '';
+  const selfId = record ? record.id : null;
+  const options = (data||[]).filter(p => p.id !== selfId);
+  selectEl.innerHTML = '<option value="">(Tidak ada / Paling Atas)</option>' +
+    options.map(p => `<option value="${p.id}" ${p.id===currentVal?'selected':''}>${p.nama}</option>`).join('');
 }
 function renderField(f, value){
   value = value ?? '';
@@ -341,6 +370,11 @@ function renderField(f, value){
   if(f.type==='date'){
     const d = value ? new Date(value).toISOString().slice(0,10) : '';
     return `<div class="field"><label>${f.label}</label><input type="date" id="${id}" value="${d}"></div>`;
+  }
+  if(f.type==='dynamic-select-pengurus'){
+    return `<div class="field"><label>${f.label}</label>
+      <select id="${id}" data-current="${value||''}"><option value="">Memuat…</option></select>
+    </div>`;
   }
   if(f.type==='image'){
     return `<div class="field"><label>${f.label}</label>
@@ -400,114 +434,6 @@ async function saveProfilKonten(){
   showToast('Konten Profil tersimpan ✓');
 }
 
-
-
-// ---------- FLYER POP-UP AWAL (perlakuan khusus) ----------
-let pendingFlyerFile = null;
-let pendingFlyerObjectUrl = null;
-
-async function renderFlyerCard(){
-  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['flyer_image_url','flyer_link_url','flyer_active']);
-  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
-  pendingFlyerFile = null;
-  pendingFlyerObjectUrl = null;
-
-  return `
-    <div class="item-card" style="flex-direction:column;align-items:stretch;">
-      <div class="item-title" style="margin-bottom:10px;">🎈 Flyer Pop-up Awal</div>
-      <p style="font-size:11.5px;color:var(--ink-600);margin:0 0 10px;">Muncul otomatis sekali saat pengunjung pertama kali buka website. Bisa ditutup (✕) atau diklik untuk menuju link.</p>
-
-      <div class="field">
-        <label>Aktifkan Pop-up?</label>
-        <select id="flyerActive" onchange="updateFlyerPreview()">
-          <option value="tidak" ${map.flyer_active!=='ya'?'selected':''}>Tidak aktif</option>
-          <option value="ya" ${map.flyer_active==='ya'?'selected':''}>Aktif</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Gambar Flyer</label>
-        <input type="file" id="flyerFileInput" accept="image/*" onchange="onFlyerFileChosen(this)">
-      </div>
-      <div class="field">
-        <label>Link Tujuan (saat gambar diklik)</label>
-        <input type="text" id="flyerLink" value="${(map.flyer_link_url||'').replace(/"/g,'&quot;')}" placeholder="https://... atau ppdb.html">
-      </div>
-
-      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:8px 0 6px;">PRATINJAU</div>
-      <div style="background:rgba(43,8,16,.75);border-radius:12px;padding:24px;display:flex;align-items:center;justify-content:center;min-height:140px;">
-        <div id="flyerPreviewBox" style="position:relative;max-width:340px;width:100%;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 14px 30px -10px rgba(0,0,0,.5);">
-          <div style="position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(43,8,16,.85);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;z-index:2;">✕</div>
-          <div id="flyerPreviewImg" style="aspect-ratio:2.4/1;background:var(--cream-100);display:flex;align-items:center;justify-content:center;color:var(--ink-600);font-size:11px;text-align:center;padding:10px;">Belum ada gambar</div>
-        </div>
-      </div>
-      <div style="font-size:10.5px;color:var(--ink-600);margin-top:4px;">Disarankan ukuran gambar landscape 1200×500 px.</div>
-
-      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyFlyerFinal()">Terapkan ke Website</button>
-      <div class="upload-status" id="flyerStatus"></div>
-    </div>
-  `;
-}
-
-function renderFlyerPreviewImg(url){
-  const box = document.getElementById('flyerPreviewImg');
-  if(!box) return;
-  box.style.padding = url ? '0' : '10px';
-  box.innerHTML = url ? `<img src="${url}" style="width:100%;height:100%;object-fit:cover;">` : 'Belum ada gambar';
-}
-
-async function updateFlyerPreview(){
-  if(pendingFlyerObjectUrl){
-    renderFlyerPreviewImg(pendingFlyerObjectUrl);
-  } else {
-    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','flyer_image_url').maybeSingle();
-    renderFlyerPreviewImg(data ? data.value : '');
-  }
-}
-
-function onFlyerFileChosen(input){
-  const file = input.files[0];
-  if(!file) return;
-  pendingFlyerFile = file;
-  if(pendingFlyerObjectUrl) URL.revokeObjectURL(pendingFlyerObjectUrl);
-  pendingFlyerObjectUrl = URL.createObjectURL(file);
-  renderFlyerPreviewImg(pendingFlyerObjectUrl);
-}
-
-async function applyFlyerFinal(){
-  const statusEl = document.getElementById('flyerStatus');
-  const active = document.getElementById('flyerActive').value;
-  const link = document.getElementById('flyerLink').value;
-  let finalUrl = null;
-
-  if(pendingFlyerFile){
-    statusEl.textContent = 'Mengunggah…';
-    const path = `flyer/${Date.now()}-${pendingFlyerFile.name.replace(/\s+/g,'-')}`;
-    const {error} = await sb.storage.from('media-website').upload(path, pendingFlyerFile);
-    if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
-    finalUrl = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
-  } else {
-    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','flyer_image_url').maybeSingle();
-    finalUrl = data ? data.value : null;
-  }
-
-  if(active === 'ya' && !finalUrl){
-    statusEl.textContent = 'Upload gambar dulu sebelum mengaktifkan pop-up.';
-    return;
-  }
-
-  statusEl.textContent = 'Menyimpan…';
-  const rows = [
-    {key:'flyer_active', value: active},
-    {key:'flyer_link_url', value: link},
-  ];
-  if(finalUrl) rows.push({key:'flyer_image_url', value: finalUrl});
-  const {error: upsertErr} = await sb.from('pengaturan_situs').upsert(rows);
-  if(upsertErr){ statusEl.textContent = 'Gagal simpan: ' + upsertErr.message; return; }
-
-  statusEl.textContent = 'Flyer diterapkan ✓';
-  showToast('Flyer pop-up diterapkan ✓');
-  loadList();
-}
 
 
 async function renderKontakSosmedCard(){
@@ -601,7 +527,7 @@ async function renderTickerStyleCard(){
   const bg = map.ticker_bg || '#2b0810';
   const textColor = map.ticker_text_color || '#e8c766';
   const height = map.ticker_height || '38';
-  const speed = map.ticker_speed || '22';
+  const speed = map.ticker_speed || '80';
   return `
     <div class="item-card" style="flex-direction:column;align-items:stretch;">
       <div class="item-title" style="margin-bottom:10px;">📢 Tampilan Running Text</div>
@@ -611,8 +537,8 @@ async function renderTickerStyleCard(){
         <div class="field" style="flex:1;min-width:140px;"><label>Tinggi Kotak (px)</label><input type="number" id="tickerHeight" value="${height}" min="24" max="80" oninput="updateTickerPreview()"></div>
       </div>
       <div class="field">
-        <label>Kecepatan Jalan Teks: <span id="tickerSpeedLabel">${speed}</span> detik per putaran (makin besar angka = makin lambat)</label>
-        <input type="range" id="tickerSpeed" value="${speed}" min="8" max="60" step="1" oninput="document.getElementById('tickerSpeedLabel').textContent=this.value; updateTickerPreview()" style="width:100%;">
+        <label>Kecepatan: <span id="tickerSpeedLabel">${speed}</span> piksel/detik (makin besar angka = makin cepat, tapi kecepatannya tetap sama walau teksnya pendek atau panjang)</label>
+        <input type="range" id="tickerSpeed" value="${speed}" min="20" max="200" step="5" oninput="document.getElementById('tickerSpeedLabel').textContent=this.value; updateTickerPreview()" style="width:100%;">
       </div>
       <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:6px 0 6px;">PRATINJAU (coba lihat kecepatannya berjalan)</div>
       <div id="tickerPreviewBox" style="border-radius:8px;overflow:hidden;display:flex;align-items:center;white-space:nowrap;">
@@ -628,15 +554,21 @@ function updateTickerPreview(){
   const bg = document.getElementById('tickerBg').value;
   const textColor = document.getElementById('tickerTextColor').value;
   const height = document.getElementById('tickerHeight').value;
-  const speed = document.getElementById('tickerSpeed').value;
+  const speedPxPerSec = Number(document.getElementById('tickerSpeed').value) || 80;
   const box = document.getElementById('tickerPreviewBox');
   box.style.background = bg;
   box.style.height = height + 'px';
   const textEl = document.getElementById('tickerPreviewText');
   textEl.style.color = textColor;
   textEl.style.lineHeight = height + 'px';
-  textEl.style.animation = `ticker-scroll ${speed}s linear infinite`;
+  textEl.style.animation = 'none';
   textEl.textContent = 'Contoh: Pendaftaran Santri Baru Tahun Ajaran 2027/2028 telah dibuka  •  Info lebih lanjut hubungi panitia PPDB';
+  // ukur lebar teks asli, baru tentukan durasi -> kecepatan (px/detik) selalu konsisten
+  requestAnimationFrame(()=>{
+    const distance = textEl.scrollWidth;
+    const duration = Math.max(distance / speedPxPerSec, 2);
+    textEl.style.animation = `ticker-scroll ${duration}s linear infinite`;
+  });
 }
 async function applyTickerStyle(){
   const statusEl = document.getElementById('tickerStyleStatus');
