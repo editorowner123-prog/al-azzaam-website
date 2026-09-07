@@ -171,7 +171,7 @@ footer a:hover{color:var(--gold-400);}
 /* ---------- FLYER POP-UP AWAL ---------- */
 .flyer-overlay{position:fixed;inset:0;background:rgba(43,8,16,.75);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
 .flyer-overlay.open{display:flex;}
-.flyer-box{position:relative;max-width:380px;width:100%;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);}
+.flyer-box{position:relative;max-width:560px;width:100%;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);}
 .flyer-box img{width:100%;display:block;cursor:pointer;}
 .flyer-close{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(43,8,16,.85);color:#fff;border:none;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
 </style>
@@ -459,7 +459,7 @@ async function loadBeritaMini(){
 async function loadTicker(){
   const [{data: items}, {data: settings}] = await Promise.all([
     sb.from('running_text').select('teks').eq('status','published').order('urutan'),
-    sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height']),
+    sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height','ticker_speed']),
   ]);
   const map = {}; (settings||[]).forEach(r=>map[r.key]=r.value);
   const wrap = document.getElementById('tickerWrap');
@@ -468,6 +468,7 @@ async function loadTicker(){
   wrap.style.background = map.ticker_bg || 'var(--maroon-950)';
   wrap.style.height = (map.ticker_height || '38') + 'px';
   track.style.color = map.ticker_text_color || 'var(--gold-400)';
+  track.style.animationDuration = (map.ticker_speed || '22') + 's';
 
   if(!items || items.length===0){
     wrap.style.display = 'none';
@@ -563,8 +564,16 @@ function closeFlyer(){
   document.getElementById('flyerOverlay').classList.remove('open');
   sessionStorage.setItem('flyer_dismissed','1');
 }
+function normalizeFlyerLink(link){
+  if(!link) return '';
+  link = link.trim();
+  if(/^https?:\/\//i.test(link)) return link;      // sudah lengkap
+  if(link.startsWith('/') || link.startsWith('#')) return link;   // path relatif situs
+  if(/\.html(\?|#|$)/i.test(link)) return link;    // halaman lokal, misal ppdb.html
+  return 'https://' + link;                          // domain luar tanpa https:// -> tambahkan otomatis
+}
 function clickFlyer(){
-  if(window._flyerLink) window.open(window._flyerLink, '_blank');
+  if(window._flyerLink) window.open(normalizeFlyerLink(window._flyerLink), '_blank');
   closeFlyer();
 }
 loadFlyer();
