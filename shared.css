@@ -105,19 +105,17 @@ footer a:hover{color:var(--gold-400);}
 .flyer-close{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(43,8,16,.85);color:#fff;border:none;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
 
 /* ---------- STRUKTUR PENGURUS: POHON ORGANISASI ---------- */
-.org-scroll{overflow-x:auto;padding:20px 10px 30px;}
-.org-tree, .org-tree ul{list-style:none;margin:0;padding:0;display:flex;justify-content:center;}
-.org-tree ul{padding-top:26px;}
-.org-tree li{position:relative;text-align:center;padding:26px 10px 0;display:flex;flex-direction:column;align-items:center;}
-.org-tree li::before, .org-tree li::after{content:'';position:absolute;top:0;right:50%;border-top:2px solid var(--line);width:50%;height:26px;}
-.org-tree li::after{right:auto;left:50%;border-left:2px solid var(--line);}
+.org-scroll{overflow-x:auto;padding:20px 10px 30px;text-align:center;}
+.org-tree{display:inline-block;}
+.org-tree ul{list-style:none;margin:0;padding:0;position:relative;white-space:nowrap;}
+.org-tree li{display:inline-table;text-align:center;list-style:none;position:relative;padding:10px 14px 0 14px;vertical-align:top;white-space:normal;}
+.org-tree li::before, .org-tree li::after{content:'';position:absolute;top:0;right:50%;border-top:2px solid #d9b99a;width:50%;height:0;}
+.org-tree li::after{right:auto;left:50%;border-left:2px solid #d9b99a;}
 .org-tree li:only-child::after, .org-tree li:only-child::before{display:none;}
-.org-tree li:only-child{padding-top:0;}
-.org-tree li:first-child::before{border:0 none;}
-.org-tree li:last-child::after{border:0 none;}
-.org-tree li:last-child::before{border-right:2px solid var(--line);border-radius:0 5px 0 0;}
-.org-tree li:first-child::after{border-radius:5px 0 0 0;}
-.org-tree ul ul::before{content:'';position:absolute;top:0;left:50%;border-left:2px solid var(--line);width:0;height:26px;}
+.org-tree li:first-child::before, .org-tree li:last-child::after{border:0 none;}
+.org-tree li:last-child::before{border-right:2px solid #d9b99a;}
+.org-stem-wrap{text-align:center;line-height:0;}
+.org-stem{display:inline-block;width:0;height:20px;border-left:2px solid #d9b99a;}
 .org-node{display:inline-flex;flex-direction:column;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);min-width:120px;}
 .org-node .avatar{width:44px;height:44px;border-radius:50%;background-color:var(--maroon-950);background-size:cover;background-position:center;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--gold-500);margin-bottom:7px;}
 .org-node .nama{font-size:12.5px;font-weight:700;color:var(--maroon-900);white-space:nowrap;}
