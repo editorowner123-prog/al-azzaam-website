@@ -52,7 +52,7 @@ async function applyHeroPhoto(){
   if(!hero) return;
   const {data} = await sb.from('pengaturan_situs').select('value').eq('key','hero_photo_url').maybeSingle();
   if(data && data.value){
-    hero.style.backgroundImage = `linear-gradient(160deg, rgba(43,8,16,.88), rgba(61,12,20,.82)), url('${data.value}')`;
+    hero.style.backgroundImage = `linear-gradient(160deg, rgba(43,8,16,.68), rgba(61,12,20,.6)), url('${data.value}')`;
   }
 }
 
