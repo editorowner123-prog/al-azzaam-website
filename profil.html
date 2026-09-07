@@ -168,13 +168,14 @@ async function loadStruktur(){
       <div class="jabatan">${node.jabatan || ''}</div>
     </div>`;
     if(node.children.length){
+      html += `<div class="org-stem-wrap"><div class="org-stem"></div></div>`;
       html += `<ul>${node.children.map(renderNode).join('')}</ul>`;
     }
     html += `</li>`;
     return html;
   }
 
-  container.innerHTML = `<ul class="org-tree">${roots.map(renderNode).join('')}</ul>`;
+  container.innerHTML = `<div class="org-tree"><ul>${roots.map(renderNode).join('')}</ul></div>`;
 }
 
 loadProfil();
