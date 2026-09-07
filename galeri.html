@@ -10,9 +10,17 @@
 <link rel="stylesheet" href="shared.css">
 <style>
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px;}
-.kategori-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:30px;}
-.kategori-tab{background:var(--surface);border:1.5px solid var(--line);padding:9px 18px;border-radius:20px;font-size:12.5px;font-weight:700;color:var(--ink-600);cursor:pointer;}
-.kategori-tab.active{background:var(--gold-shine);color:var(--maroon-950);border-color:transparent;}
+.folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.folder-card{border-radius:14px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;background:var(--surface);transition:transform .15s;}
+.folder-card:hover{transform:translateY(-3px);}
+.folder-thumb{aspect-ratio:4/3;background:var(--cream-100);position:relative;overflow:hidden;}
+.folder-thumb img{width:100%;height:100%;object-fit:cover;}
+.folder-thumb .stack{position:absolute;inset:0;background:linear-gradient(0deg,rgba(43,8,16,.55),transparent 55%);}
+.folder-thumb .icon-empty{display:flex;align-items:center;justify-content:center;height:100%;font-size:34px;opacity:.35;}
+.folder-info{padding:12px 14px;}
+.folder-info .fname{font-size:13.5px;font-weight:700;color:var(--maroon-900);margin-bottom:2px;}
+.folder-info .fcount{font-size:11px;color:var(--ink-600);}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--maroon-600);margin-bottom:20px;cursor:pointer;}
 .galeri-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
 .galeri-item{border-radius:14px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;position:relative;aspect-ratio:4/3;background:var(--cream-100);}
 .galeri-item img{width:100%;height:100%;object-fit:cover;transition:transform .2s;}
@@ -62,11 +70,18 @@
 </div>
 
 <section class="section wrap">
-  <div class="kategori-tabs" id="kategoriTabs">
-    <button class="kategori-tab active" data-k="Semua" onclick="filterKategori('Semua')">Semua</button>
+  <!-- Tampilan FOLDER (default) -->
+  <div id="folderView">
+    <div class="folder-grid" id="folderGrid">
+      <div class="empty-state">Memuat album…</div>
+    </div>
   </div>
-  <div class="galeri-grid" id="galeriGrid">
-    <div class="empty-state">Memuat galeri…</div>
+
+  <!-- Tampilan ISI FOLDER (muncul setelah klik salah satu album) -->
+  <div id="itemsView" style="display:none;">
+    <div class="back-link" onclick="backToFolders()">← Kembali ke semua album</div>
+    <h2 id="folderTitle" style="font-size:18px;color:var(--maroon-900);margin-bottom:16px;"></h2>
+    <div class="galeri-grid" id="galeriGrid"></div>
   </div>
 </section>
 
@@ -114,25 +129,81 @@
 <script src="shared.js"></script>
 <script>
 let allGaleri = [];
+let folderMap = {};
 
 async function loadGaleri(){
   const {data, error} = await sb.from('galeri').select('*').order('urutan');
-  const grid = document.getElementById('galeriGrid');
+  const folderGrid = document.getElementById('folderGrid');
   if(error || !data || data.length===0){
-    grid.innerHTML = '<div class="empty-state">Belum ada foto/video. Tambahkan lewat panel admin.</div>';
+    folderGrid.innerHTML = '<div class="empty-state">Belum ada foto/video. Tambahkan lewat panel admin.</div>';
     return;
   }
   allGaleri = data;
-  const kategoriSet = [...new Set(data.map(g=>g.kategori).filter(Boolean))];
-  const tabsEl = document.getElementById('kategoriTabs');
-  tabsEl.innerHTML = '<button class="kategori-tab active" data-k="Semua" onclick="filterKategori(\'Semua\')">Semua</button>' +
-    kategoriSet.map(k=>`<button class="kategori-tab" data-k="${k}" onclick="filterKategori('${k}')">${k}</button>`).join('');
-  renderGaleri(allGaleri);
+
+  // Kelompokkan jadi "folder" berdasarkan kategori. Yang tidak diisi kategori masuk "Lainnya".
+  folderMap = {};
+  allGaleri.forEach(g=>{
+    const nama = (g.kategori || '').trim() || 'Lainnya';
+    if(!folderMap[nama]) folderMap[nama] = [];
+    folderMap[nama].push(g);
+  });
+
+  renderFolders();
+
+  // Deep-link: kalau ada ?folder=Nama di URL, langsung buka folder itu
+  const params = new URLSearchParams(location.search);
+  const folder = params.get('folder');
+  if(folder && folderMap[folder]) openFolder(folder);
 }
+
+function renderFolders(){
+  const folderGrid = document.getElementById('folderGrid');
+  const names = Object.keys(folderMap);
+  if(names.length===0){
+    folderGrid.innerHTML = '<div class="empty-state">Belum ada album.</div>';
+    return;
+  }
+  folderGrid.innerHTML = names.map(nama=>{
+    const items = folderMap[nama];
+    const cover = items.find(i=>i.tipe!=='video') || items[0];
+    return `
+      <div class="folder-card" onclick="openFolder('${nama.replace(/'/g,"\\'")}')">
+        <div class="folder-thumb">
+          ${cover ? `<img src="${cover.media_url}" alt="${nama}" loading="lazy">` : '<div class="icon-empty">🖼️</div>'}
+          <div class="stack"></div>
+        </div>
+        <div class="folder-info">
+          <div class="fname">📁 ${nama}</div>
+          <div class="fcount">${items.length} item</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openFolder(nama){
+  document.getElementById('folderView').style.display = 'none';
+  document.getElementById('itemsView').style.display = 'block';
+  document.getElementById('folderTitle').textContent = '📁 ' + nama;
+  const list = folderMap[nama] || [];
+  renderGaleri(list);
+  const url = new URL(location.href);
+  url.searchParams.set('folder', nama);
+  history.pushState({}, '', url);
+}
+
+function backToFolders(){
+  document.getElementById('folderView').style.display = 'block';
+  document.getElementById('itemsView').style.display = 'none';
+  const url = new URL(location.href);
+  url.searchParams.delete('folder');
+  history.pushState({}, '', url);
+}
+
 function renderGaleri(list){
   const grid = document.getElementById('galeriGrid');
   if(list.length===0){
-    grid.innerHTML = '<div class="empty-state">Belum ada item di kategori ini.</div>';
+    grid.innerHTML = '<div class="empty-state">Belum ada item di album ini.</div>';
     return;
   }
   grid.innerHTML = list.map((g,i)=>`
@@ -143,10 +214,6 @@ function renderGaleri(list){
     </div>
   `).join('');
   window._currentList = list;
-}
-function filterKategori(k){
-  document.querySelectorAll('.kategori-tab').forEach(t=>t.classList.toggle('active', t.dataset.k===k));
-  renderGaleri(k==='Semua' ? allGaleri : allGaleri.filter(g=>g.kategori===k));
 }
 function openLightbox(i){
   const item = window._currentList[i];
