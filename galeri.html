@@ -94,7 +94,7 @@ footer a:hover{color:var(--gold-400);}
 /* ---------- FLYER POP-UP AWAL ---------- */
 .flyer-overlay{position:fixed;inset:0;background:rgba(43,8,16,.75);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
 .flyer-overlay.open{display:flex;}
-.flyer-box{position:relative;max-width:380px;width:100%;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);}
+.flyer-box{position:relative;max-width:560px;width:100%;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 30px 60px -20px rgba(0,0,0,.6);}
 .flyer-box img{width:100%;display:block;cursor:pointer;}
 .flyer-close{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(43,8,16,.85);color:#fff;border:none;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
 </style>
@@ -301,8 +301,16 @@ function closeFlyer(){
   document.getElementById('flyerOverlay').classList.remove('open');
   sessionStorage.setItem('flyer_dismissed','1');
 }
+function normalizeFlyerLink(link){
+  if(!link) return '';
+  link = link.trim();
+  if(/^https?:\/\//i.test(link)) return link;      // sudah lengkap
+  if(link.startsWith('/') || link.startsWith('#')) return link;   // path relatif situs
+  if(/\.html(\?|#|$)/i.test(link)) return link;    // halaman lokal, misal ppdb.html
+  return 'https://' + link;                          // domain luar tanpa https:// -> tambahkan otomatis
+}
 function clickFlyer(){
-  if(window._flyerLink) window.open(window._flyerLink, '_blank');
+  if(window._flyerLink) window.open(normalizeFlyerLink(window._flyerLink), '_blank');
   closeFlyer();
 }
 loadFlyer();
