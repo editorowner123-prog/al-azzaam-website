@@ -11,12 +11,20 @@
 <link rel="stylesheet" href="shared.css">
 <style>
 /* ---------- Gaya khusus halaman Beranda saja ---------- */
-.hero{position:relative;background:linear-gradient(160deg, rgba(43,8,16,.9), rgba(61,12,20,.86)), radial-gradient(1200px 600px at 15% -10%, rgba(212,175,55,.18) 0%, transparent 60%), linear-gradient(180deg, var(--maroon-950), var(--maroon-900) 60%, var(--maroon-950));background-size:cover;background-position:center;padding:60px 20px 56px;overflow:hidden;}
+.hero{position:relative;background:linear-gradient(160deg, rgba(43,8,16,.68), rgba(61,12,20,.6)), radial-gradient(1200px 600px at 15% -10%, rgba(212,175,55,.18) 0%, transparent 60%), linear-gradient(180deg, var(--maroon-950), var(--maroon-900) 60%, var(--maroon-950));background-size:cover;background-position:center;padding:60px 20px 76px;overflow:hidden;}
 .hero-inner{max-width:720px;margin:0 auto;position:relative;text-align:left;}
-.hero-arabic{font-family:'Aref Ruqaa',serif;color:var(--gold-400);font-size:26px;margin-bottom:14px;}
-.hero-title{font-family:'Playfair Display',serif;color:#fff;font-size:clamp(28px,4vw,42px);font-weight:700;line-height:1.25;margin-bottom:16px;}
-.hero-title em{font-style:normal;color:var(--gold-400);}
-.hero-sub{color:rgba(255,255,255,.75);font-size:15px;line-height:1.7;max-width:520px;margin-bottom:26px;}
+.hero-arabic{font-family:'Aref Ruqaa',serif;color:var(--gold-400);font-size:26px;margin-bottom:14px;text-shadow:0 2px 12px rgba(0,0,0,.45);}
+.hero-title{font-family:'Playfair Display',serif;color:#fff;font-size:clamp(28px,4vw,42px);font-weight:700;line-height:1.25;margin-bottom:16px;text-shadow:0 2px 16px rgba(0,0,0,.5);}
+.hero-title em{
+  font-style:normal;
+  background:linear-gradient(90deg, var(--gold-300), var(--gold-500), var(--gold-600), var(--gold-300), var(--gold-500));
+  background-size:300% auto;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:heroGoldShimmer 5s linear infinite;
+  text-shadow:none;
+}
+@keyframes heroGoldShimmer{0%{background-position:0% 50%;}100%{background-position:300% 50%;}}
+.hero-sub{color:rgba(255,255,255,.85);font-size:15px;line-height:1.7;max-width:520px;margin-bottom:26px;text-shadow:0 1px 10px rgba(0,0,0,.4);}
 .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
 
 .home-grid{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr;gap:20px;}
@@ -118,7 +126,7 @@
   <div class="ticker-track" id="tickerTrack">Memuat info terkini…</div>
 </div>
 
-<section class="section" style="padding-top:36px;padding-bottom:36px;">
+<section class="section" style="padding-top:56px;padding-bottom:40px;">
   <div class="home-grid">
     <div class="home-left">
 
