@@ -315,6 +315,7 @@ async function loadList(){
 
 // ---------- FORM ----------
 function openForm(record){
+  isUploading = false;
   currentRecord = record || null;
   const cfg = TABLES[currentTab];
   document.getElementById('modalTitle').textContent = record ? `Edit ${cfg.label}` : `Tambah ${cfg.label}`;
@@ -396,20 +397,25 @@ function renderField(f, value){
   return `<div class="field"><label>${f.label}</label><input type="text" id="${id}" value="${value}"></div>`;
 }
 
+let isUploading = false;
+
 async function uploadImage(input, targetId, folder){
   const file = input.files[0];
   if(!file) return;
+  isUploading = true;
   const statusEl = document.getElementById(targetId+'_status');
   statusEl.textContent = 'Mengunggah…';
   const path = `${folder}/${Date.now()}-${file.name.replace(/\s+/g,'-')}`;
   const {error} = await sb.storage.from('media-website').upload(path, file);
   if(error){
     statusEl.textContent = 'Gagal unggah: ' + error.message;
+    isUploading = false;
     return;
   }
   const {data} = sb.storage.from('media-website').getPublicUrl(path);
   document.getElementById(targetId).value = data.publicUrl;
   statusEl.textContent = 'Berhasil diunggah ✓';
+  isUploading = false;
 }
 
 async function insertInlineImage(input, textareaId, folder){
@@ -733,6 +739,10 @@ async function applyLogoFinal(){
 
 
 async function saveRecord(){
+  if(isUploading){
+    alert('Tunggu sebentar, gambar masih dalam proses unggah. Coba klik Simpan lagi setelah muncul tulisan "Berhasil diunggah ✓".');
+    return;
+  }
   const cfg = TABLES[currentTab];
   const payload = {};
   cfg.fields.forEach(f => {
