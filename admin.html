@@ -132,8 +132,8 @@ const TABLES = {
       {key:'judul', label:'Judul', type:'text', required:true},
       {key:'slug', label:'Slug (URL, huruf kecil tanpa spasi)', type:'text', required:true},
       {key:'ringkasan', label:'Ringkasan Singkat', type:'textarea'},
-      {key:'isi', label:'Isi Berita', type:'textarea-lg', required:true},
-      {key:'foto_url', label:'Foto', type:'image', folder:'berita'},
+      {key:'isi', label:'Isi Berita', type:'textarea-lg', required:true, allowInlineImage:true, imageFolder:'berita-inline'},
+      {key:'foto_url', label:'Foto Sampul (tampil di kartu & bagian atas artikel)', type:'image', folder:'berita'},
       {key:'kategori', label:'Kategori', type:'select', options:['Prestasi','Kegiatan','Pengumuman']},
       {key:'status', label:'Status', type:'select', options:['draft','published']},
       {key:'tanggal_publish', label:'Tanggal Publish', type:'date'},
@@ -161,7 +161,7 @@ const TABLES = {
       {key:'judul', label:'Judul', type:'text'},
       {key:'media_url', label:'Foto / Thumbnail', type:'image', folder:'galeri'},
       {key:'tipe', label:'Tipe', type:'select', options:['foto','video']},
-      {key:'kategori', label:'Kategori (misal: Fasilitas, Wisuda)', type:'text'},
+      {key:'kategori', label:'Nama Album/Folder (misal: Fasilitas, Wisuda 2027) — foto dengan nama folder sama akan dikelompokkan bersama', type:'text'},
       {key:'urutan', label:'Urutan Tampil', type:'number'},
     ]
   },
@@ -357,7 +357,16 @@ function renderField(f, value){
   const id = 'f_' + f.key;
   if(f.type==='textarea' || f.type==='textarea-lg'){
     const rows = f.type==='textarea-lg' ? 7 : 3;
-    return `<div class="field"><label>${f.label}</label><textarea id="${id}" rows="${rows}">${value}</textarea></div>`;
+    let extra = '';
+    if(f.allowInlineImage){
+      extra = `<div style="margin-top:6px;padding:10px;background:var(--cream-100);border-radius:8px;">
+        <label style="display:block;margin-bottom:6px;">🖼️ Sisipkan gambar ke dalam teks</label>
+        <input type="file" accept="image/*" onchange="insertInlineImage(this,'${id}','${f.imageFolder||'inline'}')">
+        <div style="font-size:10.5px;color:var(--ink-600);margin-top:6px;line-height:1.5;">Klik dulu di posisi teks tempat kamu mau taruh gambarnya, baru pilih file. Kodenya <code>[[gambar:...]]</code> otomatis muncul di situ — jangan dihapus/diubah manual, itu yang membuat gambar tampil di tempat itu saat dipublikasikan.</div>
+        <div class="upload-status" id="${id}_inlinestatus"></div>
+      </div>`;
+    }
+    return `<div class="field"><label>${f.label}</label><textarea id="${id}" rows="${rows}">${value}</textarea>${extra}</div>`;
   }
   if(f.type==='select'){
     return `<div class="field"><label>${f.label}</label><select id="${id}">
@@ -401,6 +410,29 @@ async function uploadImage(input, targetId, folder){
   const {data} = sb.storage.from('media-website').getPublicUrl(path);
   document.getElementById(targetId).value = data.publicUrl;
   statusEl.textContent = 'Berhasil diunggah ✓';
+}
+
+async function insertInlineImage(input, textareaId, folder){
+  const file = input.files[0];
+  if(!file) return;
+  const statusEl = document.getElementById(textareaId+'_inlinestatus');
+  statusEl.textContent = 'Mengunggah…';
+  const path = `${folder}/${Date.now()}-${file.name.replace(/\s+/g,'-')}`;
+  const {error} = await sb.storage.from('media-website').upload(path, file);
+  if(error){
+    statusEl.textContent = 'Gagal unggah: ' + error.message;
+    return;
+  }
+  const {data} = sb.storage.from('media-website').getPublicUrl(path);
+  const textarea = document.getElementById(textareaId);
+  const token = `\n[[gambar:${data.publicUrl}]]\n`;
+  const start = textarea.selectionStart ?? textarea.value.length;
+  const end = textarea.selectionEnd ?? textarea.value.length;
+  textarea.value = textarea.value.slice(0, start) + token + textarea.value.slice(end);
+  textarea.focus();
+  textarea.selectionStart = textarea.selectionEnd = start + token.length;
+  input.value = '';
+  statusEl.textContent = 'Gambar disisipkan ke teks ✓';
 }
 
 // ---------- KONTEN PROFIL (Sejarah/Visi/Misi, perlakuan khusus) ----------
