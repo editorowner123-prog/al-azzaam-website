@@ -665,12 +665,14 @@ async function applyTickerStyle(){
 }
 
 async function renderLogoCard(){
-  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['logo_url','logo_type']);
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['logo_url','logo_type','favicon_url']);
   const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
   const currentUrl = map.logo_url || '';
   const currentType = map.logo_type || 'icon';
+  const currentFavicon = map.favicon_url || '';
   pendingLogoFile = null;
   pendingLogoObjectUrl = null;
+  pendingFaviconFile = null;
 
   return `
     <div class="item-card" style="flex-direction:column;align-items:stretch;">
@@ -696,6 +698,19 @@ async function renderLogoCard(){
 
       <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyLogoFinal()">Terapkan ke Website</button>
       <div class="upload-status" id="logoStatus"></div>
+
+      <div style="border-top:1px solid var(--line);margin:18px 0 14px;"></div>
+
+      <div class="item-title" style="margin-bottom:10px;font-size:14px;">🔖 Favicon (ikon kecil di tab browser)</div>
+      <p style="font-size:11px;color:var(--ink-600);margin:0 0 10px;">Boleh beda dari Logo Website di atas — misal versi lebih sederhana yang tetap jelas walau ditampilkan sangat kecil. Kalau tidak diisi, otomatis pakai monogram "A" bawaan.</p>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div id="faviconPreviewBox" style="width:40px;height:40px;border-radius:8px;background:${currentFavicon ? `#fff url('${currentFavicon}') center/contain no-repeat` : 'var(--cream-100)'};border:1.5px solid var(--line);flex:none;"></div>
+        <div style="flex:1;">
+          <input type="file" id="faviconFileInput" accept="image/*" onchange="onFaviconFileChosen(this)">
+        </div>
+      </div>
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyFaviconFinal()">Terapkan Favicon</button>
+      <div class="upload-status" id="faviconStatus"></div>
     </div>
   `;
 }
@@ -777,6 +792,36 @@ async function applyLogoFinal(){
 
   statusEl.textContent = 'Logo diterapkan ke website ✓';
   showToast('Logo diterapkan ke website ✓');
+  loadList();
+}
+
+let pendingFaviconFile = null;
+
+function onFaviconFileChosen(input){
+  const file = input.files[0];
+  if(!file) return;
+  pendingFaviconFile = file;
+  const objectUrl = URL.createObjectURL(file);
+  document.getElementById('faviconPreviewBox').style.cssText += `background:#fff url('${objectUrl}') center/contain no-repeat;`;
+}
+
+async function applyFaviconFinal(){
+  const statusEl = document.getElementById('faviconStatus');
+  if(!pendingFaviconFile){
+    statusEl.textContent = 'Pilih gambar favicon dulu sebelum menerapkan.';
+    return;
+  }
+  statusEl.textContent = 'Memproses gambar…';
+  const compressed = await compressImage(pendingFaviconFile, 256, 0.9);
+  statusEl.textContent = 'Mengunggah…';
+  const path = `favicon/${Date.now()}-${pendingFaviconFile.name.replace(/\s+/g,'-')}`;
+  const {error} = await sb.storage.from('media-website').upload(path, compressed);
+  if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
+  const url = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
+  const {error: upsertErr} = await sb.from('pengaturan_situs').upsert({key:'favicon_url', value:url});
+  if(upsertErr){ statusEl.textContent = 'Gagal simpan: ' + upsertErr.message; return; }
+  statusEl.textContent = 'Favicon diterapkan ✓';
+  showToast('Favicon diterapkan ✓');
   loadList();
 }
 
