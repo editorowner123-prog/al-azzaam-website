@@ -399,14 +399,50 @@ function renderField(f, value){
 
 let isUploading = false;
 
+// Mengecilkan gambar sebelum upload (dimensi maksimal + kompresi kualitas)
+// supaya website tidak lemot karena file foto asli kamera yang besar (bisa 3-5MB).
+// PNG tetap PNG (jaga transparansi, misal untuk logo), format lain jadi JPEG.
+function compressImage(file, maxDim, quality){
+  return new Promise((resolve) => {
+    if(!file.type.startsWith('image/') || file.type === 'image/gif' || file.size < 300*1024){
+      resolve(file); // sudah kecil atau bukan format yang perlu dikompres, lewati
+      return;
+    }
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      let {width, height} = img;
+      if(width > maxDim || height > maxDim){
+        const ratio = Math.min(maxDim/width, maxDim/height);
+        width = Math.round(width*ratio);
+        height = Math.round(height*ratio);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      const outType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+      canvas.toBlob((blob) => {
+        URL.revokeObjectURL(objectUrl);
+        if(!blob || blob.size >= file.size){ resolve(file); return; }
+        const newName = file.name.replace(/\.(png|jpe?g|webp)$/i,'') + (outType==='image/png' ? '.png' : '.jpg');
+        resolve(new File([blob], newName, {type: outType}));
+      }, outType, quality);
+    };
+    img.onerror = () => { URL.revokeObjectURL(objectUrl); resolve(file); };
+    img.src = objectUrl;
+  });
+}
+
 async function uploadImage(input, targetId, folder){
   const file = input.files[0];
   if(!file) return;
   isUploading = true;
   const statusEl = document.getElementById(targetId+'_status');
+  statusEl.textContent = 'Memproses gambar…';
+  const compressed = await compressImage(file, 1600, 0.82);
   statusEl.textContent = 'Mengunggah…';
   const path = `${folder}/${Date.now()}-${file.name.replace(/\s+/g,'-')}`;
-  const {error} = await sb.storage.from('media-website').upload(path, file);
+  const {error} = await sb.storage.from('media-website').upload(path, compressed);
   if(error){
     statusEl.textContent = 'Gagal unggah: ' + error.message;
     isUploading = false;
@@ -422,9 +458,11 @@ async function insertInlineImage(input, textareaId, folder){
   const file = input.files[0];
   if(!file) return;
   const statusEl = document.getElementById(textareaId+'_inlinestatus');
+  statusEl.textContent = 'Memproses gambar…';
+  const compressed = await compressImage(file, 1600, 0.82);
   statusEl.textContent = 'Mengunggah…';
   const path = `${folder}/${Date.now()}-${file.name.replace(/\s+/g,'-')}`;
-  const {error} = await sb.storage.from('media-website').upload(path, file);
+  const {error} = await sb.storage.from('media-website').upload(path, compressed);
   if(error){
     statusEl.textContent = 'Gagal unggah: ' + error.message;
     return;
@@ -546,9 +584,11 @@ function onHeroFileChosen(input){
 async function applyHeroPhotoFinal(){
   const statusEl = document.getElementById('heroPhotoStatus');
   if(!pendingHeroFile){ statusEl.textContent = 'Pilih foto dulu sebelum menerapkan.'; return; }
+  statusEl.textContent = 'Memproses gambar…';
+  const compressed = await compressImage(pendingHeroFile, 1920, 0.8);
   statusEl.textContent = 'Mengunggah…';
   const path = `hero/${Date.now()}-${pendingHeroFile.name.replace(/\s+/g,'-')}`;
-  const {error} = await sb.storage.from('media-website').upload(path, pendingHeroFile);
+  const {error} = await sb.storage.from('media-website').upload(path, compressed);
   if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
   const url = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
   const {error: upsertErr} = await sb.from('pengaturan_situs').upsert({key:'hero_photo_url', value:url});
@@ -710,9 +750,11 @@ async function applyLogoFinal(){
   let finalUrl = null;
 
   if(pendingLogoFile){
+    statusEl.textContent = 'Memproses gambar…';
+    const compressed = await compressImage(pendingLogoFile, 800, 0.85);
     statusEl.textContent = 'Mengunggah…';
     const path = `logo/${Date.now()}-${pendingLogoFile.name.replace(/\s+/g,'-')}`;
-    const {error} = await sb.storage.from('media-website').upload(path, pendingLogoFile);
+    const {error} = await sb.storage.from('media-website').upload(path, compressed);
     if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
     finalUrl = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
   } else {
