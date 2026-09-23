@@ -24,6 +24,9 @@ async function applyLogo(){
   const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['logo_url','logo_type']);
   const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
   if(!map.logo_url) return;
+
+  const faviconLink = document.getElementById('faviconLink');
+  if(faviconLink) faviconLink.href = map.logo_url;
   const type = map.logo_type || 'icon';
 
   document.querySelectorAll('.nav-brand').forEach(el=>{
