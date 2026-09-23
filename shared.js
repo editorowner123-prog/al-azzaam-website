@@ -21,12 +21,18 @@ function normalizeLink(link){
 
 // ---------- Logo ----------
 async function applyLogo(){
-  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['logo_url','logo_type']);
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['logo_url','logo_type','favicon_url']);
   const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
-  if(!map.logo_url) return;
 
+  // Favicon terpisah dari logo website — pakai favicon_url kalau ada,
+  // kalau tidak fallback ke logo_url, kalau tidak ada dua-duanya biarkan
+  // favicon default (monogram "A") yang sudah terpasang di <head>.
   const faviconLink = document.getElementById('faviconLink');
-  if(faviconLink) faviconLink.href = map.logo_url;
+  if(faviconLink && (map.favicon_url || map.logo_url)){
+    faviconLink.href = map.favicon_url || map.logo_url;
+  }
+
+  if(!map.logo_url) return;
   const type = map.logo_type || 'icon';
 
   document.querySelectorAll('.nav-brand').forEach(el=>{
