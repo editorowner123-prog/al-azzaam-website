@@ -104,6 +104,16 @@ footer a:hover{color:var(--gold-400);}
 .flyer-box img{width:100%;display:block;cursor:pointer;}
 .flyer-close{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(43,8,16,.85);color:#fff;border:none;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
 
+/* ---------- INSTAGRAM EMBED ---------- */
+.ig-embed-grid{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;}
+.ig-embed-item{flex:1 1 320px;max-width:400px;display:flex;justify-content:center;}
+.ig-embed-item iframe{margin:0 auto!important;}
+
+/* ---------- YOUTUBE: ikon play di atas thumbnail ---------- */
+.yt-thumb-wrap{position:relative;}
+.yt-play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:rgba(43,8,16,.75);display:flex;align-items:center;justify-content:center;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.4);}
+.yt-play-icon::after{content:'';border-style:solid;border-width:7px 0 7px 12px;border-color:transparent transparent transparent #fff;margin-left:3px;}
+
 /* ---------- STRUKTUR PENGURUS: POHON ORGANISASI ---------- */
 .org-scroll{overflow-x:auto;padding:20px 10px 30px;text-align:center;}
 .org-tree{display:inline-block;}
