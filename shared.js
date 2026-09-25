@@ -19,6 +19,56 @@ function normalizeLink(link){
   return 'https://' + link;
 }
 
+// ---------- Util: YouTube — ambil ID video dari berbagai bentuk link ----------
+function getYoutubeId(url){
+  if(!url) return null;
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=)([\w-]{11})/,
+    /(?:youtu\.be\/)([\w-]{11})/,
+    /(?:youtube\.com\/embed\/)([\w-]{11})/,
+    /(?:youtube\.com\/shorts\/)([\w-]{11})/,
+  ];
+  for(const p of patterns){
+    const m = url.match(p);
+    if(m) return m[1];
+  }
+  return null;
+}
+function getYoutubeThumbnail(url){
+  const id = getYoutubeId(url);
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : '';
+}
+
+// ---------- Util: Instagram embed (postingan & Reels) ----------
+function ensureInstagramScript(){
+  if(document.getElementById('igEmbedScript')) return;
+  const s = document.createElement('script');
+  s.id = 'igEmbedScript';
+  s.async = true;
+  s.src = 'https://www.instagram.com/embed.js';
+  document.body.appendChild(s);
+}
+function processInstagramEmbeds(retries){
+  retries = retries || 0;
+  if(window.instgrm && window.instgrm.Embeds){
+    window.instgrm.Embeds.process();
+  } else if(retries < 15){
+    setTimeout(()=>processInstagramEmbeds(retries+1), 300);
+  }
+}
+async function loadInstagramEmbeds(containerId, limit){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  const {data, error} = await sb.from('instagram_embed').select('*').eq('status','published').order('urutan').order('created_at',{ascending:false}).limit(limit || 100);
+  if(error || !data || data.length===0){
+    container.innerHTML = '<div class="empty-state">Belum ada postingan Instagram.</div>';
+    return;
+  }
+  container.innerHTML = data.map(p=>`<div class="ig-embed-item">${p.embed_code}</div>`).join('');
+  ensureInstagramScript();
+  processInstagramEmbeds();
+}
+
 // ---------- Logo ----------
 async function applyLogo(){
   const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['logo_url','logo_type','favicon_url']);
