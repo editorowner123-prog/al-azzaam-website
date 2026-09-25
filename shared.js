@@ -64,7 +64,9 @@ async function loadInstagramEmbeds(containerId, limit){
     container.innerHTML = '<div class="empty-state">Belum ada postingan Instagram.</div>';
     return;
   }
-  container.innerHTML = data.map(p=>`<div class="ig-embed-item">${p.embed_code}</div>`).join('');
+  // Hapus data-instgrm-captioned supaya kartu tampil ringkas (tanpa teks caption panjang)
+  const compact = code => code.replace(/\s*data-instgrm-captioned(="[^"]*")?/gi, '');
+  container.innerHTML = data.map(p=>`<div class="ig-embed-item">${compact(p.embed_code)}</div>`).join('');
   ensureInstagramScript();
   processInstagramEmbeds();
 }
