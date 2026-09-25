@@ -99,9 +99,23 @@ label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-b
   <div class="content">
     <div class="content-head">
       <h2 id="contentTitle">—</h2>
-      <button class="btn btn-gold btn-sm" id="addBtn" onclick="openForm()">+ Tambah</button>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline btn-sm" id="bulkBtn" style="display:none;" onclick="openBulkForm()">⚡ Tambah Massal</button>
+        <button class="btn btn-gold btn-sm" id="addBtn" onclick="openForm()">+ Tambah</button>
+      </div>
     </div>
     <div id="listArea"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="bulkModalOverlay">
+  <div class="modal">
+    <h3 id="bulkModalTitle">Tambah Massal</h3>
+    <div id="bulkFormArea"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeBulkForm()">Batal</button>
+      <button class="btn btn-gold" onclick="submitBulk()">Tambahkan Semua</button>
+    </div>
   </div>
 </div>
 
@@ -160,9 +174,10 @@ const TABLES = {
     meta: r => [r.tipe, r.kategori, `Urutan: ${r.urutan ?? 0}`],
     fields: [
       {key:'judul', label:'Judul', type:'text'},
-      {key:'media_url', label:'Foto / Thumbnail', type:'image', folder:'galeri'},
-      {key:'tipe', label:'Tipe', type:'select', options:['foto','video']},
-      {key:'kategori', label:'Nama Album/Folder (misal: Fasilitas, Wisuda 2027) — foto dengan nama folder sama akan dikelompokkan bersama', type:'text'},
+      {key:'tipe', label:'Tipe', type:'select', options:['foto','youtube']},
+      {key:'media_url', label:'Upload Foto (khusus tipe Foto — kosongkan kalau tipe YouTube)', type:'image', folder:'galeri'},
+      {key:'youtube_url', label:'Link YouTube (khusus tipe YouTube — tempel link videonya, thumbnail otomatis)', type:'text'},
+      {key:'kategori', label:'Nama Album/Folder (misal: Fasilitas, Wisuda 2027) — item dengan nama folder sama akan dikelompokkan bersama', type:'text'},
       {key:'urutan', label:'Urutan Tampil', type:'number'},
     ]
   },
@@ -202,6 +217,17 @@ const TABLES = {
       {key:'link_url', label:'Link Tujuan (saat gambar diklik)', type:'text'},
       {key:'ukuran', label:'Ukuran Tampil', type:'select', options:['kecil','sedang','besar']},
       {key:'urutan', label:'Urutan Kemunculan (kalau lebih dari 1 aktif)', type:'number'},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
+    ]
+  },
+  instagram_embed: {
+    label: 'Instagram', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'keterangan',
+    meta: r => [`<span class="pill ${r.status}">${r.status}</span>`, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'keterangan', label:'Keterangan Internal (hanya untuk kamu, misal: "Reels Wisuda Tahfidz")', type:'text'},
+      {key:'embed_code', label:'Kode Sematkan Instagram — buka postingan/Reels di Instagram → titik tiga (⋮) → "Sematkan"/"Embed" → copy semua kode, tempel di sini', type:'textarea-lg'},
+      {key:'urutan', label:'Urutan Tampil', type:'number'},
       {key:'status', label:'Status', type:'select', options:['draft','published']},
     ]
   },
@@ -270,6 +296,53 @@ function switchTab(key){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+key).classList.add('active');
   document.getElementById('contentTitle').textContent = TABLES[key].label;
+  document.getElementById('bulkBtn').style.display = (key === 'galeri' || key === 'instagram_embed') ? 'inline-flex' : 'none';
+  loadList();
+}
+
+// ---------- TAMBAH MASSAL (YouTube di Galeri, atau Instagram) ----------
+function openBulkForm(){
+  const area = document.getElementById('bulkFormArea');
+  if(currentTab === 'galeri'){
+    document.getElementById('bulkModalTitle').textContent = 'Tambah Massal Video YouTube';
+    area.innerHTML = `
+      <div class="field"><label>Nama Album/Folder (berlaku untuk semua video ini)</label><input id="bulkFolder" placeholder="misal: Video Kegiatan"></div>
+      <div class="field"><label>Tempel Link YouTube (satu link per baris)</label><textarea id="bulkLinks" rows="8" placeholder="https://youtu.be/xxxxxxxxxxx&#10;https://youtu.be/yyyyyyyyyyy&#10;https://youtu.be/zzzzzzzzzzz"></textarea></div>
+      <div style="font-size:11px;color:var(--ink-600);">Otomatis muncul terurut dari yang paling baru ditambahkan, tidak perlu isi Urutan manual.</div>
+    `;
+  } else if(currentTab === 'instagram_embed'){
+    document.getElementById('bulkModalTitle').textContent = 'Tambah Massal Instagram';
+    area.innerHTML = `
+      <div class="field"><label>Tempel Banyak Kode Sematkan Instagram Sekaligus</label><textarea id="bulkLinks" rows="10" placeholder="Tempel beberapa kode 'Sematkan' dari Instagram berurutan (langsung copy-paste semuanya, sistem otomatis memisahkan tiap postingan)"></textarea></div>
+      <div style="font-size:11px;color:var(--ink-600);">Semua langsung berstatus "published" dan otomatis terurut dari yang paling baru ditambahkan.</div>
+    `;
+  } else {
+    return;
+  }
+  document.getElementById('bulkModalOverlay').classList.add('open');
+}
+function closeBulkForm(){
+  document.getElementById('bulkModalOverlay').classList.remove('open');
+}
+async function submitBulk(){
+  if(currentTab === 'galeri'){
+    const folder = document.getElementById('bulkFolder').value.trim();
+    const links = document.getElementById('bulkLinks').value.split('\n').map(s=>s.trim()).filter(Boolean);
+    if(links.length===0){ alert('Tempel minimal 1 link YouTube dulu.'); return; }
+    const rows = links.map(url => ({tipe:'youtube', youtube_url:url, kategori: folder || null, urutan: 0}));
+    const {error} = await sb.from('galeri').insert(rows);
+    if(error){ alert('Gagal menambahkan: ' + error.message); return; }
+    showToast(`${rows.length} video berhasil ditambahkan ✓`);
+  } else if(currentTab === 'instagram_embed'){
+    const raw = document.getElementById('bulkLinks').value;
+    const matches = raw.match(/<blockquote[^>]*class="instagram-media"[\s\S]*?<\/blockquote>/g);
+    if(!matches || matches.length===0){ alert('Tidak ditemukan kode sematkan Instagram yang valid. Pastikan kode disalin lengkap dari tombol "Sematkan" di Instagram.'); return; }
+    const rows = matches.map(code => ({embed_code: code, urutan: 0, status: 'published'}));
+    const {error} = await sb.from('instagram_embed').insert(rows);
+    if(error){ alert('Gagal menambahkan: ' + error.message); return; }
+    showToast(`${rows.length} postingan Instagram berhasil ditambahkan ✓`);
+  }
+  closeBulkForm();
   loadList();
 }
 
