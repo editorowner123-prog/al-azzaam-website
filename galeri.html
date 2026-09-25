@@ -25,6 +25,9 @@
 <link rel="stylesheet" href="shared.css?v=2">
 <style>
 .wrap{max-width:1120px;margin:0 auto;}
+.mode-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:26px;}
+.mode-tab{background:var(--surface);border:1.5px solid var(--line);padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;color:var(--ink-600);cursor:pointer;}
+.mode-tab.active{background:var(--gold-shine);color:var(--maroon-950);border-color:transparent;}
 .folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
 .folder-card{border-radius:14px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;background:var(--surface);transition:transform .15s;}
 .folder-card:hover{transform:translateY(-3px);}
@@ -85,6 +88,11 @@
 </div>
 
 <section class="section wrap">
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="modeBtnFoto" onclick="switchMode('foto')">📷 Foto &amp; Video</button>
+    <button class="mode-tab" id="modeBtnIg" onclick="switchMode('instagram')">📸 Instagram</button>
+  </div>
+
   <!-- Tampilan FOLDER (default) -->
   <div id="folderView">
     <div class="folder-grid" id="folderGrid">
@@ -97,6 +105,13 @@
     <div class="back-link" onclick="backToFolders()">← Kembali ke semua album</div>
     <h2 id="folderTitle" style="font-size:18px;color:var(--maroon-900);margin-bottom:16px;"></h2>
     <div class="galeri-grid" id="galeriGrid"></div>
+  </div>
+
+  <!-- Tampilan INSTAGRAM (mode terpisah) -->
+  <div id="instagramView" style="display:none;">
+    <div class="ig-embed-grid" id="igGrid">
+      <div class="empty-state">Memuat postingan Instagram…</div>
+    </div>
   </div>
 </section>
 
@@ -147,7 +162,7 @@ let allGaleri = [];
 let folderMap = {};
 
 async function loadGaleri(){
-  const {data, error} = await sb.from('galeri').select('*').order('urutan');
+  const {data, error} = await sb.from('galeri').select('*').order('urutan').order('created_at',{ascending:false});
   const folderGrid = document.getElementById('folderGrid');
   if(error || !data || data.length===0){
     folderGrid.innerHTML = '<div class="empty-state">Belum ada foto/video. Tambahkan lewat panel admin.</div>';
@@ -171,6 +186,12 @@ async function loadGaleri(){
   if(folder && folderMap[folder]) openFolder(folder);
 }
 
+// Foto pakai media_url, video YouTube otomatis pakai thumbnail dari YouTube
+function getItemThumb(item){
+  if(item.tipe === 'youtube') return getYoutubeThumbnail(item.youtube_url) || '';
+  return item.media_url || '';
+}
+
 function renderFolders(){
   const folderGrid = document.getElementById('folderGrid');
   const names = Object.keys(folderMap);
@@ -180,11 +201,12 @@ function renderFolders(){
   }
   folderGrid.innerHTML = names.map(nama=>{
     const items = folderMap[nama];
-    const cover = items.find(i=>i.tipe!=='video') || items[0];
+    const cover = items.find(i=>i.tipe!=='youtube') || items[0];
+    const thumb = cover ? getItemThumb(cover) : '';
     return `
       <div class="folder-card" onclick="openFolder('${nama.replace(/'/g,"\\'")}')">
         <div class="folder-thumb">
-          ${cover ? `<img src="${cover.media_url}" alt="${nama}" loading="lazy">` : '<div class="icon-empty">🖼️</div>'}
+          ${thumb ? `<img src="${thumb}" alt="${nama}" loading="lazy">` : '<div class="icon-empty">🖼️</div>'}
           <div class="stack"></div>
         </div>
         <div class="folder-info">
@@ -222,9 +244,9 @@ function renderGaleri(list){
     return;
   }
   grid.innerHTML = list.map((g,i)=>`
-    <div class="galeri-item" onclick="openLightbox(${i})">
-      <img src="${g.media_url}" alt="${g.judul||''}" loading="lazy">
-      ${g.tipe==='video' ? '<div class="badge">▶ Video</div>' : ''}
+    <div class="galeri-item ${g.tipe==='youtube' ? 'yt-thumb-wrap' : ''}" onclick="openLightbox(${i})">
+      <img src="${getItemThumb(g)}" alt="${g.judul||''}" loading="lazy">
+      ${g.tipe==='youtube' ? '<div class="yt-play-icon"></div><div class="badge">▶ YouTube</div>' : ''}
       ${g.judul ? `<div class="cap">${g.judul}</div>` : ''}
     </div>
   `).join('');
@@ -233,9 +255,14 @@ function renderGaleri(list){
 function openLightbox(i){
   const item = window._currentList[i];
   const content = document.getElementById('lightboxContent');
-  content.innerHTML = item.tipe==='video'
-    ? `<video src="${item.media_url}" controls autoplay style="max-width:100%;max-height:85vh;border-radius:10px;"></video>`
-    : `<img src="${item.media_url}" alt="${item.judul||''}">`;
+  if(item.tipe === 'youtube'){
+    const ytId = getYoutubeId(item.youtube_url);
+    content.innerHTML = ytId
+      ? `<iframe width="800" height="450" style="max-width:90vw;aspect-ratio:16/9;border:none;border-radius:10px;" src="https://www.youtube.com/embed/${ytId}?autoplay=1" title="${item.judul||''}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+      : `<div style="color:#fff;padding:20px;">Link YouTube tidak valid.</div>`;
+  } else {
+    content.innerHTML = `<img src="${item.media_url}" alt="${item.judul||''}">`;
+  }
   document.getElementById('lightbox').classList.add('open');
 }
 function closeLightbox(e){
@@ -244,6 +271,24 @@ function closeLightbox(e){
     document.getElementById('lightboxContent').innerHTML = '';
   }
 }
+let igLoaded = false;
+function switchMode(mode){
+  document.getElementById('modeBtnFoto').classList.toggle('active', mode==='foto');
+  document.getElementById('modeBtnIg').classList.toggle('active', mode==='instagram');
+  if(mode === 'instagram'){
+    document.getElementById('folderView').style.display = 'none';
+    document.getElementById('itemsView').style.display = 'none';
+    document.getElementById('instagramView').style.display = 'block';
+    if(!igLoaded){
+      igLoaded = true;
+      loadInstagramEmbeds('igGrid');
+    }
+  } else {
+    document.getElementById('instagramView').style.display = 'none';
+    document.getElementById('folderView').style.display = 'block';
+  }
+}
+
 loadGaleri();
 </script>
 </body>
