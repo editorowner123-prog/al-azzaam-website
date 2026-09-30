@@ -354,11 +354,12 @@ async function loadList(){
 
   let logoHtml = '';
   if(currentTab === 'pengaturan_situs'){
+    const maintenanceHtml = await renderMaintenanceCard();
     const profilHtml = await renderProfilCard();
     const kontakHtml = await renderKontakSosmedCard();
     const heroPhotoHtml = await renderHeroPhotoCard();
     const tickerStyleHtml = await renderTickerStyleCard();
-    logoHtml = profilHtml + kontakHtml + heroPhotoHtml + tickerStyleHtml + await renderLogoCard();
+    logoHtml = maintenanceHtml + profilHtml + kontakHtml + heroPhotoHtml + tickerStyleHtml + await renderLogoCard();
   }
 
   const {data, error} = await sb.from(currentTab).select('*').order(cfg.orderBy, {ascending: cfg.ascending});
@@ -673,6 +674,55 @@ async function applyHeroPhotoFinal(){
 }
 
 // ---------- TAMPILAN RUNNING TEXT (warna & ukuran, dengan preview) ----------
+// ---------- Mode Pemeliharaan (tombol on/off, tampilkan halaman "Sedang Pemeliharaan" ke pengunjung) ----------
+async function renderMaintenanceCard(){
+  const {data} = await sb.from('pengaturan_situs').select('value').eq('key','maintenance_mode').maybeSingle();
+  const isOn = !!(data && data.value === 'on');
+  return `
+    <div class="item-card" style="flex-direction:column;align-items:stretch;border:2px solid ${isOn ? '#c22638' : 'var(--line)'};background:${isOn ? '#fff5f5' : '#fff'};">
+      <div class="item-title" style="margin-bottom:6px;">🚧 Mode Pemeliharaan Website</div>
+      <div style="font-size:12.5px;color:var(--ink-600);margin-bottom:14px;">
+        Kalau diaktifkan, semua pengunjung (bukan admin) akan melihat halaman "Sedang Pemeliharaan"
+        berisi kata bijak penghafal Qur'an, bukan halaman aslinya. Panel admin ini tetap bisa diakses
+        seperti biasa untuk mematikannya lagi kapan saja.
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <label class="maintenance-switch">
+          <input type="checkbox" id="maintenanceToggle" ${isOn ? 'checked' : ''} onchange="toggleMaintenanceMode(this.checked)">
+          <span class="maintenance-slider"></span>
+        </label>
+        <span id="maintenanceStatusLabel" style="font-weight:700;font-size:13.5px;color:${isOn ? '#c22638' : 'var(--ink-600)'};">
+          ${isOn ? 'AKTIF — website sedang tampil halaman pemeliharaan' : 'Nonaktif — website tampil normal'}
+        </span>
+      </div>
+      <div class="upload-status" id="maintenanceStatus"></div>
+      <style>
+        .maintenance-switch{position:relative;display:inline-block;width:52px;height:28px;flex-shrink:0;}
+        .maintenance-switch input{opacity:0;width:0;height:0;position:absolute;}
+        .maintenance-switch .maintenance-slider{position:absolute;cursor:pointer;inset:0;background:#ccc;transition:.2s;border-radius:999px;}
+        .maintenance-switch .maintenance-slider::before{content:"";position:absolute;height:22px;width:22px;left:3px;top:3px;background:#fff;transition:.2s;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.3);}
+        .maintenance-switch input:checked + .maintenance-slider{background:#c22638;}
+        .maintenance-switch input:checked + .maintenance-slider::before{transform:translateX(24px);}
+      </style>
+    </div>
+  `;
+}
+async function toggleMaintenanceMode(isOn){
+  const statusEl = document.getElementById('maintenanceStatus');
+  const label = document.getElementById('maintenanceStatusLabel');
+  statusEl.textContent = 'Menyimpan…';
+  const {error} = await sb.from('pengaturan_situs').upsert({key:'maintenance_mode', value: isOn ? 'on' : 'off'});
+  if(error){
+    statusEl.textContent = 'Gagal simpan: ' + error.message;
+    document.getElementById('maintenanceToggle').checked = !isOn;
+    return;
+  }
+  statusEl.textContent = 'Tersimpan ✓';
+  label.textContent = isOn ? 'AKTIF — website sedang tampil halaman pemeliharaan' : 'Nonaktif — website tampil normal';
+  label.style.color = isOn ? '#c22638' : 'var(--ink-600)';
+  showToast(isOn ? 'Mode pemeliharaan diaktifkan — pengunjung akan melihat halaman pemeliharaan ✓' : 'Mode pemeliharaan dimatikan, website normal kembali ✓');
+}
+
 async function renderTickerStyleCard(){
   const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height','ticker_speed']);
   const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
