@@ -241,8 +241,22 @@ function setupNavToggle(){
   }
 }
 
+// ---------- Mode Pemeliharaan: cek paling awal sebelum apa pun lainnya ----------
+async function checkMaintenanceMode(){
+  try{
+    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','maintenance_mode').maybeSingle();
+    if(data && data.value === 'on'){
+      window.location.replace('maintenance.html');
+      return true;
+    }
+  }catch(e){ /* kalau gagal cek, biarkan website tampil normal */ }
+  return false;
+}
+
 // ---------- Jalankan semua yang umum, di semua halaman ----------
-function initSharedPage(){
+async function initSharedPage(){
+  const isMaintenance = await checkMaintenanceMode();
+  if(isMaintenance) return;
   setupNavToggle();
   applyLogo();
   applyHeroPhoto();
