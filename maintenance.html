@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>503 — Website sedang istirahat · PPTQ Al Azzaam</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+  :root{--m950:#2b0810;--m800:#5c1120;--m700:#7a1a2c;--g300:#f7e7ab;--g400:#e8c766;--g500:#d4af37;--g600:#b8892b;--cream:#fff8f3;--cream2:#fdf1e8;--ink:#241012;--ink2:#6b4750}
+  *{box-sizing:border-box;margin:0}
+  [hidden]{display:none!important}
+  body{min-height:100vh;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);line-height:1.6;background:
+    radial-gradient(circle at 12% 0%,rgba(212,175,55,.22),transparent 45%),radial-gradient(circle at 100% 100%,rgba(122,26,44,.10),transparent 45%),var(--cream)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cg fill='none' stroke='%237a1a2c'%3E%3Cpath d='M32 6l26 26-26 26L6 32z'/%3E%3Cpath d='M14 14h36v36H14z'/%3E%3C/g%3E%3C/svg%3E")}
+  .top{position:relative;background:linear-gradient(120deg,var(--m950),var(--m800));color:var(--g300);padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:14px;border-bottom:3px solid var(--g500)}
+  .top i{width:9px;height:9px;border-radius:50%;background:#ff6b6b;box-shadow:0 0 0 0 rgba(255,107,107,.7);animation:pulse 1.8s infinite}
+  @keyframes pulse{70%{box-shadow:0 0 0 9px rgba(255,107,107,0)}100%{box-shadow:0 0 0 0 rgba(255,107,107,0)}}
+  main{position:relative;max-width:880px;margin:0 auto;padding:36px 20px 28px;display:grid;gap:22px}
+  .hero{text-align:center;background:#fff;border:1px solid rgba(184,137,43,.35);border-radius:28px;padding:34px 24px 30px;box-shadow:0 24px 50px -28px rgba(92,17,32,.45)}
+  .code{font-family:Outfit,sans-serif;font-weight:800;font-size:clamp(84px,18vw,140px);line-height:1;letter-spacing:-.03em;display:flex;align-items:center;justify-content:center;gap:.05em;
+    background:linear-gradient(120deg,var(--m800),var(--m700) 40%,var(--g600));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .code .zero{width:.74em;height:.74em;display:inline-grid;place-items:center}
+  .code .zero svg{width:100%;height:100%;animation:spin 18s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .kind{display:inline-block;margin:6px 0 18px;padding:5px 14px;border-radius:999px;background:var(--cream2);border:1px solid rgba(184,137,43,.4);color:var(--m700);font-weight:700;font-size:13px}
+  h1{font-family:Outfit,sans-serif;font-weight:700;font-size:clamp(26px,5vw,38px);line-height:1.15;margin-bottom:12px;color:var(--m800);text-wrap:balance}
+  .msg{color:var(--ink2);font-size:17px;max-width:50ch;margin:0 auto 18px;white-space:pre-line;text-wrap:pretty}
+  .eta{display:inline-flex;gap:10px;align-items:center;padding:10px 18px;border:1px solid rgba(184,137,43,.5);border-radius:999px;font-weight:700;font-size:15px;color:var(--m800);background:var(--cream2);margin-bottom:22px}
+  .eta svg{width:20px;height:20px;flex:none}
+  .actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;gap:9px;align-items:center;padding:12px 22px;border-radius:999px;font:600 15px 'Plus Jakarta Sans',sans-serif;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-gold{border:0;background:linear-gradient(120deg,var(--g300),var(--g500) 55%,var(--g600));color:var(--m950);box-shadow:0 10px 22px -10px rgba(184,137,43,.9)}
+  .btn-line{border:1.5px solid var(--m700);background:transparent;color:var(--m700)}
+  .btn-line:hover{background:var(--m700);color:#fff}
+  .btn svg{width:20px;height:20px;flex:none}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .card{background:#fff;border:1px solid rgba(184,137,43,.3);border-radius:20px;padding:20px;box-shadow:0 14px 30px -24px rgba(92,17,32,.5)}
+  .card .ic{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--m800),var(--m700));display:grid;place-items:center;margin-bottom:10px}
+  .card .ic svg{width:24px;height:24px;color:var(--g400)}
+  .card h3{font-family:Outfit,sans-serif;font-size:17px;color:var(--m800);margin-bottom:4px}
+  .card p{font-size:14px;color:var(--ink2)}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--g600);margin-bottom:8px}
+  .tas{text-align:center;background:linear-gradient(160deg,var(--m950),var(--m800));color:var(--cream);border:0}
+  .tas .eyebrow{color:var(--g400)}
+  #tbtn{width:150px;height:150px;border-radius:50%;border:4px solid var(--g500);background:radial-gradient(circle at 35% 30%,var(--m700),var(--m950));color:var(--g300);cursor:pointer;margin:6px auto 10px;display:grid;place-items:center;box-shadow:0 0 0 6px rgba(212,175,55,.18),0 18px 30px -12px #000;transition:transform .08s}
+  #tbtn:active{transform:scale(.94)}
+  #tcount{font-family:Outfit,sans-serif;font-weight:800;font-size:54px;line-height:1}
+  #tlabel{font-weight:700;color:var(--g300);font-size:16px}
+  .tas small{color:#e9cfc0;font-size:12.5px}
+  .tas button.lnk{background:none;border:0;color:var(--g400);text-decoration:underline;cursor:pointer;font:600 12.5px inherit;font-family:inherit;margin-left:8px}
+  #qt{font-size:17px;min-height:84px;display:flex;align-items:center;transition:opacity .25s;color:var(--m800);font-weight:600}
+  #qa{font-size:13px;color:var(--g600);font-style:italic;font-weight:600}
+  .foot{text-align:center;color:var(--ink2);font-size:13px;display:grid;gap:12px;justify-items:center}
+  .foot .soc{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .foot a.s{padding:7px 16px;border-radius:999px;border:1px solid rgba(184,137,43,.5);color:var(--m700);text-decoration:none;font-weight:700;background:#fff}
+  .foot b{color:var(--m800)}
+  :focus-visible{outline:2px solid var(--g600);outline-offset:3px;border-radius:6px}
+  @media (max-width:720px){.grid3,.duo{grid-template-columns:1fr}.hero{padding:28px 18px}}
+  @media (prefers-reduced-motion:reduce){.code .zero svg,.top i{animation:none}}
+</style>
+</head>
+<body>
+<div class="top"><i></i> Layanan sementara dihentikan oleh pengelola</div>
+<main>
+  <section class="hero">
+    <div class="code" aria-label="Kode galat 503">
+      <span>5</span>
+      <span class="zero" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none" stroke="#b8892b" stroke-width="5" stroke-linejoin="round"><path d="M30 30h40v40H30zM50 14l36 36-36 36-36-36z"/><circle cx="50" cy="50" r="7" fill="#7a1a2c" stroke="none"/></svg></span>
+      <span>3</span>
+    </div>
+    <div class="kind">Galat 503 · Layanan sementara tidak tersedia</div>
+    <h1 id="mTitle">Website sedang istirahat</h1>
+    <p class="msg" id="mMsg">Server kami sedang muroja'ah sebentar supaya hafalannya makin kuat. Silakan kembali beberapa saat lagi.</p>
+    <div class="eta" id="mEta" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.3 2"/></svg>
+      <span id="mEtaText"></span>
+    </div>
+    <div class="actions">
+      <button class="btn btn-gold" type="button" onclick="location.reload()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v5h-5"/></svg>Muat ulang</button>
+      <a class="btn btn-line" id="mWa" href="#" target="_blank" rel="noopener" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16a1 1 0 0 1 1 1V16a1 1 0 0 1-1 1h-9l-4.5 3.5V17H4a1 1 0 0 1-1-1V6.5a1 1 0 0 1 1-1zM7.5 9.5h9M7.5 12.8H13"/></svg>Hubungi panitia</a>
+    </div>
+  </section>
+
+  <section class="grid3" aria-label="Yang sedang dikerjakan">
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C6.5 4.5 9.5 4.5 12 6c2.5-1.5 5.5-1.5 8-.5V18c-2.5-1-5.5-1-8 .5-2.5-1.5-5.5-1.500-8-.5zM12 6v12.500"/></svg></div><h3>Muroja'ah server</h3><p>Data diulang-ulang dulu supaya tidak ada yang terlewat saat setoran.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.600 5.600l2.100 2.100M16.300 16.300l2.100 2.100M5.600 18.400l2.100-2.100M16.300 7.700l2.100-2.100"/><circle cx="12" cy="12" r="3"/></svg></div><h3>Rapi-rapi pondok</h3><p>Admin sedang memperbarui konten dan merapikan tampilan website.</p></div>
+    <div class="card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.500A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/><path d="M16 5l.6 1.400L18 7l-1.400.6L16 9l-.6-1.400L14 7l1.400-.6z"/></svg></div><h3>Istirahat sejenak</h3><p>Santri saja butuh tidur, masa website tidak boleh rehat sebentar.</p></div>
+  </section>
+
+  <section class="duo">
+    <div class="card tas">
+      <div class="eyebrow">Sambil menunggu</div>
+      <button id="tbtn" type="button" onclick="tasbih()" aria-label="Tambah tasbih"><span><span id="tcount">0</span><br><span id="tlabel">Subhanallah</span></span></button>
+      <small><span id="ttotal">0 total</span><button class="lnk" type="button" onclick="resetTasbih()">ulang</button></small>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Hikmah santri</div>
+      <div id="qt"></div>
+      <div id="qa"></div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="soc"><a class="s" id="mIg" href="#" target="_blank" rel="noopener" hidden>Instagram</a><a class="s" id="mYt" href="#" target="_blank" rel="noopener" hidden>YouTube</a></div>
+    <div><b>PPTQ Al Azzaam</b> · Gunungpati, Semarang<br>Halaman ini otomatis memeriksa ulang tiap satu menit.</div>
+  </footer>
+</main>
+
+<script>
+// Pesan error diisi admin lewat panel admin (Pengaturan Situs > Mode Istirahat).
+// Kalau database tidak terjangkau, tampil pesan bawaan di atas.
+const SB_URL = "https://ttpkztaxfpjhkwtnbpec.supabase.co";
+const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0cGt6dGF4ZnBqaGt3dG5icGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MDExOTUsImV4cCI6MjEwMjk3NzE5NX0.yfeSSewI_CDw64WxYU4qUVeEbVLsHXVqpDpeCGDT5PI";
+let sbc = null;
+try{ sbc = window.supabase.createClient(SB_URL, SB_ANON); }catch(e){}
+
+async function loadMaintenance(){
+  if(!sbc) return;
+  try{
+    const {data} = await sbc.from('pengaturan_situs').select('key,value')
+      .in('key',['maintenance_mode','maintenance_title','maintenance_message','maintenance_eta','no_wa','instagram','youtube']);
+    const m = {}; (data||[]).forEach(r=>m[r.key]=r.value);
+    // Kalau admin sudah mematikan mode istirahat, kembali ke beranda otomatis
+    if(data && data.length && m.maintenance_mode !== 'on' && !location.search.includes('preview')){
+      location.replace('index.html'); return;
+    }
+    if(m.maintenance_title) document.getElementById('mTitle').textContent = m.maintenance_title;
+    if(m.maintenance_message) document.getElementById('mMsg').textContent = m.maintenance_message;
+    if(m.maintenance_eta){
+      document.getElementById('mEtaText').textContent = 'Perkiraan kembali: ' + m.maintenance_eta;
+      document.getElementById('mEta').hidden = false;
+    }
+    if(m.no_wa){
+      const wa = document.getElementById('mWa');
+      wa.href = 'https://wa.me/' + m.no_wa.replace(/[^0-9]/g,'').replace(/^0/,'62');
+      wa.hidden = false;
+    }
+    [['instagram','mIg'],['youtube','mYt']].forEach(([k,id])=>{ if(m[k]){ const a=document.getElementById(id); let u=m[k].trim(); if(!/^https?:/.test(u)) u=(k==='instagram'?'https://instagram.com/':'https://youtube.com/')+u.replace(/^@/,''); a.href=u; a.hidden=false; } });
+  }catch(e){}
+}
+loadMaintenance();
+setInterval(loadMaintenance, 60000);
+
+const QUOTES = [
+  ["Hafalan itu seperti pasangan hidup: gampang didapat, susah dijaga.","Kata santri, tiap malam sebelum setoran"],
+  ["Jangan bilang 'udah lancar' sebelum diuji ustadz. Itu jebakan klasik.","Nasihat kakak kelas"],
+  ["Kalau muroja'ah libur dua hari, otak minta THR tiga hari untuk balikin lagi.","Hukum kekekalan hafalan"],
+  ["Sabar itu separuh iman. Separuh lainnya sabar dengar teman halaqah yang salah ayat tapi pede.","Hikmah dari pojok halaqah"],
+  ["Semangat menghafal boleh naik turun, yang penting mushaf jangan ikut pindah tempat terus dicariin.","Tips anti panik sebelum setoran"],
+  ["Waktu terbaik menghafal adalah setelah subuh. Waktu terbaik berjanji menghafal setelah subuh adalah tengah malam.","Paradoks santri"],
+  ["Jangan minder kalau hafalan turun. Nabi Musa saja minta ditemani Harun saat grogi.","Motivasi ringan pagi hari"],
+];
+let last=-1;
+function showQuote(){
+  let i; do{ i=Math.floor(Math.random()*QUOTES.length) }while(i===last && QUOTES.length>1); last=i;
+  const t=document.getElementById('qt'); t.style.opacity=0;
+  setTimeout(()=>{ t.textContent='“'+QUOTES[i][0]+'”'; document.getElementById('qa').textContent='— '+QUOTES[i][1]; t.style.opacity=1; },200);
+}
+showQuote(); setInterval(showQuote, 12000);
+
+// Tasbih
+let cnt=0; try{cnt=+localStorage.getItem('tasbihM')||0}catch(e){}
+const TAS=['Subhanallah','Alhamdulillah','Allahu Akbar'];
+function drawTasbih(){ document.getElementById('tcount').textContent=cnt%33; document.getElementById('tlabel').textContent=TAS[Math.floor(cnt/33)%3]; document.getElementById('ttotal').textContent=cnt+' total'; }
+function tasbih(){ cnt++; try{localStorage.setItem('tasbihM',cnt)}catch(e){} drawTasbih(); }
+function resetTasbih(){ cnt=0; try{localStorage.removeItem('tasbihM')}catch(e){} drawTasbih(); }
+drawTasbih();
+</script>
+</body>
+</html>
