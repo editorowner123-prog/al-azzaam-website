@@ -241,16 +241,34 @@ function setupNavToggle(){
   }
 }
 
-// ---------- Mode Pemeliharaan: cek paling awal sebelum apa pun lainnya ----------
+// ---------- Mode Istirahat: cek paling awal sebelum apa pun lainnya ----------
+// Hanya admin (yang login lewat admin.html di domain yang sama) yang bisa menyalakan/mematikan,
+// dan hanya admin yang tetap melihat website normal saat mode ini aktif.
 async function checkMaintenanceMode(){
   try{
     const {data} = await sb.from('pengaturan_situs').select('value').eq('key','maintenance_mode').maybeSingle();
     if(data && data.value === 'on'){
+      const {data: sess} = await sb.auth.getSession();
+      if(sess && sess.session){ showMaintenanceAdminBar(); return false; } // admin: lanjut tampil normal
       window.location.replace('maintenance.html');
       return true;
     }
   }catch(e){ /* kalau gagal cek, biarkan website tampil normal */ }
   return false;
+}
+function showMaintenanceAdminBar(){
+  const bar = document.createElement('div');
+  bar.setAttribute('role','status');
+  bar.style.cssText = 'position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:100000;max-width:min(94vw,720px);display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;background:#9b1c2e;color:#fff;padding:12px 18px;border-radius:16px;box-shadow:0 14px 34px -10px rgba(0,0,0,.55);font:600 13.5px/1.4 "Plus Jakarta Sans",sans-serif;text-align:center;';
+  bar.innerHTML = '<span>Mode istirahat sedang AKTIF. Pengunjung melihat halaman error 503, hanya kamu (admin) yang melihat situs ini.</span>'
+    + '<button type="button" id="maintOffBtn" style="border:0;border-radius:999px;padding:8px 16px;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer;background:#f7e7ab;color:#2b0810;">Matikan sekarang</button>'
+    + '<a href="maintenance.html" target="_blank" rel="noopener" style="color:#f7e7ab;text-decoration:underline;">Lihat halaman istirahat</a>';
+  document.body.appendChild(bar);
+  document.getElementById('maintOffBtn').addEventListener('click', async ()=>{
+    const {error} = await sb.from('pengaturan_situs').upsert({key:'maintenance_mode', value:'off'});
+    if(error){ alert('Gagal mematikan: ' + error.message); return; }
+    bar.remove();
+  });
 }
 
 // ---------- Jalankan semua yang umum, di semua halaman ----------
