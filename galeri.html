@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+
 <meta charset="UTF-8">
 <link id="faviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2730%27 fill=%27%232b0810%27/%3E%3Ctext x=%2732%27 y=%2743%27 font-family=%27Georgia,serif%27 font-size=%2732%27 font-weight=%27700%27 fill=%27%23d4af37%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Galeri — PPTQ Al Azzaam</title>
 <meta name="description" content="Galeri foto dan video kegiatan santri PPTQ Al Azzaam Gunungpati, Semarang.">
 <link rel="canonical" href="https://pesantrenalazzaam.org/galeri.html">
@@ -20,40 +20,141 @@
 <meta name="twitter:title" content="Galeri — PPTQ Al Azzaam">
 <meta name="twitter:description" content="Galeri foto dan video kegiatan santri PPTQ Al Azzaam Gunungpati, Semarang.">
 <meta name="twitter:image" content="https://pesantrenalazzaam.org/og-image.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="tema.js?v=1"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link rel="stylesheet" href="shared.css?v=3">
+<link rel="stylesheet" href="shared.css?v=6">
 <style>
-.folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;}
-.folder-card{border-radius:28px;overflow:hidden;cursor:pointer;background:#fff;transition:transform .2s;}
-.folder-card:nth-child(4n+1){border-radius:28px 80px 28px 28px;}
-.folder-card:hover{transform:translateY(-3px);}
-.folder-thumb{aspect-ratio:4/3;background:linear-gradient(135deg,var(--rose),var(--gold-l));position:relative;overflow:hidden;}
-.folder-thumb img{width:100%;height:100%;object-fit:cover;}
-.folder-thumb .stack{position:absolute;inset:0;background:linear-gradient(0deg,rgba(29,18,22,.45),transparent 55%);}
-.folder-thumb .icon-empty{display:grid;place-items:center;height:100%;color:var(--maroon);}
-.folder-thumb .icon-empty .i{width:54px;height:54px;opacity:.5;}
-.folder-info{padding:16px 20px 18px;}
-.folder-info .fname{font:700 20px 'Bricolage Grotesque',sans-serif;color:var(--ink);margin-bottom:2px;display:flex;gap:8px;align-items:center;}
-.folder-info .fname .i{color:var(--maroon);width:20px;height:20px;}
-.folder-info .fcount{font-size:13.5px;color:var(--mute);}
-.back-link{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;color:var(--maroon);background:#fff;padding:10px 18px;border-radius:999px;margin-bottom:16px;cursor:pointer;}
-.galeri-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
-.galeri-item{border-radius:28px;overflow:hidden;cursor:pointer;position:relative;aspect-ratio:4/3;background:var(--rose);}
-.galeri-item img{width:100%;height:100%;object-fit:cover;transition:transform .25s;}
-.galeri-item:hover img{transform:scale(1.05);}
-.galeri-item .badge{position:absolute;top:12px;right:12px;background:rgba(29,18,22,.75);color:var(--gold-l);font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;}
-.galeri-item .cap{position:absolute;bottom:0;left:0;right:0;padding:26px 16px 14px;background:linear-gradient(0deg,rgba(29,18,22,.85),transparent);color:#fff;font-size:14px;font-weight:600;}
-.lightbox{position:fixed;inset:0;background:rgba(29,18,22,.92);display:none;align-items:center;justify-content:center;padding:20px;z-index:200;}
-.lightbox.open{display:flex;}
-.lightbox img,.lightbox iframe{max-width:100%;max-height:85vh;border-radius:24px;}
-.lightbox-close{position:absolute;top:18px;right:20px;color:#fff;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.14);border:0;cursor:pointer;display:grid;place-items:center;}
-.lightbox-close .i{width:22px;height:22px;pointer-events:none;}
+
+:root{--hf:'Cormorant Garamond',Georgia,serif;}
+body.dark{--bg:color-mix(in srgb,var(--pd) 26%,#050102);--bg2:color-mix(in srgb,var(--pd) 42%,#050102);--ink:#f6ece8;--mu:#c3aeab;background:var(--bg);color:var(--ink);}
+body.dark .nav-brand{color:var(--a);}
+body.dark .nav-links>a:hover,body.dark .nav-top-link:hover,body.dark .nav-links>a.active,body.dark .nav-top-link.active{color:var(--a);}
+body.dark .nav-brand .ring{box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--a);}
+body.dark .ticker-wrap{background:var(--a);}
+body[data-nav="over"] .ticker-wrap{position:absolute;top:72px;left:0;right:0;z-index:90;}
+@media(max-width:1020px){body[data-nav="over"] .ticker-wrap{top:64px;}}
+.eb{color:var(--a);letter-spacing:.22em;}
+h2.t{font-size:clamp(40px,5.6vw,76px);font-weight:700;margin:8px 0 12px;color:#fff;}
+section.band{padding:84px 0;}
+/* ===== Hero slideshow ===== */
+.hero{position:relative;height:100vh;min-height:600px;overflow:hidden;background:linear-gradient(150deg,var(--pd),color-mix(in srgb,var(--p) 55%,#000));}
+.sl{position:absolute;inset:0;opacity:0;transition:opacity 1.2s;}
+.sl.on{opacity:1;}
+.sl img{width:100%;height:100%;object-fit:cover;transform:scale(1.02);}
+.sl.on img{animation:kb 9s linear forwards;}
+@keyframes kb{to{transform:scale(1.18) translate(-2%,-1.5%);}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 4%,transparent 55%),linear-gradient(90deg,rgba(5,1,2,.78),transparent 62%);pointer-events:none;}
+.hc{position:absolute;z-index:5;left:0;right:0;bottom:92px;}
+.hc .tag{display:inline-block;background:var(--a);color:var(--pd);font-weight:800;font-size:12px;padding:5px 12px;border-radius:99px;letter-spacing:.08em;margin-bottom:14px;}
+.hc h1{font-size:clamp(46px,8vw,118px);max-width:14ch;margin-bottom:14px;color:#fff;font-weight:700;line-height:.95;}
+.hc p{max-width:52ch;opacity:.88;font-size:17px;margin:0 0 26px;}
+.sg{position:absolute;z-index:6;bottom:34px;left:24px;right:24px;max-width:1112px;margin:0 auto;display:flex;gap:8px;}
+.sg i{flex:1;height:4px;border-radius:4px;background:rgba(255,255,255,.28);overflow:hidden;cursor:pointer;display:block;}
+.sg i b{display:block;height:100%;width:0;background:var(--a);}
+.sg i.d b{width:100%;}
+.sg i.on b{animation:pr 6s linear forwards;}
+@keyframes pr{to{width:100%;}}
+.hero:hover .sg i.on b{animation-play-state:paused;}
+/* ===== Stories ===== */
+.stories{display:flex;gap:22px;overflow-x:auto;padding:26px 4px 12px;scrollbar-width:none;}
+.stories::-webkit-scrollbar{display:none;}
+.sr{flex:none;width:112px;text-align:center;cursor:pointer;}
+.sr .rg{width:104px;height:104px;border-radius:50%;padding:4px;background:conic-gradient(var(--a),var(--p),var(--a));margin:0 auto 10px;transition:transform .3s;}
+.sr:hover .rg{transform:scale(1.08) rotate(8deg);}
+.sr.seen .rg{background:rgba(255,255,255,.25);}
+.sr .rg>div{width:100%;height:100%;border-radius:50%;border:3px solid var(--bg);overflow:hidden;background:var(--bg2);}
+.sr img{width:100%;height:100%;object-fit:cover;}
+.sr span{font-size:13px;font-weight:700;color:var(--ink);display:block;line-height:1.25;}
+.sr small{color:var(--mu);font-size:11.5px;}
+.md{position:fixed;inset:0;z-index:400;background:rgba(3,0,1,.94);display:none;align-items:center;justify-content:center;}
+.md.on{display:flex;animation:fi .3s;}
+@keyframes fi{from{opacity:0;}}
+.md .x{position:absolute;top:18px;right:20px;z-index:5;width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:20px;cursor:pointer;}
+.sv{position:relative;width:min(420px,94vw);height:min(760px,88vh);border-radius:24px;overflow:hidden;background:#000;box-shadow:0 40px 80px -20px #000;}
+.sv>img{width:100%;height:100%;object-fit:cover;animation:zi 8s linear forwards;}
+@keyframes zi{from{transform:scale(1);}to{transform:scale(1.08);}}
+.sv::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.8),transparent 38%,transparent 78%,rgba(0,0,0,.5));pointer-events:none;}
+.sb{position:absolute;top:12px;left:12px;right:12px;display:flex;gap:5px;z-index:4;}
+.sb i{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.35);overflow:hidden;display:block;}
+.sb i b{display:block;height:100%;width:0;background:#fff;}
+.sb i.d b{width:100%;}
+.sb i.on b{animation:pr 4s linear forwards;}
+.sv.paused .sb i.on b{animation-play-state:paused;}
+.cap{position:absolute;left:20px;right:20px;bottom:22px;z-index:4;color:#fff;}
+.cap b{font:700 30px var(--hf);display:block;line-height:1.05;}
+.cap span{font-size:13.5px;opacity:.85;}
+.z{position:absolute;top:60px;bottom:90px;width:38%;z-index:3;cursor:pointer;}
+.z.l{left:0;}.z.r{right:0;}
+.pl{position:absolute;left:50%;top:50%;z-index:4;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:26px;cursor:pointer;display:none;}
+.sv.vid .pl{display:block;}
+/* ===== Pita film ===== */
+.film{background:#000;padding:70px 0;border-block:1px solid rgba(255,255,255,.1);}
+.fs{display:flex;gap:14px;overflow-x:auto;padding:30px 24px;cursor:grab;scrollbar-width:none;user-select:none;position:relative;}
+.fs::-webkit-scrollbar{display:none;}
+.fs.drag{cursor:grabbing;}
+.fr{flex:none;width:300px;position:relative;padding:22px 0;background:#15090b;border-radius:6px;transition:transform .3s;}
+.fr::before,.fr::after{content:"";position:absolute;left:8px;right:8px;height:10px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0 12px,transparent 12px 24px);border-radius:2px;}
+.fr::before{top:6px;}.fr::after{bottom:6px;}
+.fr:hover{transform:translateY(-8px) rotate(-1deg);}
+.fr .im{margin:0 12px;aspect-ratio:4/3;overflow:hidden;position:relative;background:var(--bg2);}
+.fr img{width:100%;height:100%;object-fit:cover;pointer-events:none;}
+.fr .nm{margin:8px 14px 0;font:700 17px var(--hf);color:#f6ece8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* ===== Video ===== */
+.vg{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:30px;}
+.vc{position:relative;aspect-ratio:16/10;border-radius:20px;overflow:hidden;cursor:pointer;background:var(--bg2);}
+.vc img{width:100%;height:100%;object-fit:cover;transition:transform .6s;}
+.vc:hover img{transform:scale(1.08);}
+.vc::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.78),transparent 60%);}
+.vc .pb{position:absolute;z-index:2;left:50%;top:44%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;background:var(--a);color:var(--pd);display:grid;place-items:center;font-size:22px;transition:.3s;}
+.vc:hover .pb{transform:translate(-50%,-50%) scale(1.15);}
+.vc b{position:absolute;z-index:2;left:18px;right:18px;bottom:14px;font:700 22px var(--hf);color:#fff;}
+@media(max-width:900px){.vg{grid-template-columns:1fr 1fr;}}@media(max-width:560px){.vg{grid-template-columns:1fr;}}
+.pv{width:min(900px,94vw);}
+.pv iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:14px;background:#000;}
+/* ===== Album ===== */
+.ag{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:30px;}
+.ac{cursor:pointer;position:relative;display:block;}
+.ac .ph{position:relative;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--bg2);}
+.ac .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s;}
+.ac:hover .ph img{transform:scale(1.1);}
+.ac .st{position:absolute;inset:8px -8px -8px 8px;z-index:-1;border-radius:10px;background:var(--bg2);border:1px solid rgba(255,255,255,.12);transition:.4s;}
+.ac:hover .st{transform:translate(6px,6px) rotate(2deg);}
+.ac .nn{position:absolute;right:10px;top:10px;z-index:2;background:rgba(0,0,0,.65);color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:99px;}
+.ac h3{font-size:28px;margin-top:14px;color:#fff;}
+.ac:hover h3{color:var(--a);}
+@media(max-width:1000px){.ag{grid-template-columns:repeat(3,1fr);}}@media(max-width:700px){.ag{grid-template-columns:1fr 1fr;gap:18px;}.ac h3{font-size:22px;}}
+.alb{position:fixed;inset:0;z-index:350;background:var(--bg);overflow-y:auto;display:none;}
+.alb.on{display:block;animation:fi .35s;}
+.alb .top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);padding:14px 0;border-bottom:1px solid rgba(255,255,255,.1);}
+.alb .top .w{display:flex;align-items:center;gap:16px;}
+.alb .top h2{font-size:34px;color:#fff;margin-right:auto;}
+.alb .top button{border:0;border-radius:99px;background:var(--a);color:var(--pd);font:800 14px var(--bf);padding:11px 22px;cursor:pointer;}
+.mas{columns:3 260px;column-gap:14px;padding:26px 0 70px;}
+.mas .it{break-inside:avoid;margin-bottom:14px;border-radius:14px;overflow:hidden;position:relative;cursor:zoom-in;background:var(--bg2);}
+.mas .it img{width:100%;display:block;transition:transform .5s;}
+.mas .it:hover img{transform:scale(1.05);}
+.mas .it .cp{position:absolute;left:0;right:0;bottom:0;padding:26px 14px 12px;background:linear-gradient(0deg,rgba(0,0,0,.8),transparent);color:#fff;font-size:14px;font-weight:700;opacity:0;transition:.3s;}
+.mas .it:hover .cp{opacity:1;}
+.lb{position:fixed;inset:0;z-index:450;background:rgba(3,0,1,.95);display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;}
+.lb.on{display:flex;animation:fi .25s;}
+.lb img{max-width:92vw;max-height:78vh;border-radius:12px;box-shadow:0 30px 70px -20px #000;}
+.lb iframe{width:min(900px,92vw);aspect-ratio:16/9;border:0;border-radius:12px;}
+.lb .cp{color:#fff;text-align:center;font:700 22px var(--hf);}
+.lb .cp small{display:block;font:600 13px var(--bf);opacity:.7;margin-top:2px;}
+.lb .nv{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:22px;cursor:pointer;}
+.lb .nv.p{left:16px;}.lb .nv.n{right:16px;}
+.lb .x{position:absolute;top:18px;right:20px;width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:20px;cursor:pointer;}
+.ig-embed-item{background:#fff;}
+.kosong{text-align:center;color:var(--mu);padding:20px;}
+
 </style>
 </head>
-<body data-lay="page" data-lay-sel=".page-hero,section,footer">
+<body data-nav="over">
+<div id="bar"></div>
 <script src="icons.js"></script>
-
 <nav class="navbar">
   <div class="navbar-inner">
     <a href="index.html" class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</a>
@@ -77,51 +178,63 @@
       <a href="#kontak">Kontak</a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <a href="ppdb.html" class="nav-cta">Daftar sekarang</a>
+      <a href="ppdb.html" class="nav-cta mg">Daftar Santri Baru</a>
       <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><svg class="i"><use href="#i-menu"/></svg></button>
     </div>
   </div>
 </nav>
+<div class="ticker-wrap" id="tickerWrap"><div class="ticker-track" id="tickerTrack">Memuat info terkini…</div></div>
+<main data-lay="main">
 
-<div class="page-hero">
-  <div class="hero-arabic">فَبِأَيِّ آلَاءِ رَبِّكُمَا تُكَذِّبَانِ</div>
-  <h1>Galeri</h1>
-  <p>Momen dan kegiatan santri PPTQ Al Azzaam.</p>
-</div>
+  <header class="hero" id="hero">
+    <div id="sls"></div>
+    <div class="hc"><div class="w">
+      <span class="tag" id="htag">GALERI KEGIATAN</span>
+      <h1 id="ht">Momen santri, tersimpan indah</h1>
+      <p id="hp">Foto dan video kegiatan PPTQ Al Azzaam — dari halaqoh pagi hingga wisuda.</p>
+      <div class="btn-row"><button class="btn btn-a mg" id="hb" type="button">▶ Tonton cerita</button><a class="btn btn-o mg" href="#album">Jelajahi album</a></div>
+    </div></div>
+    <div class="sg" id="sg"></div>
+  </header>
 
-<section class="section wrap" data-lay="wrap">
-  <div class="pill-tabs mode-tabs">
-    <button class="pill-tab mode-tab active" id="modeBtnFoto" onclick="switchMode('foto')"><svg class="i"><use href="#i-camera"/></svg> Foto &amp; Video</button>
-    <button class="pill-tab mode-tab" id="modeBtnIg" onclick="switchMode('instagram')"><svg class="i"><use href="#i-ig"/></svg> Instagram</button>
-  </div>
-
-  <!-- Tampilan FOLDER (default) -->
-  <div id="folderView" data-dyn>
-    <div class="folder-grid" id="folderGrid">
-      <div class="empty-state">Memuat album…</div>
+  <section class="band" id="st">
+    <div class="wrap">
+      <div class="eb rv">Cerita terbaru</div>
+      <h2 class="t rv">Ketuk lingkaran, tonton ceritanya</h2>
+      <p class="sub rv">Seperti story di media sosial: ketuk kanan/kiri untuk pindah, tahan untuk berhenti sebentar.</p>
+      <div class="stories rv" id="strs" data-dyn><div class="kosong">Memuat…</div></div>
     </div>
-  </div>
+  </section>
 
-  <!-- Tampilan ISI FOLDER (muncul setelah klik salah satu album) -->
-  <div id="itemsView" style="display:none;" data-dyn>
-    <div class="back-link" onclick="backToFolders()"><svg class="i" style="transform:rotate(180deg)"><use href="#i-arrow"/></svg> Kembali ke semua album</div>
-    <h2 id="folderTitle" style="font-size:clamp(28px,3.4vw,40px);font-weight:800;margin-bottom:18px;"></h2>
-    <div class="galeri-grid" id="galeriGrid"></div>
-  </div>
+  <section class="film" id="fl">
+    <div class="wrap"><div class="eb rv">Pita film</div><h2 class="t rv">Seret ke samping, putar waktu</h2></div>
+    <div class="fs" id="fs" data-dyn></div>
+  </section>
 
-  <!-- Tampilan INSTAGRAM (mode terpisah) -->
-  <div id="instagramView" style="display:none;" data-dyn>
-    <div class="ig-embed-grid" id="igGrid">
-      <div class="empty-state">Memuat postingan Instagram…</div>
-    </div>
-  </div>
-</section>
+  <section class="band" id="vd" style="display:none">
+    <div class="wrap"><div class="eb rv">Video kegiatan</div><h2 class="t rv">Tonton selengkapnya</h2><div class="vg" id="vg" data-dyn></div></div>
+  </section>
+
+  <section class="band" id="album">
+    <div class="wrap"><div class="eb rv">Arsip</div><h2 class="t rv">Semua Album</h2><div class="ag" id="folderGrid" data-dyn><div class="empty-state">Memuat album…</div></div></div>
+  </section>
+
+  <section class="band" id="ig" style="background:var(--bg2)">
+    <div class="wrap"><div class="eb rv"><svg class="i" style="width:16px;height:16px;"><use href="#i-ig"/></svg> Instagram</div><h2 class="t rv">Dari Layar Kami</h2><div class="ig-embed-grid" id="igGrid" data-dyn></div></div>
+  </section>
+
+</main>
+
+<div class="md" id="smd"><button class="x" id="sx" aria-label="Tutup">✕</button><div class="sv" id="sv"><div class="sb" id="ssb"></div><img id="sim" alt=""><div class="cap"><b id="sct"></b><span id="scs"></span></div><button class="pl" id="spl" type="button" aria-label="Putar video">▶</button><div class="z l" id="szl"></div><div class="z r" id="szr"></div></div></div>
+<div class="md" id="vmd"><button class="x" id="vx" aria-label="Tutup">✕</button><div class="pv" id="vbox"></div></div>
+<div class="alb" id="alb"><div class="top"><div class="w"><h2 id="albT"></h2><button id="albX" type="button">← Semua album</button></div></div><div class="wrap"><div class="mas" id="mas"></div></div></div>
+<div class="lb" id="lb"><button class="x" id="lx" aria-label="Tutup">✕</button><button class="nv p" id="lp" aria-label="Sebelumnya">‹</button><div id="lbm"></div><div class="cp" id="lcp"></div><button class="nv n" id="ln" aria-label="Berikutnya">›</button></div>
 
 <footer id="kontak">
   <div class="footer-grid">
     <div>
       <div class="footer-brand"><svg class="i"><use href="#i-star8"/></svg> PPTQ Al Azzaam</div>
-      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
+      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang, Jawa Tengah.</p>
       <div class="social-row" id="socialRow" data-dyn></div>
     </div>
     <div>
@@ -143,156 +256,162 @@
       </ul>
     </div>
   </div>
-  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang.</div>
+  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang. Seluruh hak cipta dilindungi.</div>
 </footer>
-
-<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-  <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button>
-  <div id="lightboxContent"></div>
-</div>
-
 <div class="flyer-overlay" id="flyerOverlay" onclick="if(event.target.id==='flyerOverlay') closeFlyer()">
   <div class="flyer-box">
     <button class="flyer-close" onclick="closeFlyer()" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button>
     <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
   </div>
 </div>
-
-<script src="shared.js?v=3"></script>
-<script src="layout.js?v=1"></script>
+<script src="shared.js?v=5"></script>
+<script src="layout.js?v=3"></script>
 <script>
-let allGaleri = [];
-let folderMap = {};
 
+document.body.classList.add('dark');
+let IT = [], FOLD = {}, HS = [], hi = -1, hT = null;
+const PH = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 3"><rect width="4" height="3" fill="#3a1a20"/></svg>');
+
+/* ---- data → item seragam ---- */
+function mkItem(g){
+  const yt = g.tipe === 'youtube' ? getYoutubeId(g.youtube_url) : null;
+  return {id:g.id, t:g.judul || '', kat:(g.kategori || '').trim() || 'Lainnya', yt:yt, video:g.tipe === 'youtube',
+          src: g.tipe === 'youtube' ? (getYoutubeThumbnail(g.youtube_url) || PH) : (g.media_url || PH), tgl:g.created_at};
+}
 async function loadGaleri(){
   const {data, error} = await sb.from('galeri').select('*').order('urutan').order('created_at',{ascending:false});
-  const folderGrid = document.getElementById('folderGrid');
-  if(error || !data || data.length===0){
-    folderGrid.innerHTML = '<div class="empty-state">Belum ada foto/video. Tambahkan lewat panel admin.</div>';
-    return;
+  if(error || !data || data.length === 0){
+    $('#strs').innerHTML = '<div class="kosong">Belum ada foto atau video. Tambahkan lewat panel admin.</div>';
+    $('#fs').innerHTML = '<div class="kosong" style="width:100%">Belum ada foto.</div>';
+    $('#folderGrid').innerHTML = '<div class="empty-state">Belum ada foto/video. Tambahkan lewat panel admin.</div>';
+    startHero(); return;
   }
-  allGaleri = data;
-
-  // Kelompokkan jadi "folder" berdasarkan kategori. Yang tidak diisi kategori masuk "Lainnya".
-  folderMap = {};
-  allGaleri.forEach(g=>{
-    const nama = (g.kategori || '').trim() || 'Lainnya';
-    if(!folderMap[nama]) folderMap[nama] = [];
-    folderMap[nama].push(g);
-  });
-
-  renderFolders();
-
-  // Deep-link: kalau ada ?folder=Nama di URL, langsung buka folder itu
-  const params = new URLSearchParams(location.search);
-  const folder = params.get('folder');
-  if(folder && folderMap[folder]) openFolder(folder);
+  IT = data.map(mkItem);
+  FOLD = {}; IT.forEach(x=>(FOLD[x.kat] = FOLD[x.kat] || []).push(x));
+  HS = IT.filter(x=>!x.video).slice(0, 4); if(HS.length < 2) HS = IT.slice(0, 4);
+  startHero(); renderStories(); renderFilm(); renderVideos(); renderFolders();
+  const f = new URLSearchParams(location.search).get('folder'); if(f && FOLD[f]) openAlbum(f, false);
 }
-
-// Foto pakai media_url, video YouTube otomatis pakai thumbnail dari YouTube
-function getItemThumb(item){
-  if(item.tipe === 'youtube') return getYoutubeThumbnail(item.youtube_url) || '';
-  return item.media_url || '';
+/* ---- hero ---- */
+function startHero(){
+  if(!HS.length){ return; }
+  $('#sls').innerHTML = HS.map(x=>`<div class="sl"><img src="${esc(x.src)}" alt=""></div>`).join('');
+  $('#sg').innerHTML = HS.map(()=>'<i><b></b></i>').join('');
+  $$('#sg i').forEach((s,k)=>s.onclick = ()=>heroGo(k));
+  heroGo(0);
 }
+function heroGo(k){
+  hi = k; clearTimeout(hT);
+  $$('.sl').forEach((s,j)=>s.classList.toggle('on', j===k));
+  $$('#sg i').forEach((s,j)=>{ s.classList.remove('on','d'); s.offsetHeight; if(j<k) s.classList.add('d'); if(j===k) s.classList.add('on'); });
+  const x = HS[k];
+  $('#htag').textContent = x.kat.toUpperCase();
+  $('#ht').textContent = x.t || x.kat;
+  $('#hp').textContent = 'Album ' + x.kat + ' — ' + (FOLD[x.kat] || []).length + ' foto & video terdokumentasi.';
+  hT = setTimeout(()=>heroGo((k + 1) % HS.length), 6000);
+}
+$('#hb').onclick = ()=>{ if(HS[hi]) openStory(HS[hi].kat); else location.hash = '#album'; };
 
+/* ---- stories ---- */
+function renderStories(){
+  const names = Object.keys(FOLD);
+  $('#strs').innerHTML = names.map(n=>`<div class="sr" data-k="${esc(n)}"><div class="rg"><div><img src="${esc(FOLD[n][0].src)}" alt=""></div></div><span>${esc(n)}</span><small>${FOLD[n].length} item</small></div>`).join('');
+  $$('.sr').forEach(s=>s.onclick = ()=>{ s.classList.add('seen'); openStory(s.dataset.k); });
+}
+let sK = null, sL = [], sp = 0, sT = null;
+function openStory(k){ sK = k; sL = (FOLD[k] || []).slice(0, 12); sp = 0; if(!sL.length) return; $('#smd').classList.add('on'); document.body.style.overflow = 'hidden'; showStory(); }
+function showStory(){
+  clearTimeout(sT); const x = sL[sp];
+  const v = $('#sv'); v.classList.remove('paused'); v.classList.toggle('vid', x.video);
+  $('#ssb').innerHTML = sL.map((_,i)=>`<i class="${i<sp?'d':''}"><b></b></i>`).join('');
+  const im = $('#sim'); im.style.animation = 'none'; im.offsetHeight; im.style.animation = ''; im.src = x.src;
+  $('#sct').textContent = x.t || x.kat; $('#scs').textContent = x.kat + ' · ' + (sp + 1) + '/' + sL.length;
+  const cur = $$('#ssb i')[sp]; cur.classList.add('on');
+  if(!x.video) sT = setTimeout(storyNext, 4000);
+}
+function storyNext(){ if(sp < sL.length - 1){ sp++; showStory(); } else closeStory(); }
+function storyPrev(){ if(sp > 0){ sp--; showStory(); } }
+function closeStory(){ clearTimeout(sT); $('#smd').classList.remove('on'); document.body.style.overflow = ''; }
+$('#szr').onclick = storyNext; $('#szl').onclick = storyPrev; $('#sx').onclick = closeStory;
+$('#spl').onclick = ()=>{ const x = sL[sp]; if(x && x.yt) playVideo(x); };
+['pointerdown'].forEach(ev=>$('#sv').addEventListener(ev, ()=>{ $('#sv').classList.add('paused'); clearTimeout(sT); }));
+['pointerup','pointerleave'].forEach(ev=>$('#sv').addEventListener(ev, ()=>{ const v = $('#sv'); if(v.classList.contains('paused') && !sL[sp].video){ v.classList.remove('paused'); const b = $$('#ssb i')[sp]; if(b){ b.classList.remove('on'); b.offsetHeight; b.classList.add('on'); } clearTimeout(sT); sT = setTimeout(storyNext, 4000); } }));
+
+/* ---- pita film (seret) ---- */
+function renderFilm(){
+  const list = IT.filter(x=>!x.video).slice(0, 24); const use = list.length ? list : IT.slice(0, 24);
+  $('#fs').innerHTML = use.map((x,i)=>`<div class="fr" data-i="${IT.indexOf(x)}"><div class="im"><img src="${esc(x.src)}" alt="${esc(x.t)}" loading="lazy"></div><div class="nm">${esc(x.t || x.kat)}</div></div>`).join('');
+  const fs = $('#fs'); let down = false, sx = 0, sl = 0, moved = 0;
+  fs.onpointerdown = e=>{ down = true; moved = 0; sx = e.clientX; sl = fs.scrollLeft; fs.classList.add('drag'); };
+  addEventListener('pointermove', e=>{ if(!down) return; const d = e.clientX - sx; moved = Math.max(moved, Math.abs(d)); fs.scrollLeft = sl - d; });
+  addEventListener('pointerup', ()=>{ down = false; fs.classList.remove('drag'); });
+  $$('.fr').forEach(f=>f.onclick = ()=>{ if(moved > 6) return; openLb(IT, +f.dataset.i); });
+}
+/* ---- video ---- */
+function renderVideos(){
+  const v = IT.filter(x=>x.video && x.yt);
+  const sec = $('#vd'); if(!v.length){ sec.style.display = 'none'; return; }
+  sec.style.display = '';
+  $('#vg').innerHTML = v.map((x,i)=>`<div class="vc" data-i="${i}"><img src="${esc(x.src)}" alt="" loading="lazy"><span class="pb">▶</span><b>${esc(x.t || x.kat)}</b></div>`).join('');
+  $$('.vc').forEach(c=>c.onclick = ()=>playVideo(v[+c.dataset.i]));
+}
+function playVideo(x){
+  clearTimeout(sT);
+  $('#vbox').innerHTML = `<iframe src="https://www.youtube.com/embed/${x.yt}?autoplay=1&rel=0" title="${esc(x.t)}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+  $('#vmd').classList.add('on');
+}
+function closeVideo(){ $('#vmd').classList.remove('on'); $('#vbox').innerHTML = ''; }
+$('#vx').onclick = closeVideo; $('#vmd').onclick = e=>{ if(e.target.id === 'vmd') closeVideo(); };
+
+/* ---- album ---- */
 function renderFolders(){
-  const folderGrid = document.getElementById('folderGrid');
-  const names = Object.keys(folderMap);
-  if(names.length===0){
-    folderGrid.innerHTML = '<div class="empty-state">Belum ada album.</div>';
-    return;
-  }
-  folderGrid.innerHTML = names.map(nama=>{
-    const items = folderMap[nama];
-    const cover = items.find(i=>i.tipe!=='youtube') || items[0];
-    const thumb = cover ? getItemThumb(cover) : '';
-    return `
-      <div class="folder-card" onclick="openFolder('${nama.replace(/'/g,"\\'")}')">
-        <div class="folder-thumb">
-          ${thumb ? `<img src="${thumb}" alt="${nama}" loading="lazy">` : '<div class="icon-empty">'+ic('image')+'</div>'}
-          <div class="stack"></div>
-        </div>
-        <div class="folder-info">
-          <div class="fname">${ic('folder')} ${nama}</div>
-          <div class="fcount">${items.length} item</div>
-        </div>
-      </div>
-    `;
+  const names = Object.keys(FOLD);
+  $('#folderGrid').innerHTML = names.map(n=>{
+    const cover = FOLD[n].find(x=>!x.video) || FOLD[n][0];
+    return `<div class="ac rv" data-k="${esc(n)}"><div class="st"></div><div class="ph"><img src="${esc(cover.src)}" alt="" loading="lazy"><span class="nn">${FOLD[n].length} item</span></div><h3>${esc(n)}</h3></div>`;
   }).join('');
+  $$('.ac').forEach(a=>a.onclick = ()=>openAlbum(a.dataset.k, true));
 }
+let curList = [];
+function openAlbum(k, push){
+  curList = FOLD[k] || [];
+  $('#albT').textContent = k;
+  $('#mas').innerHTML = curList.map((x,i)=>`<div class="it ${x.video?'yt-thumb-wrap':''}" data-i="${i}"><img src="${esc(x.src)}" alt="${esc(x.t)}" loading="lazy">${x.video?'<div class="yt-play-icon"></div>':''}${x.t?`<div class="cp">${esc(x.t)}</div>`:''}</div>`).join('');
+  $$('#mas .it').forEach(c=>c.onclick = ()=>openLb(curList, +c.dataset.i));
+  $('#alb').classList.add('on'); $('#alb').scrollTop = 0; document.body.style.overflow = 'hidden';
+  if(push){ const u = new URL(location.href); u.searchParams.set('folder', k); history.pushState({}, '', u); }
+}
+function closeAlbum(push){
+  $('#alb').classList.remove('on'); document.body.style.overflow = '';
+  if(push){ const u = new URL(location.href); u.searchParams.delete('folder'); history.pushState({}, '', u); }
+}
+$('#albX').onclick = ()=>closeAlbum(true);
+addEventListener('popstate', ()=>{ const f = new URLSearchParams(location.search).get('folder'); if(f && FOLD[f]) openAlbum(f, false); else closeAlbum(false); });
 
-function openFolder(nama){
-  document.getElementById('folderView').style.display = 'none';
-  document.getElementById('itemsView').style.display = 'block';
-  document.getElementById('folderTitle').textContent = nama;
-  const list = folderMap[nama] || [];
-  renderGaleri(list);
-  const url = new URL(location.href);
-  url.searchParams.set('folder', nama);
-  history.pushState({}, '', url);
+/* ---- lightbox ---- */
+let lbL = [], lbI = 0;
+function openLb(list, i){ lbL = list; lbI = i; showLb(); $('#lb').classList.add('on'); }
+function showLb(){
+  const x = lbL[lbI];
+  $('#lbm').innerHTML = x.video && x.yt ? `<iframe src="https://www.youtube.com/embed/${x.yt}?autoplay=1&rel=0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen title="${esc(x.t)}"></iframe>` : `<img src="${esc(x.src)}" alt="${esc(x.t)}">`;
+  $('#lcp').innerHTML = `${esc(x.t || x.kat)}<small>${esc(x.kat)} · ${lbI + 1} / ${lbL.length}</small>`;
 }
-
-function backToFolders(){
-  document.getElementById('folderView').style.display = 'block';
-  document.getElementById('itemsView').style.display = 'none';
-  const url = new URL(location.href);
-  url.searchParams.delete('folder');
-  history.pushState({}, '', url);
-}
-
-function renderGaleri(list){
-  const grid = document.getElementById('galeriGrid');
-  if(list.length===0){
-    grid.innerHTML = '<div class="empty-state">Belum ada item di album ini.</div>';
-    return;
-  }
-  grid.innerHTML = list.map((g,i)=>`
-    <div class="galeri-item ${g.tipe==='youtube' ? 'yt-thumb-wrap' : ''}" onclick="openLightbox(${i})">
-      <img src="${getItemThumb(g)}" alt="${g.judul||''}" loading="lazy">
-      ${g.tipe==='youtube' ? '<div class="yt-play-icon"></div><div class="badge">YouTube</div>' : ''}
-      ${g.judul ? `<div class="cap">${g.judul}</div>` : ''}
-    </div>
-  `).join('');
-  window._currentList = list;
-}
-function openLightbox(i){
-  const item = window._currentList[i];
-  const content = document.getElementById('lightboxContent');
-  if(item.tipe === 'youtube'){
-    const ytId = getYoutubeId(item.youtube_url);
-    content.innerHTML = ytId
-      ? `<iframe width="800" height="450" style="max-width:90vw;aspect-ratio:16/9;border:none;border-radius:10px;" src="https://www.youtube.com/embed/${ytId}?autoplay=1" title="${item.judul||''}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
-      : `<div style="color:#fff;padding:20px;">Link YouTube tidak valid.</div>`;
-  } else {
-    content.innerHTML = `<img src="${item.media_url}" alt="${item.judul||''}">`;
-  }
-  document.getElementById('lightbox').classList.add('open');
-}
-function closeLightbox(e){
-  if(e.target.id==='lightbox' || e.target.classList.contains('lightbox-close')){
-    document.getElementById('lightbox').classList.remove('open');
-    document.getElementById('lightboxContent').innerHTML = '';
-  }
-}
-let igLoaded = false;
-function switchMode(mode){
-  document.getElementById('modeBtnFoto').classList.toggle('active', mode==='foto');
-  document.getElementById('modeBtnIg').classList.toggle('active', mode==='instagram');
-  if(mode === 'instagram'){
-    document.getElementById('folderView').style.display = 'none';
-    document.getElementById('itemsView').style.display = 'none';
-    document.getElementById('instagramView').style.display = 'block';
-    if(!igLoaded){
-      igLoaded = true;
-      loadInstagramEmbeds('igGrid');
-    }
-  } else {
-    document.getElementById('instagramView').style.display = 'none';
-    document.getElementById('folderView').style.display = 'block';
-  }
-}
-
+function lbGo(d){ lbI = (lbI + d + lbL.length) % lbL.length; showLb(); }
+function closeLb(){ $('#lb').classList.remove('on'); $('#lbm').innerHTML = ''; }
+$('#lx').onclick = closeLb; $('#lp').onclick = ()=>lbGo(-1); $('#ln').onclick = ()=>lbGo(1);
+$('#lb').onclick = e=>{ if(e.target.id === 'lb') closeLb(); };
+let tx = 0; $('#lb').addEventListener('touchstart', e=>tx = e.touches[0].clientX, {passive:true}); $('#lb').addEventListener('touchend', e=>{ const d = e.changedTouches[0].clientX - tx; if(Math.abs(d) > 50) lbGo(d < 0 ? 1 : -1); });
+addEventListener('keydown', e=>{
+  if($('#lb').classList.contains('on')){ if(e.key === 'Escape') closeLb(); if(e.key === 'ArrowRight') lbGo(1); if(e.key === 'ArrowLeft') lbGo(-1); return; }
+  if($('#vmd').classList.contains('on')){ if(e.key === 'Escape') closeVideo(); return; }
+  if($('#smd').classList.contains('on')){ if(e.key === 'Escape') closeStory(); if(e.key === 'ArrowRight') storyNext(); if(e.key === 'ArrowLeft') storyPrev(); return; }
+  if(e.key === 'Escape' && $('#alb').classList.contains('on')) closeAlbum(true);
+});
+/* ---- Instagram: dimuat saat bagiannya terlihat ---- */
+const igIO = new IntersectionObserver(es=>{ if(es[0].isIntersecting){ igIO.disconnect(); loadInstagramEmbeds('igGrid'); } }, {rootMargin:'300px'});
+igIO.observe($('#ig'));
 loadGaleri();
+
 </script>
 </body>
 </html>
