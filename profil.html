@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+
 <meta charset="UTF-8">
 <link id="faviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2730%27 fill=%27%232b0810%27/%3E%3Ctext x=%2732%27 y=%2743%27 font-family=%27Georgia,serif%27 font-size=%2732%27 font-weight=%27700%27 fill=%27%23d4af37%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Profil — Pondok Tahfidz Jawa Tengah | PPTQ Al Azzaam</title>
 <meta name="description" content="Profil PPTQ Al Azzaam, pondok tahfidz Jawa Tengah di Semarang — sejarah, visi misi, dan struktur pengurus.">
 <link rel="canonical" href="https://pesantrenalazzaam.org/profil.html">
@@ -20,30 +20,76 @@
 <meta name="twitter:title" content="Profil — Pondok Tahfidz Jawa Tengah | PPTQ Al Azzaam">
 <meta name="twitter:description" content="Profil PPTQ Al Azzaam, pondok tahfidz Jawa Tengah di Semarang — sejarah, visi misi, dan struktur pengurus.">
 <meta name="twitter:image" content="https://pesantrenalazzaam.org/og-image.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="tema.js?v=1"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link rel="stylesheet" href="shared.css?v=3">
+<link rel="stylesheet" href="shared.css?v=6">
 <style>
-.prof{display:grid;gap:14px;grid-template-columns:minmax(0,1fr);}
-.prof>*{min-width:0;}
-.prof .card{padding:34px;}
-.prof .card h2{font-size:clamp(28px,3.4vw,40px);font-weight:800;margin:8px 0 14px;}
-.prof .card p{font-size:17px;color:var(--mute);line-height:1.8;white-space:pre-line;max-width:70ch;margin:0;}
-.sej{border-radius:28px 80px 28px 28px;background:var(--gold-l)!important;}
-.sej .eyebrow{color:var(--maroon);} .sej h2{color:var(--maroon-d);} .sej p{color:var(--maroon-d)!important;opacity:.85;}
-.vm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-@media(max-width:700px){.vm-grid{grid-template-columns:1fr;}.prof .card{padding:26px;}}
-.vm-card{background:#fff;border-radius:28px;padding:30px;}
-.vm-ic{width:48px;height:48px;border-radius:16px;background:var(--rose);color:var(--maroon);display:grid;place-items:center;margin-bottom:14px;}
-.vm-ic .i{width:26px;height:26px;}
-.vm-card h3{font-size:30px;font-weight:800;margin-bottom:10px;color:var(--ink);}
-.vm-list{font-size:16px;color:var(--mute);line-height:1.75;text-align:left;margin:0;padding-left:22px;}
-.vm-list li{margin-bottom:6px;}
+
+:root{--hf:'Fraunces',Georgia,serif;}
+.fx-hero{padding:84px 0 90px;}
+.fx-hero .ar{font:700 26px 'Amiri',serif;color:var(--al);}
+.fx-hero h1{font-size:clamp(40px,6vw,78px);font-weight:800;margin:8px 0 14px;}
+.fx-hero h1 em{font-style:normal;color:var(--a);}
+.fx-hero p{max-width:58ch;opacity:.9;font-size:17px;margin:0;}
+section.band{padding:80px 0;}
+section.band.alt{background:var(--bg2);}
+/* kartu miring + sorot */
+.tilts{perspective:1100px;}
+.tc{position:relative;border-radius:28px;padding:32px 30px;background:var(--bg2);border:1px solid var(--line);transform-style:preserve-3d;transition:transform .15s,box-shadow .3s;overflow:hidden;display:flex;flex-direction:column;gap:10px;}
+.tc::before{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%),color-mix(in srgb,var(--a) 50%,transparent),transparent 60%);opacity:0;transition:.3s;pointer-events:none;}
+.tc:hover::before{opacity:1;}
+.tc:hover{box-shadow:0 36px 50px -32px var(--pd);}
+.tc>*{position:relative;}
+/* kartu balik */
+.fl{display:grid;gap:20px;margin-top:34px;}
+.fc{perspective:900px;cursor:pointer;}
+.fi{display:grid;}
+.ff,.fb{grid-area:1/1;border-radius:28px;padding:32px;display:flex;flex-direction:column;justify-content:center;transition:transform .7s cubic-bezier(.3,.7,.2,1),opacity 0s linear .35s;min-height:260px;}
+.ff{background:linear-gradient(160deg,var(--p),var(--pd));color:var(--on);align-items:center;text-align:center;}
+.ff .ar{font:700 34px 'Amiri',serif;line-height:1.7;color:var(--al);}
+.ff h3{font-size:44px;}
+.ff small{opacity:.75;margin-top:12px;font-weight:700;letter-spacing:.06em;}
+.fb{background:var(--a);color:var(--pd);transform:rotateY(-180deg);opacity:0;}
+.fc.fp .ff{transform:rotateY(180deg);opacity:0;}
+.fc.fp .fb{transform:rotateY(0);opacity:1;}
+.fb h3{font-size:28px;margin-bottom:10px;}
+.fb p{margin:0;font-size:15.5px;line-height:1.65;}
+.fb ol{margin:0;padding-left:20px;font-size:15.5px;line-height:1.6;}
+.fb li{margin-bottom:6px;}
+.cta{background:linear-gradient(150deg,var(--pd),var(--p));color:var(--on);border-radius:40px;padding:56px;text-align:center;position:relative;overflow:hidden;}
+.cta h2{font-size:clamp(30px,4vw,52px);font-weight:800;}
+.cta p{opacity:.88;max-width:48ch;margin:12px auto 26px;}
+@media(max-width:700px){.cta{padding:40px 24px;}}
+
+.sej{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:50px;align-items:start;}
+.sej .big{font:800 clamp(90px,14vw,190px)/0.8 var(--hf);color:color-mix(in srgb,var(--p) 18%,transparent);}
+.sej h2{font-size:clamp(34px,4.6vw,58px);color:var(--pd);font-weight:800;margin:6px 0 0;}
+.sej-txt p{font-size:18px;color:var(--mu);margin:0 0 18px;line-height:1.8;}
+.sej-txt p:first-child::first-letter{font:800 70px/0.8 var(--hf);float:left;padding:8px 12px 0 0;color:var(--p);}
+@media(max-width:860px){.sej{grid-template-columns:1fr;gap:20px;}}
+.fl.two{grid-template-columns:repeat(2,minmax(0,1fr));}
+@media(max-width:860px){.fl.two{grid-template-columns:1fr;}}
+/* struktur */
+.org{margin-top:40px;display:flex;flex-direction:column;gap:0;align-items:center;}
+.lvl{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;position:relative;padding-top:30px;width:100%;}
+.lvl:first-child{padding-top:0;}
+.lvl:not(:first-child)::before{content:"";position:absolute;top:0;left:50%;height:30px;width:2px;background:linear-gradient(var(--a),var(--p));}
+.pn{width:210px;text-align:center;padding:24px 18px;border-radius:26px;background:var(--bg);border:1px solid var(--line);}
+.pn .av{width:92px;height:92px;border-radius:50%;margin:0 auto 14px;background:linear-gradient(150deg,var(--p),var(--pd)) center/cover;display:grid;place-items:center;color:var(--al);font:800 34px var(--hf);box-shadow:0 0 0 4px var(--bg),0 0 0 6px var(--a);}
+.pn .nm{font:800 18px var(--hf);color:var(--pd);line-height:1.2;}
+.pn .jb{font-size:13.5px;color:var(--mu);margin-top:4px;font-weight:600;}
+.lvl.root .pn{width:250px;background:linear-gradient(160deg,var(--p),var(--pd));color:var(--on);}
+.lvl.root .pn .nm{color:var(--on);} .lvl.root .pn .jb{color:var(--al);}
+@media(max-width:600px){.pn{width:calc(50% - 9px);padding:18px 10px;}.pn .av{width:72px;height:72px;font-size:26px;}.lvl.root .pn{width:80%;}}
+
 </style>
 </head>
-<body data-lay="page" data-lay-sel=".page-hero,section,footer">
+<body>
+<div id="bar"></div>
 <script src="icons.js"></script>
-
 <nav class="navbar">
   <div class="navbar-inner">
     <a href="index.html" class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</a>
@@ -67,50 +113,55 @@
       <a href="#kontak">Kontak</a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <a href="ppdb.html" class="nav-cta">Daftar sekarang</a>
+      <a href="ppdb.html" class="nav-cta mg">Daftar Santri Baru</a>
       <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><svg class="i"><use href="#i-menu"/></svg></button>
     </div>
   </div>
 </nav>
+<div class="ticker-wrap" id="tickerWrap"><div class="ticker-track" id="tickerTrack">Memuat info terkini…</div></div>
+<main data-lay="main">
 
-<div class="page-hero">
-  <div class="hero-arabic">اَلْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِيْنَ</div>
-  <h1>Profil lembaga</h1>
-  <p>Mengenal lebih dekat PPTQ Al Azzaam, pondok tahfidz Jawa Tengah yang berlokasi di Semarang — sejarah, visi-misi, dan orang-orang di baliknya.</p>
-</div>
-
-<section class="section wrap prof" data-lay="prof">
-  <div class="card sej" id="sejarah" style="scroll-margin-top:90px;">
-    <div class="eyebrow">Sejarah</div>
-    <h2>Perjalanan kami</h2>
-    <p id="sejarahText" data-dyn>Memuat…</p>
-  </div>
-
-  <div class="vm-grid" id="visimisi" style="scroll-margin-top:90px;">
-    <div class="vm-card">
-      <div class="vm-ic"><svg class="i"><use href="#i-target"/></svg></div><h3>Visi</h3>
-      <ol id="visiText" class="vm-list" data-dyn>Memuat…</ol>
+  <header class="fx-hero">
+    <div class="wrap">
+      <div class="ar">اَلْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِيْنَ</div>
+      <h1>Profil <em>lembaga</em></h1>
+      <p>Mengenal lebih dekat PPTQ Al Azzaam, pondok tahfidz Jawa Tengah yang berlokasi di Semarang — sejarah, visi-misi, dan orang-orang di baliknya.</p>
     </div>
-    <div class="vm-card">
-      <div class="vm-ic"><svg class="i"><use href="#i-compass"/></svg></div><h3>Misi</h3>
-      <ol id="misiText" class="vm-list" data-dyn>Memuat…</ol>
+  </header>
+  <section class="band" id="sejarah" style="scroll-margin-top:80px;">
+    <div class="wrap sej">
+      <div class="rv"><div class="big">“</div><div class="eb">Sejarah</div><h2>Perjalanan kami</h2></div>
+      <div class="sej-txt rv" id="sejarahText" data-dyn>Memuat…</div>
     </div>
-  </div>
+  </section>
+  <section class="band alt" id="visimisi" style="scroll-margin-top:80px;">
+    <div class="wrap">
+      <div class="eb rv">Visi &amp; Misi</div>
+      <h2 class="sec-t rv">Ketuk kartu untuk membaliknya</h2>
+      <div class="fl two">
+        <div class="fc rv"><div class="fi"><div class="ff"><div class="ar">رُؤْيَتُنَا</div><h3>Visi</h3><small>ketuk untuk membaca</small></div><div class="fb"><h3>Visi</h3><ol id="visiText" data-dyn></ol></div></div></div>
+        <div class="fc rv"><div class="fi"><div class="ff"><div class="ar">رِسَالَتُنَا</div><h3>Misi</h3><small>ketuk untuk membaca</small></div><div class="fb"><h3>Misi</h3><ol id="misiText" data-dyn></ol></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="band" id="struktur" style="scroll-margin-top:80px;">
+    <div class="wrap">
+      <div class="eb rv">Struktur pengurus</div>
+      <h2 class="sec-t rv">Diasuh &amp; dikelola oleh</h2>
+      <div class="org tilts" id="strukturTree" data-dyn><div class="empty-state">Memuat…</div></div>
+    </div>
+  </section>
+  <section class="band" style="padding-top:0">
+    <div class="wrap"><div class="cta rv"><h2>Bergabung bersama kami</h2><p>Pendaftaran santri baru dibuka. Amanahkan pendidikan Al‑Qur'an putra‑putri Anda.</p><a class="btn btn-a mg" href="ppdb.html">Informasi Pendaftaran →</a></div></div>
+  </section>
 
-  <div class="card" id="struktur" style="scroll-margin-top:90px;">
-    <div class="eyebrow">Struktur Pengurus</div>
-    <h2>Diasuh &amp; dikelola oleh</h2>
-    <div class="org-scroll">
-      <div id="strukturTree" data-dyn><div class="empty-state">Memuat…</div></div>
-    </div>
-  </div>
-</section>
+</main>
 
 <footer id="kontak">
   <div class="footer-grid">
     <div>
       <div class="footer-brand"><svg class="i"><use href="#i-star8"/></svg> PPTQ Al Azzaam</div>
-      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
+      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang, Jawa Tengah.</p>
       <div class="social-row" id="socialRow" data-dyn></div>
     </div>
     <div>
@@ -132,76 +183,43 @@
       </ul>
     </div>
   </div>
-  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang.</div>
+  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang. Seluruh hak cipta dilindungi.</div>
 </footer>
-
 <div class="flyer-overlay" id="flyerOverlay" onclick="if(event.target.id==='flyerOverlay') closeFlyer()">
   <div class="flyer-box">
     <button class="flyer-close" onclick="closeFlyer()" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button>
     <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
   </div>
 </div>
-
-<script src="shared.js?v=3"></script>
-<script src="layout.js?v=1"></script>
+<script src="shared.js?v=5"></script>
+<script src="layout.js?v=3"></script>
 <script>
-// Konten Sejarah/Visi/Misi diambil dari tabel pengaturan_situs
-// (isi lewat panel admin, tab "Pengaturan Situs", dengan key:
-//  profil_sejarah, profil_visi, profil_misi)
+
+$$('.fc').forEach(f=>f.onclick=()=>f.classList.toggle('fp'));
 async function loadProfil(){
   const {data} = await sb.from('pengaturan_situs').select('key,value');
   const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
-  document.getElementById('sejarahText').textContent = map.profil_sejarah || 'Konten sejarah belum diisi. Tambahkan lewat panel admin (Pengaturan Situs → key: profil_sejarah).';
-  const toListItems = (text) => (text||'').split('\n').map(s=>s.trim()).filter(Boolean).map(s=>`<li>${s}</li>`).join('');
-  const visiItems = toListItems(map.profil_visi);
-  const misiItems = toListItems(map.profil_misi);
-  document.getElementById('visiText').innerHTML = visiItems || '<li>Konten visi belum diisi (key: profil_visi).</li>';
-  document.getElementById('misiText').innerHTML = misiItems || '<li>Konten misi belum diisi (key: profil_misi).</li>';
+  const paras = (map.profil_sejarah||'').split(/\n\s*\n|\n/).map(s=>s.trim()).filter(Boolean);
+  document.getElementById('sejarahText').innerHTML = paras.length ? paras.map(p=>`<p>${esc(p)}</p>`).join('') : '<p>Konten sejarah belum diisi. Tambahkan lewat panel admin (Pengaturan Situs → key: profil_sejarah).</p>';
+  const li = t => (t||'').split('\n').map(s=>s.trim()).filter(Boolean).map(s=>`<li>${esc(s)}</li>`).join('');
+  document.getElementById('visiText').innerHTML = li(map.profil_visi) || '<li>Konten visi belum diisi (key: profil_visi).</li>';
+  document.getElementById('misiText').innerHTML = li(map.profil_misi) || '<li>Konten misi belum diisi (key: profil_misi).</li>';
 }
-
-// Struktur Pengurus ditampilkan sebagai pohon organisasi berdasarkan
-// relasi "Atasan Langsung" (parent_id) yang diatur lewat panel admin.
+// Struktur Pengurus: ditampilkan per tingkat (atasan → bawahan) berdasarkan "Atasan Langsung" (parent_id)
 async function loadStruktur(){
   const {data, error} = await sb.from('struktur_pengurus').select('*').order('urutan');
-  const container = document.getElementById('strukturTree');
-  if(error || !data || data.length===0){
-    container.innerHTML = '<div class="empty-state">Data pengurus belum diisi. Tambahkan lewat panel admin.</div>';
-    return;
-  }
-
-  const byId = {};
-  data.forEach(p => byId[p.id] = {...p, children: []});
-  const roots = [];
-  data.forEach(p => {
-    if(p.parent_id && byId[p.parent_id]){
-      byId[p.parent_id].children.push(byId[p.id]);
-    } else {
-      roots.push(byId[p.id]);
-    }
-  });
-
-  function renderNode(node){
-    const avatarStyle = node.foto_url
-      ? `background-image:url('${node.foto_url}')`
-      : '';
-    let html = `<li><div class="org-node">
-      <div class="avatar" style="${avatarStyle}"></div>
-      <div class="nama">${node.nama}</div>
-      <div class="jabatan">${node.jabatan || ''}</div>
-    </div>`;
-    if(node.children.length){
-      html += `<div class="org-stem-wrap"><div class="org-stem"></div></div>`;
-      html += `<ul>${node.children.map(renderNode).join('')}</ul>`;
-    }
-    html += `</li>`;
-    return html;
-  }
-
-  container.innerHTML = `<div class="org-tree"><ul>${roots.map(renderNode).join('')}</ul></div>`;
+  const box = document.getElementById('strukturTree');
+  if(error || !data || data.length===0){ box.innerHTML = '<div class="empty-state">Data pengurus belum diisi. Tambahkan lewat panel admin.</div>'; return; }
+  const byId = {}; data.forEach(p=>byId[p.id] = Object.assign({}, p, {lv:null}));
+  const depth = p=>{ if(p.lv!==null) return p.lv; let d = 0, c = p, g = 0; while(c.parent_id && byId[c.parent_id] && g++ < 20){ c = byId[c.parent_id]; d++; } return p.lv = d; };
+  const levels = [];
+  Object.values(byId).forEach(p=>{ const d = depth(p); (levels[d] = levels[d] || []).push(p); });
+  const ini = n => String(n||'?').replace(/^(KH\.?|Ust\.?|Ustzh\.?|Ustadz|Ustadzah|Dr\.?|H\.?|Hj\.?)\s+/i,'').trim().charAt(0).toUpperCase();
+  box.innerHTML = levels.filter(Boolean).map((arr,i)=>`<div class="lvl ${i===0?'root':''}">${arr.map(n=>`
+    <div class="pn tc rv"><div class="av" ${n.foto_url?`style="background-image:url('${esc(n.foto_url)}')"`:''}>${n.foto_url?'':ini(n.nama)}</div><div class="nm">${esc(n.nama)}</div><div class="jb">${esc(n.jabatan||'')}</div></div>`).join('')}</div>`).join('');
 }
+loadProfil(); loadStruktur();
 
-loadProfil();
-loadStruktur();
 </script>
 </body>
 </html>
