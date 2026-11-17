@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+
 <meta charset="UTF-8">
 <link id="faviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2730%27 fill=%27%232b0810%27/%3E%3Ctext x=%2732%27 y=%2743%27 font-family=%27Georgia,serif%27 font-size=%2732%27 font-weight=%27700%27 fill=%27%23d4af37%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pendaftaran Santri Baru — PPTQ Al Azzaam</title>
 <meta name="description" content="Syarat, jadwal, dan biaya pendaftaran santri baru PPTQ Al Azzaam Gunungpati, Semarang.">
 <link rel="canonical" href="https://pesantrenalazzaam.org/ppdb.html">
@@ -20,31 +20,63 @@
 <meta name="twitter:title" content="Pendaftaran Santri Baru — PPTQ Al Azzaam">
 <meta name="twitter:description" content="Syarat, jadwal, dan biaya pendaftaran santri baru PPTQ Al Azzaam Gunungpati, Semarang.">
 <meta name="twitter:image" content="https://pesantrenalazzaam.org/og-image.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="tema.js?v=1"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link rel="stylesheet" href="shared.css?v=2">
+<link rel="stylesheet" href="shared.css?v=6">
 <style>
-.wrap{max-width:820px;margin:0 auto;}
-.tahun-badge{display:inline-block;background:var(--gold-shine);color:var(--maroon-950);font-weight:800;font-size:12px;padding:6px 16px;border-radius:20px;margin-top:14px;}
-.card-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.card-head .ic{font-size:20px;}
-.card-head h2{font-size:16px;color:var(--maroon-900);}
-.card{margin-bottom:18px;}
-.card p{font-size:13.5px;color:var(--ink-600);line-height:1.8;white-space:pre-line;}
-.wa-strip{background:linear-gradient(120deg,var(--maroon-900),var(--maroon-700));border-radius:var(--radius);padding:30px 26px;text-align:center;color:#fff;}
-.wa-strip h2{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:8px;}
-.wa-strip p{color:rgba(255,255,255,.72);font-size:13px;margin-bottom:20px;}
-.btn-wa{background:#25D366;color:#fff;}
+
+:root{--hf:'DM Serif Display',Georgia,serif;}
+.hero{position:relative;color:var(--on);background:linear-gradient(170deg,var(--pd),var(--p));padding:76px 0 110px;overflow:hidden;text-align:center;}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(color-mix(in srgb,var(--on) 14%,transparent) 1.2px,transparent 1.2px);background-size:28px 28px;opacity:.55;}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:70px;background:var(--bg);clip-path:ellipse(60% 100% at 50% 100%);}
+.hero .wrap{position:relative;z-index:2;}
+.hero .ar{font:700 26px 'Amiri',serif;color:var(--al);}
+.hero h1{font-size:clamp(38px,5.6vw,68px);margin:8px 0 14px;}
+.hero p{opacity:.9;max-width:54ch;margin:0 auto;font-size:17px;}
+.tahun-badge{display:inline-block;margin-top:22px;background:var(--a);color:var(--pd);font-weight:800;padding:8px 20px;border-radius:99px;font-size:14px;}
+section.band{padding:70px 0;}
+.sp{--n:4;display:grid;grid-template-columns:repeat(var(--n),1fr);margin:34px 0 22px;position:relative;}
+.sp::before{content:"";position:absolute;left:calc(50% / var(--n));right:calc(50% / var(--n));top:26px;height:4px;background:color-mix(in srgb,var(--ink) 12%,transparent);border-radius:4px;}
+.sp .pf{position:absolute;left:calc(50% / var(--n));top:26px;height:4px;background:linear-gradient(90deg,var(--a),var(--p));border-radius:4px;width:0;transition:width .5s;}
+.sp button{border:0;background:none;font:800 14px var(--bf);color:var(--mu);cursor:pointer;padding:0 6px;text-align:center;position:relative;z-index:2;}
+.sp i{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;margin:0 auto 10px;background:var(--bg);border:3px solid color-mix(in srgb,var(--ink) 16%,transparent);font:400 24px var(--hf);font-style:normal;transition:.3s;}
+.sp button.on i{background:var(--p);color:var(--on);border-color:var(--a);transform:scale(1.16);box-shadow:0 0 0 7px color-mix(in srgb,var(--a) 30%,transparent);}
+.sp button.dn i{background:var(--a);border-color:var(--a);color:var(--pd);}
+.sp button.on{color:var(--p);}
+.sb{background:#fff;border-radius:28px;padding:38px;min-height:220px;box-shadow:0 22px 44px -32px var(--p);animation:fi .4s;}
+@keyframes fi{from{opacity:0;transform:translateY(10px);}}
+.sb h3{font-size:34px;color:var(--pd);margin-bottom:12px;display:flex;gap:12px;align-items:center;}
+.sb h3 .i{color:var(--a);width:30px;height:30px;}
+.sb ul{list-style:none;padding:0;margin:0;display:grid;gap:10px;}
+.sb li{display:flex;gap:12px;align-items:flex-start;padding:12px 16px;background:var(--bg);border-radius:14px;color:var(--ink);}
+.sb li::before{content:"✓";flex:none;width:24px;height:24px;border-radius:50%;background:var(--p);color:var(--on);display:grid;place-items:center;font-size:13px;font-weight:800;margin-top:1px;}
+.sb p{color:var(--mu);max-width:62ch;margin:0 0 10px;}
+.sb .btn-row{margin-top:18px;}
+.nv{display:flex;gap:10px;margin-top:20px;justify-content:space-between;}
+.nv .btn.back{background:color-mix(in srgb,var(--ink) 10%,transparent);color:var(--ink);}
+.nv .btn[disabled]{opacity:.4;pointer-events:none;}
+.qs{background:linear-gradient(160deg,var(--pd),var(--p));color:var(--on);border-radius:36px;padding:56px 40px;text-align:center;position:relative;overflow:hidden;}
+.qs::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-120px;top:-160px;background:radial-gradient(circle,color-mix(in srgb,var(--a) 45%,transparent),transparent 65%);}
+.qs h2{font-size:clamp(30px,4vw,50px);position:relative;}
+.qs p{opacity:.9;max-width:50ch;margin:14px auto 26px;position:relative;}
+.qs .btn-row{justify-content:center;position:relative;}
+@media(max-width:640px){.sp button{font-size:12px;}.sp i{width:44px;height:44px;font-size:20px;}.sp::before,.sp .pf{top:21px;}.sb{padding:26px 22px;}}
+
 </style>
 </head>
 <body>
-
+<div id="bar"></div>
+<script src="icons.js"></script>
 <nav class="navbar">
   <div class="navbar-inner">
     <a href="index.html" class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</a>
     <div class="nav-links" id="navLinks">
+      <a href="index.html">Beranda</a>
       <div class="nav-item">
-        <a href="profil.html" class="nav-top-link">Profil <span class="nav-caret">▾</span></a>
+        <a href="profil.html" class="nav-top-link">Profil <span class="nav-caret"><svg class="i"><use href="#i-caret"/></svg></span></a>
         <div class="dropdown-menu">
           <a href="profil.html#sejarah">Sejarah</a>
           <a href="profil.html#visimisi">Visi &amp; Misi</a>
@@ -52,7 +84,7 @@
         </div>
       </div>
       <div class="nav-item">
-        <a href="program.html" class="nav-top-link">Program <span class="nav-caret">▾</span></a>
+        <a href="program.html" class="nav-top-link">Program <span class="nav-caret"><svg class="i"><use href="#i-caret"/></svg></span></a>
         <div class="dropdown-menu program-dropdown"><a href="program.html">Memuat…</a></div>
       </div>
       <a href="berita.html">Berita</a>
@@ -61,29 +93,47 @@
       <a href="#kontak">Kontak</a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <a href="ppdb.html" class="nav-cta">Daftar Sekarang</a>
-      <button class="nav-toggle" id="navToggle">☰</button>
+      <a href="ppdb.html" class="nav-cta mg">Daftar Santri Baru</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><svg class="i"><use href="#i-menu"/></svg></button>
     </div>
   </div>
 </nav>
+<div class="ticker-wrap" id="tickerWrap"><div class="ticker-track" id="tickerTrack">Memuat info terkini…</div></div>
+<main data-lay="main">
 
-<div class="page-hero">
-  <div class="hero-arabic">خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ</div>
-  <h1>Pendaftaran Santri Baru</h1>
-  <p>Amanahkan pendidikan Al-Qur'an putra-putri Anda bersama PPTQ Al Azzaam.</p>
-  <div id="tahunBadge"></div>
-</div>
+  <header class="hero">
+    <div class="wrap">
+      <div class="ar">خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ</div>
+      <h1>Pendaftaran santri baru</h1>
+      <p>Amanahkan pendidikan Al-Qur'an putra-putri Anda bersama PPTQ Al Azzaam.</p>
+      <div id="tahunBadge" data-dyn></div>
+    </div>
+  </header>
+  <section class="band" id="cara">
+    <div class="wrap">
+      <div class="eb rv">Cara mendaftar</div>
+      <h2 class="sec-t rv">Langkah demi langkah</h2>
+      <div id="ppdbArea" data-dyn><div class="empty-state">Memuat info pendaftaran…</div></div>
+    </div>
+  </section>
+  <section class="band" id="siap" style="padding-top:0">
+    <div class="wrap">
+      <div class="qs rv">
+        <h2>Ada yang ingin ditanyakan?</h2>
+        <p>Hubungi panitia PPDB untuk info lebih lanjut atau bantuan pendaftaran.</p>
+        <div class="btn-row" id="waRow" data-dyn><a class="btn btn-a mg" href="index.html#kontak">Lihat kontak kami</a></div>
+      </div>
+    </div>
+  </section>
 
-<section class="section wrap" id="ppdbContent">
-  <div class="empty-state">Memuat info pendaftaran…</div>
-</section>
+</main>
 
 <footer id="kontak">
   <div class="footer-grid">
     <div>
-      <div class="footer-brand">PPTQ Al Azzaam</div>
-      <p style="font-size:12.5px;line-height:1.7;">Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
-      <div class="social-row" id="socialRow"></div>
+      <div class="footer-brand"><svg class="i"><use href="#i-star8"/></svg> PPTQ Al Azzaam</div>
+      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang, Jawa Tengah.</p>
+      <div class="social-row" id="socialRow" data-dyn></div>
     </div>
     <div>
       <h4>Tautan</h4>
@@ -99,50 +149,73 @@
     </div>
     <div>
       <h4>Kontak</h4>
-      <ul id="kontakList">
+      <ul id="kontakList" data-dyn>
         <li>Memuat…</li>
       </ul>
     </div>
   </div>
-  <div class="footer-bottom">© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang.</div>
+  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang. Seluruh hak cipta dilindungi.</div>
 </footer>
-
 <div class="flyer-overlay" id="flyerOverlay" onclick="if(event.target.id==='flyerOverlay') closeFlyer()">
   <div class="flyer-box">
-    <button class="flyer-close" onclick="closeFlyer()">✕</button>
+    <button class="flyer-close" onclick="closeFlyer()" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button>
     <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
   </div>
 </div>
-
-<script src="shared.js?v=2"></script>
+<script src="shared.js?v=5"></script>
+<script src="layout.js?v=3"></script>
 <script>
+
+let STEPS = [], si = 0, WA = '', FORM = '';
+function lines(t){ return String(t||'').split('\n').map(s=>s.trim()).filter(Boolean); }
+function stepBody(s){
+  if(s.type === 'list') return '<ul>' + lines(s.text).map(l=>`<li>${l}</li>`).join('') + '</ul>';
+  return s.html;
+}
+function renderStep(){
+  const sp = document.getElementById('sp');
+  $$('#sp button').forEach((b,i)=>{ b.classList.toggle('on', i===si); b.classList.toggle('dn', i<si); });
+  document.getElementById('pf').style.width = (si / (STEPS.length - 1)) * (100 - 100 / STEPS.length) + '%';
+  const d = document.getElementById('sb'), s = STEPS[si];
+  d.style.animation = 'none'; d.offsetHeight; d.style.animation = '';
+  d.innerHTML = `<h3>${ic(s.icon)} ${si+1}. ${s.title}</h3>${stepBody(s)}`;
+  document.getElementById('pv').disabled = si === 0;
+  const nx = document.getElementById('nx');
+  nx.innerHTML = si === STEPS.length - 1 ? 'Selesai ✓' : 'Lanjut →';
+}
 async function loadPpdb(){
   const {data, error} = await sb.from('info_ppdb').select('*').eq('status','published').order('updated_at',{ascending:false}).limit(1);
-  const area = document.getElementById('ppdbContent');
+  const area = document.getElementById('ppdbArea');
   if(error || !data || data.length===0){
     area.innerHTML = '<div class="empty-state">Info pendaftaran belum dipublikasikan. Silakan cek kembali nanti atau hubungi kami langsung.</div>';
     return;
   }
   const p = data[0];
-  document.getElementById('tahunBadge').innerHTML = p.tahun_ajaran ? `<div class="tahun-badge">Tahun Ajaran ${p.tahun_ajaran}</div>` : '';
-
-  const waNumber = (p.kontak_wa || '').replace(/[^0-9]/g,'').replace(/^0/,'62');
-
+  document.getElementById('tahunBadge').innerHTML = p.tahun_ajaran ? `<span class="tahun-badge">Tahun Ajaran ${esc(p.tahun_ajaran)}</span>` : '';
+  WA = (p.kontak_wa || '').replace(/[^0-9]/g,'').replace(/^0/,'62');
+  FORM = p.formulir_url || '';
+  const links = `<div class="btn-row">
+      ${WA ? `<a href="https://wa.me/${WA}" target="_blank" rel="noopener" class="btn btn-m mg">${ic('chat')} Chat WhatsApp panitia</a>` : ''}
+      ${FORM ? `<a href="${esc(normalizeLink(FORM))}" target="_blank" rel="noopener" class="btn btn-a mg">Isi formulir ${ic('arrow')}</a>` : ''}</div>`;
+  STEPS = [];
+  if(p.syarat) STEPS.push({title:'Syarat pendaftaran', short:'Syarat', icon:'list', type:'list', text:p.syarat});
+  if(p.jadwal) STEPS.push({title:'Jadwal pendaftaran', short:'Jadwal', icon:'calendar', type:'list', text:p.jadwal});
+  if(p.biaya)  STEPS.push({title:'Rincian biaya', short:'Biaya', icon:'wallet', type:'list', text:p.biaya});
+  STEPS.push({title:'Daftar sekarang', short:'Daftar', icon:'chat', type:'html', html:`<p>Siap mendaftar? Hubungi panitia PPDB atau isi formulir pendaftaran online.</p>${links}`});
   area.innerHTML = `
-    ${p.syarat ? `<div class="card"><div class="card-head"><span class="ic">📋</span><h2>Syarat Pendaftaran</h2></div><p>${p.syarat}</p></div>` : ''}
-    ${p.jadwal ? `<div class="card"><div class="card-head"><span class="ic">🗓️</span><h2>Jadwal Pendaftaran</h2></div><p>${p.jadwal}</p></div>` : ''}
-    ${p.biaya ? `<div class="card"><div class="card-head"><span class="ic">💳</span><h2>Rincian Biaya</h2></div><p>${p.biaya}</p></div>` : ''}
-    <div class="wa-strip">
-      <h2>Siap Mendaftar?</h2>
-      <p>Hubungi panitia PPDB untuk info lebih lanjut atau bantuan pendaftaran.</p>
-      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-        ${waNumber ? `<a href="https://wa.me/${waNumber}" target="_blank" class="btn btn-wa">💬 Chat WhatsApp Panitia</a>` : ''}
-        ${p.formulir_url ? `<a href="${normalizeLink(p.formulir_url)}" target="_blank" class="btn btn-gold">Isi Formulir →</a>` : ''}
-      </div>
-    </div>
-  `;
+    <div class="sp rv" id="sp"><div class="pf" id="pf"></div>${STEPS.map((s,i)=>`<button type="button"><i>${i+1}</i>${s.short}</button>`).join('')}</div>
+    <div class="sb" id="sb"></div>
+    <div class="nv"><button class="btn back" id="pv" type="button">← Kembali</button><button class="btn" id="nx" type="button">Lanjut →</button></div>`;
+  $$('#sp button').forEach((b,i)=>b.onclick=()=>{ si = i; renderStep(); });
+  document.getElementById('nx').onclick = ()=>{ si = Math.min(STEPS.length - 1, si + 1); renderStep(); };
+  document.getElementById('pv').onclick = ()=>{ si = Math.max(0, si - 1); renderStep(); };
+  renderStep();
+  document.getElementById('sp').style.setProperty('--n', STEPS.length);
+  renderStep();
+  document.getElementById('waRow').innerHTML = `${WA ? `<a href="https://wa.me/${WA}" target="_blank" rel="noopener" class="btn btn-a mg">${ic('chat')} Chat WhatsApp panitia</a>` : ''}${FORM ? `<a href="${esc(normalizeLink(FORM))}" target="_blank" rel="noopener" class="btn btn-o mg">Isi formulir ${ic('arrow')}</a>` : ''}` || '';
 }
 loadPpdb();
+
 </script>
 </body>
 </html>
