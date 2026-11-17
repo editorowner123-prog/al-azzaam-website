@@ -53,6 +53,8 @@ function normalize(s){
     if(Object.keys(r).length) o.size[k] = r;
   });
   Object.keys((s&&s.text)||{}).forEach(k=>{ if(typeof s.text[k] === 'string') o.text[k] = s.text[k]; });
+  const th = window.PPTQTema ? window.PPTQTema.clean(s && s.theme) : null;
+  if(th) o.theme = th;
   return o;
 }
 function str(s){ return JSON.stringify(normalize(s)); }
@@ -161,9 +163,13 @@ function applyCss(){
   const css = buildCss();
   if(st.textContent !== css) st.textContent = css;
 }
+function applyTheme(){
+  if(!window.PPTQTema) return;
+  window.PPTQTema.apply(state.theme || null);
+}
 function apply(){
   applying = true;
-  try{ scan(); applyOrder(); applyText(); applyCss(); }
+  try{ scan(); applyOrder(); applyText(); applyCss(); applyTheme(); }
   finally{ applying = false; }
 }
 function notify(){ listeners.forEach(f=>{ try{ f(); }catch(e){} }); }
@@ -199,9 +205,12 @@ function setState(s, opts){
 async function fetchRows(){
   try{
     if(typeof sb === 'undefined') return {};
-    const {data, error} = await sb.from('layout_halaman').select('status,data').eq('halaman', PAGE);
+    const {data, error} = await sb.from('layout_halaman').select('halaman,status,data').in('halaman', [PAGE, '_tema']);
     if(error || !data) return {};
-    const out = {}; data.forEach(r=>out[r.status] = r.data);
+    const out = {tema:{}}; data.forEach(r=>{
+      if(!r.data || r.data.v !== 2) return;
+      if(r.halaman === '_tema') out.tema[r.status] = r.data; else out[r.status] = r.data;
+    });
     return out;
   }catch(e){ return {}; }
 }
@@ -219,6 +228,10 @@ const API = {
   finishPreview: (prev, now)=>{ undoStack.push(clone(prev)); redoStack.length = 0; state = normalize(now); apply(); notify(); },
   canUndo: ()=>undoStack.length > 0, canRedo: ()=>redoStack.length > 0,
   clearAll: ()=>commit(s=>{ s.order = {}; s.size = {}; s.text = {}; }),
+  // Warna situs: berlaku untuk SEMUA halaman (disimpan terpisah di baris '_tema')
+  getTheme: ()=>state.theme ? clone(state.theme) : null,
+  previewTheme: t=>{ state.theme = window.PPTQTema.clean(t) || undefined; if(!state.theme) delete state.theme; applyTheme(); },
+  setTheme: t=>commit(s=>{ const c = window.PPTQTema.clean(t); if(c) s.theme = c; else delete s.theme; }),
   onChange: f=>listeners.push(f),
   blocksOf, containers, origOrder, clone,
   rows: {}
@@ -231,8 +244,12 @@ function boot(){
   // pengunjung: pakai cache lokal dulu supaya tidak berkedip
   if(!IS_ED){
     try{
-      const c = localStorage.getItem('lay_' + PAGE);
-      if(c){ state = normalize(JSON.parse(c)); apply(); }
+      const c = localStorage.getItem('lay2_' + PAGE);
+      if(c){
+        state = normalize(JSON.parse(c));
+        try{ const tc = window.PPTQTema && window.PPTQTema.clean(JSON.parse(localStorage.getItem('pptq_tema2') || 'null')); if(tc) state.theme = tc; }catch(e){}
+        apply();
+      }
     }catch(e){}
   }
   // elemen dinamis (diisi JS setelah data datang) -> rapikan lagi otomatis
@@ -253,7 +270,10 @@ function boot(){
     }
     if(IS_ED && sess){
       mo.disconnect();
-      setState(rows.draft || rows.live || {}, {baseline:true});
+      const base = Object.assign({}, rows.draft || rows.live || {});
+      const tm = (rows.tema && (rows.tema.draft || rows.tema.live)) || null;
+      if(tm) base.theme = tm;
+      setState(base, {baseline:true});
       observeAll();
       const s = document.createElement('script');
       s.src = 'editor.js?v=1';
@@ -262,9 +282,17 @@ function boot(){
       document.body.appendChild(s);
     } else {
       mo.disconnect();
-      setState(rows.live || {}, {baseline:true});
+      const base = Object.assign({}, rows.live || {});
+      const tm = rows.tema && rows.tema.live;
+      if(tm) base.theme = tm;
+      setState(base, {baseline:true});
       observeAll();
-      try{ localStorage.setItem('lay_' + PAGE, JSON.stringify(normalize(state))); }catch(e){}
+      try{
+        const ns = normalize(state);
+        const th = ns.theme; delete ns.theme;
+        localStorage.setItem('lay2_' + PAGE, JSON.stringify(ns));
+        window.PPTQTema && window.PPTQTema.cache(th || null);
+      }catch(e){}
       readyResolve(true);
     }
   })();
