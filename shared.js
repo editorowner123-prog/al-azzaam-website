@@ -113,7 +113,7 @@ async function applyHeroPhoto(){
   if(!hero) return;
   const {data} = await sb.from('pengaturan_situs').select('value').eq('key','hero_photo_url').maybeSingle();
   if(data && data.value){
-    hero.style.backgroundImage = `linear-gradient(160deg, rgba(43,8,16,.68), rgba(61,12,20,.6)), url('${data.value}')`;
+    hero.style.backgroundImage = `linear-gradient(160deg, rgba(77,10,24,.82), rgba(122,17,38,.66)), url('${data.value}')`;
   }
 }
 
@@ -124,24 +124,25 @@ async function loadFooterData(){
 
   const list = document.getElementById('kontakList');
   if(list){
+    const row = (icon, inner) => `<li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--gold-l);margin-top:2px;display:inline-flex;">${ic(icon)}</span><span>${inner}</span></li>`;
     let items = '';
-    items += `<li>${map.alamat || 'Alamat belum diisi'}</li>`;
-    if(map.google_maps_url) items += `<li><a href="${map.google_maps_url}" target="_blank">📍 Lihat di Peta</a></li>`;
-    if(map.no_wa) items += `<li><a href="https://wa.me/${map.no_wa.replace(/[^0-9]/g,'').replace(/^0/,'62')}" target="_blank">WA: ${map.no_wa}</a></li>`;
-    if(map.email) items += `<li><a href="mailto:${map.email}">${map.email}</a></li>`;
+    items += row('pin', map.alamat || 'Alamat belum diisi');
+    if(map.google_maps_url) items += row('globe', `<a href="${map.google_maps_url}" target="_blank" rel="noopener">Lihat di peta</a>`);
+    if(map.no_wa) items += row('phone', `<a href="https://wa.me/${map.no_wa.replace(/[^0-9]/g,'').replace(/^0/,'62')}" target="_blank" rel="noopener">WA: ${map.no_wa}</a>`);
+    if(map.email) items += row('mail', `<a href="mailto:${map.email}">${map.email}</a>`);
     list.innerHTML = items;
   }
 
   const socialRow = document.getElementById('socialRow');
   if(socialRow){
     const socials = [
-      {key:'instagram', label:'IG'},
-      {key:'facebook', label:'FB'},
-      {key:'youtube', label:'YT'},
-      {key:'tiktok', label:'TT'},
+      {key:'instagram', label:'ig', nama:'Instagram'},
+      {key:'facebook', label:'fb', nama:'Facebook'},
+      {key:'youtube', label:'yt', nama:'YouTube'},
+      {key:'tiktok', label:'tt', nama:'TikTok'},
     ];
     socialRow.innerHTML = socials.filter(s=>map[s.key])
-      .map(s=>`<a href="${map[s.key]}" target="_blank" class="social-badge" title="${s.key}">${s.label}</a>`).join('');
+      .map(s=>`<a href="${map[s.key]}" target="_blank" rel="noopener" class="social-badge" title="${s.nama}" aria-label="${s.nama}">${ic(s.label)}</a>`).join('');
   }
 
   document.getElementById('yearNow').textContent = new Date().getFullYear();
@@ -157,9 +158,9 @@ async function loadTicker(){
     sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height','ticker_speed']),
   ]);
   const map = {}; (settings||[]).forEach(r=>map[r.key]=r.value);
-  wrap.style.background = map.ticker_bg || 'var(--maroon-950)';
-  wrap.style.height = (map.ticker_height || '38') + 'px';
-  track.style.color = map.ticker_text_color || 'var(--gold-400)';
+  wrap.style.background = map.ticker_bg || 'var(--ink)';
+  wrap.style.height = (map.ticker_height || '46') + 'px';
+  track.style.color = map.ticker_text_color || 'var(--gold-l)';
 
   if(!items || items.length===0){
     wrap.style.display = 'none';
@@ -186,6 +187,7 @@ let flyerIndex = 0;
 async function loadFlyer(){
   const overlay = document.getElementById('flyerOverlay');
   if(!overlay) return;
+  if(/[?&]editor=1/.test(location.search)) return;
   if(sessionStorage.getItem('flyer_dismissed')) return;
   const {data} = await sb.from('flyer_popup').select('*').eq('status','published').order('urutan');
   if(!data || data.length===0) return;
