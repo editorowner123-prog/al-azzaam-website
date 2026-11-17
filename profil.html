@@ -20,31 +20,37 @@
 <meta name="twitter:title" content="Profil — Pondok Tahfidz Jawa Tengah | PPTQ Al Azzaam">
 <meta name="twitter:description" content="Profil PPTQ Al Azzaam, pondok tahfidz Jawa Tengah di Semarang — sejarah, visi misi, dan struktur pengurus.">
 <meta name="twitter:image" content="https://pesantrenalazzaam.org/og-image.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link rel="stylesheet" href="shared.css?v=2">
+<link rel="stylesheet" href="shared.css?v=3">
 <style>
-.wrap{max-width:900px;margin:0 auto;}
-.card{padding:28px 26px;margin-bottom:20px;}
-.card h2{font-size:19px;color:var(--maroon-900);margin-bottom:12px;font-family:'Outfit',sans-serif;}
-.card p{font-size:13.5px;color:var(--ink-600);line-height:1.8;white-space:pre-line;}
-
-.vm-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-@media(max-width:700px){.vm-grid{grid-template-columns:1fr;}}
-.vm-card{background:var(--cream-100);border-radius:var(--radius);padding:22px;border-left:4px solid var(--gold-500);}
-.vm-card h3{font-size:14px;color:var(--maroon-800);margin-bottom:8px;}
-.vm-list{font-size:13px;color:var(--ink-600);line-height:1.8;text-align:left;margin:0;padding-left:18px;}
-.vm-list li{margin-bottom:4px;}
+.prof{display:grid;gap:14px;grid-template-columns:minmax(0,1fr);}
+.prof>*{min-width:0;}
+.prof .card{padding:34px;}
+.prof .card h2{font-size:clamp(28px,3.4vw,40px);font-weight:800;margin:8px 0 14px;}
+.prof .card p{font-size:17px;color:var(--mute);line-height:1.8;white-space:pre-line;max-width:70ch;margin:0;}
+.sej{border-radius:28px 80px 28px 28px;background:var(--gold-l)!important;}
+.sej .eyebrow{color:var(--maroon);} .sej h2{color:var(--maroon-d);} .sej p{color:var(--maroon-d)!important;opacity:.85;}
+.vm-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:700px){.vm-grid{grid-template-columns:1fr;}.prof .card{padding:26px;}}
+.vm-card{background:#fff;border-radius:28px;padding:30px;}
+.vm-ic{width:48px;height:48px;border-radius:16px;background:var(--rose);color:var(--maroon);display:grid;place-items:center;margin-bottom:14px;}
+.vm-ic .i{width:26px;height:26px;}
+.vm-card h3{font-size:30px;font-weight:800;margin-bottom:10px;color:var(--ink);}
+.vm-list{font-size:16px;color:var(--mute);line-height:1.75;text-align:left;margin:0;padding-left:22px;}
+.vm-list li{margin-bottom:6px;}
 </style>
 </head>
-<body>
+<body data-lay="page" data-lay-sel=".page-hero,section,footer">
+<script src="icons.js"></script>
 
 <nav class="navbar">
   <div class="navbar-inner">
     <a href="index.html" class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</a>
     <div class="nav-links" id="navLinks">
+      <a href="index.html">Beranda</a>
       <div class="nav-item">
-        <a href="profil.html" class="nav-top-link active">Profil <span class="nav-caret">▾</span></a>
+        <a href="profil.html" class="nav-top-link active">Profil <span class="nav-caret"><svg class="i"><use href="#i-caret"/></svg></span></a>
         <div class="dropdown-menu">
           <a href="profil.html#sejarah">Sejarah</a>
           <a href="profil.html#visimisi">Visi &amp; Misi</a>
@@ -52,7 +58,7 @@
         </div>
       </div>
       <div class="nav-item">
-        <a href="program.html" class="nav-top-link">Program <span class="nav-caret">▾</span></a>
+        <a href="program.html" class="nav-top-link">Program <span class="nav-caret"><svg class="i"><use href="#i-caret"/></svg></span></a>
         <div class="dropdown-menu program-dropdown"><a href="program.html">Memuat…</a></div>
       </div>
       <a href="berita.html">Berita</a>
@@ -61,41 +67,41 @@
       <a href="#kontak">Kontak</a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <a href="ppdb.html" class="nav-cta">Daftar Sekarang</a>
-      <button class="nav-toggle" id="navToggle">☰</button>
+      <a href="ppdb.html" class="nav-cta">Daftar sekarang</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><svg class="i"><use href="#i-menu"/></svg></button>
     </div>
   </div>
 </nav>
 
 <div class="page-hero">
   <div class="hero-arabic">اَلْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِيْنَ</div>
-  <h1>Profil Lembaga</h1>
+  <h1>Profil lembaga</h1>
   <p>Mengenal lebih dekat PPTQ Al Azzaam, pondok tahfidz Jawa Tengah yang berlokasi di Semarang — sejarah, visi-misi, dan orang-orang di baliknya.</p>
 </div>
 
-<section class="section wrap">
-  <div class="card" id="sejarah" style="scroll-margin-top:80px;">
+<section class="section wrap prof" data-lay="prof">
+  <div class="card sej" id="sejarah" style="scroll-margin-top:90px;">
     <div class="eyebrow">Sejarah</div>
-    <h2 style="margin-top:6px">Perjalanan Kami</h2>
-    <p id="sejarahText">Memuat…</p>
+    <h2>Perjalanan kami</h2>
+    <p id="sejarahText" data-dyn>Memuat…</p>
   </div>
 
-  <div class="vm-grid" id="visimisi" style="scroll-margin-top:80px;">
+  <div class="vm-grid" id="visimisi" style="scroll-margin-top:90px;">
     <div class="vm-card">
-      <h3>🎯 Visi</h3>
-      <ol id="visiText" class="vm-list">Memuat…</ol>
+      <div class="vm-ic"><svg class="i"><use href="#i-target"/></svg></div><h3>Visi</h3>
+      <ol id="visiText" class="vm-list" data-dyn>Memuat…</ol>
     </div>
     <div class="vm-card">
-      <h3>🧭 Misi</h3>
-      <ol id="misiText" class="vm-list">Memuat…</ol>
+      <div class="vm-ic"><svg class="i"><use href="#i-compass"/></svg></div><h3>Misi</h3>
+      <ol id="misiText" class="vm-list" data-dyn>Memuat…</ol>
     </div>
   </div>
 
-  <div class="card" id="struktur" style="margin-top:20px;scroll-margin-top:80px;">
+  <div class="card" id="struktur" style="scroll-margin-top:90px;">
     <div class="eyebrow">Struktur Pengurus</div>
-    <h2 style="margin-top:6px;margin-bottom:6px">Diasuh & Dikelola Oleh</h2>
+    <h2>Diasuh &amp; dikelola oleh</h2>
     <div class="org-scroll">
-      <div id="strukturTree"><div class="empty-state">Memuat…</div></div>
+      <div id="strukturTree" data-dyn><div class="empty-state">Memuat…</div></div>
     </div>
   </div>
 </section>
@@ -103,9 +109,9 @@
 <footer id="kontak">
   <div class="footer-grid">
     <div>
-      <div class="footer-brand">PPTQ Al Azzaam</div>
-      <p style="font-size:12.5px;line-height:1.7;">Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
-      <div class="social-row" id="socialRow"></div>
+      <div class="footer-brand"><svg class="i"><use href="#i-star8"/></svg> PPTQ Al Azzaam</div>
+      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
+      <div class="social-row" id="socialRow" data-dyn></div>
     </div>
     <div>
       <h4>Tautan</h4>
@@ -121,22 +127,23 @@
     </div>
     <div>
       <h4>Kontak</h4>
-      <ul id="kontakList">
+      <ul id="kontakList" data-dyn>
         <li>Memuat…</li>
       </ul>
     </div>
   </div>
-  <div class="footer-bottom">© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang.</div>
+  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang.</div>
 </footer>
 
 <div class="flyer-overlay" id="flyerOverlay" onclick="if(event.target.id==='flyerOverlay') closeFlyer()">
   <div class="flyer-box">
-    <button class="flyer-close" onclick="closeFlyer()">✕</button>
+    <button class="flyer-close" onclick="closeFlyer()" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button>
     <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
   </div>
 </div>
 
-<script src="shared.js?v=2"></script>
+<script src="shared.js?v=3"></script>
+<script src="layout.js?v=1"></script>
 <script>
 // Konten Sejarah/Visi/Misi diambil dari tabel pengaturan_situs
 // (isi lewat panel admin, tab "Pengaturan Situs", dengan key:
