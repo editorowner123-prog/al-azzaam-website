@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id" data-tema="bento">
+<html lang="id">
 <head>
+
 <meta charset="UTF-8">
 <link id="faviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2730%27 fill=%27%232b0810%27/%3E%3Ctext x=%2732%27 y=%2743%27 font-family=%27Georgia,serif%27 font-size=%2732%27 font-weight=%27700%27 fill=%27%23d4af37%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pondok Tahfidz Semarang — PPTQ Al Azzaam | Jawa Tengah</title>
 <meta name="description" content="PPTQ Al Azzaam, pondok tahfidz Semarang di Gunungpati, Jawa Tengah — program SMP Tahfidz, MA Tahfidz, Diniyah, dan pendidikan Al-Qur'an dalam satu pesantren.">
 <link rel="canonical" href="https://pesantrenalazzaam.org/">
@@ -37,79 +37,116 @@
   }
 }
 </script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="tema.js?v=1"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link rel="stylesheet" href="shared.css?v=3">
+<link rel="stylesheet" href="shared.css?v=6">
 <style>
-/* ---------- Gaya khusus Beranda: papan bento ---------- */
-.bento{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:minmax(112px,auto);grid-auto-flow:dense;gap:14px;}
-.t{border-radius:28px;padding:26px;position:relative;overflow:hidden;background:#fff;}
-.t-hero{grid-column:span 7;grid-row:span 4;background-color:var(--maroon);color:#fff;border-radius:40px;padding:42px;padding-top:84px;display:flex;flex-direction:column;justify-content:flex-end;background-size:cover;background-position:center;
-  background-image:radial-gradient(90% 70% at 100% 0,rgba(243,221,154,.28),transparent 60%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Cg fill='none' stroke='%23f3dd9a' stroke-opacity='.12'%3E%3Cpath d='M36 6l30 30-30 30L6 36z'/%3E%3Cpath d='M15 15h42v42H15z'/%3E%3C/g%3E%3C/svg%3E");}
-.chip{position:absolute;top:26px;left:42px;display:inline-flex;gap:8px;align-items:center;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.14);font-size:14px;}
-.hero-arabic{font-family:'Amiri',serif;font-weight:700;color:var(--gold-l);font-size:28px;line-height:1.5;margin-bottom:6px;}
-.hero-title{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(34px,4.2vw,58px);font-weight:800;line-height:1.04;letter-spacing:-.02em;margin-bottom:18px;text-wrap:balance;}
-.hero-title em{font-style:normal;color:var(--gold-l);}
-.hero-sub{max-width:50ch;opacity:.86;font-size:16.5px;margin:0 0 26px;}
-.hero-ctas{display:flex;gap:10px;flex-wrap:wrap;}
 
-.t-photo{grid-column:span 5;grid-row:span 3;border-radius:120px 28px 28px 28px;background:linear-gradient(160deg,#d9b0b8,var(--gold-l));display:grid;place-items:center;color:var(--maroon);background-size:cover;background-position:center;padding:0;}
-.t-photo .i{width:84px;height:84px;opacity:.55;}
-.t-photo .cap{position:absolute;left:22px;bottom:18px;background:rgba(255,255,255,.9);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:600;color:var(--maroon-d);}
-.t-data{grid-column:span 5;display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0;background:none;overflow:visible;}
-.stat{background:#fff;border-radius:28px;padding:18px 22px;display:flex;align-items:center;gap:14px;}
-.stat .i{width:34px;height:34px;color:var(--maroon);}
-.stat b{display:block;font:800 40px 'Bricolage Grotesque',sans-serif;letter-spacing:-.03em;line-height:1;}
-.stat span{color:var(--mute);font-size:14px;}
+:root{--hf:'DM Serif Display',Georgia,serif;}
+/* ===== Hero (desain 13 "Perjalanan") ===== */
+.hero{position:relative;color:var(--on);background:linear-gradient(170deg,var(--pd),var(--p));padding:92px 0 150px;overflow:hidden;}
+.hero::before{content:"";position:absolute;inset:0;background-image:radial-gradient(color-mix(in srgb,var(--on) 14%,transparent) 1.2px,transparent 1.2px);background-size:28px 28px;opacity:.55;}
+.hero.has-photo::before{background:var(--hero-img) center/cover;opacity:.3;mix-blend-mode:luminosity;}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:80px;background:var(--bg);clip-path:ellipse(60% 100% at 50% 100%);}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:44px;align-items:center;}
+.hero .ar{font:700 28px 'Amiri',serif;color:var(--al);}
+.hero h1{font-size:clamp(40px,6vw,74px);margin:10px 0 18px;}
+.type{color:var(--a);border-right:3px solid var(--a);padding-right:4px;animation:bl .8s infinite;}
+@keyframes bl{50%{border-color:transparent;}}
+.hero p.lead{opacity:.9;max-width:50ch;font-size:17px;margin:0;}
+.hero .btn-row{margin-top:28px;}
+.card3{background:color-mix(in srgb,var(--on) 8%,transparent);border:1px solid color-mix(in srgb,var(--on) 22%,transparent);border-radius:28px;padding:28px;backdrop-filter:blur(6px);}
+.card3 h3{font-size:26px;color:var(--al);margin-bottom:6px;}
+.card3 label{display:block;font-size:13px;opacity:.85;margin:14px 0 6px;font-weight:700;}
+.card3 select{width:100%;padding:14px;border-radius:14px;border:0;font:700 15px var(--bf);background:#fff;color:#2a1519;}
+.card3 .out{margin-top:16px;background:color-mix(in srgb,var(--on) 12%,transparent);border-radius:16px;padding:16px 18px;min-height:96px;font-size:14.5px;}
+.card3 .out b{display:block;font:400 22px var(--hf);color:var(--al);margin-bottom:4px;}
+.card3 .out a{display:inline-flex;margin-top:8px;font-weight:800;color:var(--a);}
+.card3 .ppdb-line{margin-top:14px;font-size:13.5px;opacity:.92;display:flex;gap:8px;align-items:center;}
+.card3 .ppdb-line::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--a);box-shadow:0 0 0 4px color-mix(in srgb,var(--a) 35%,transparent);animation:pl 1.6s infinite;}
+@keyframes pl{50%{box-shadow:0 0 0 9px transparent;}}
+@media(max-width:860px){.hero{padding:64px 0 120px;}.hero .wrap{grid-template-columns:1fr;}}
+/* ===== Angka ===== */
+.stats .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:-92px;position:relative;z-index:5;}
+.stat{background:var(--bg);border-radius:26px;padding:26px 28px;box-shadow:0 26px 44px -30px var(--pd);border:1px solid var(--line);transition:transform .3s;display:flex;gap:18px;align-items:center;}
+.stat:hover{transform:translateY(-8px);}
+.stat .i{width:42px;height:42px;color:var(--p);}
+.stat b{font:400 46px var(--hf);color:var(--p);display:block;line-height:1;}
+.stat span{color:var(--mu);font-size:14px;font-weight:700;}
+@media(max-width:760px){.stats .wrap{grid-template-columns:1fr;gap:12px;margin-top:-70px;}.stat{padding:18px 22px;}.stat b{font-size:38px;}}
+section.band{padding:84px 0;}
+section.band.alt{background:var(--bg2);}
+/* ===== Tentang ===== */
+.tentang{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:52px;align-items:start;}
+.tentang p{color:var(--mu);white-space:pre-line;font-size:17px;margin:0 0 26px;}
+.vm-panel{display:flex;flex-direction:column;gap:18px;}
+.vm-box{background:#fff;border-radius:26px;padding:26px 28px;box-shadow:0 22px 40px -32px var(--p);border:2px solid transparent;transition:.3s;}
+.vm-box:hover{border-color:var(--a);transform:translateX(6px);}
+.vm-box h3{font-size:28px;color:var(--pd);margin-bottom:10px;display:flex;gap:12px;align-items:center;}
+.vm-box h3 .i{color:var(--a);width:26px;height:26px;}
+.vm-box ol{padding-left:20px;color:var(--mu);font-size:15px;margin:0;}
+.vm-box li{margin-bottom:6px;}
+@media(max-width:860px){.tentang{grid-template-columns:1fr;gap:30px;}}
+/* ===== Perjalanan (garis menyala saat digulir) ===== */
+.jr{position:relative;margin-top:44px;padding-left:84px;max-width:860px;}
+.jr::before{content:"";position:absolute;left:29px;top:0;bottom:0;width:4px;background:color-mix(in srgb,var(--ink) 12%,transparent);border-radius:4px;}
+.jf{position:absolute;left:29px;top:0;width:4px;background:linear-gradient(var(--a),var(--p));border-radius:4px;height:0;}
+.stp{position:relative;margin-bottom:30px;background:#fff;border-radius:26px;padding:26px 30px;border:2px solid transparent;opacity:.5;transform:translateX(-10px);transition:.5s;}
+.stp.on{opacity:1;transform:none;border-color:var(--a);box-shadow:0 26px 42px -30px var(--p);}
+.stp .dot{position:absolute;left:-70px;top:22px;width:60px;height:60px;border-radius:50%;background:#fff;border:4px solid color-mix(in srgb,var(--ink) 14%,transparent);display:grid;place-items:center;font:400 26px var(--hf);color:var(--mu);transition:.5s;}
+.stp.on .dot{background:var(--p);border-color:var(--a);color:var(--on);transform:scale(1.12);box-shadow:0 0 0 8px color-mix(in srgb,var(--a) 30%,transparent);}
+.stp .tg{display:inline-block;background:var(--al);color:var(--p);font-weight:800;font-size:12px;padding:4px 12px;border-radius:99px;margin-bottom:8px;}
+.stp h3{font-size:30px;color:var(--pd);}
+.stp p{color:var(--mu);margin:8px 0 0;}
+.stp .btn-outline-mini{margin-top:14px;}
+@media(max-width:600px){.jr{padding-left:62px;}.stp{padding:20px;}.stp .dot{left:-60px;width:50px;height:50px;font-size:22px;}.jr::before,.jf{left:23px;}}
+/* ===== Layanan ===== */
+.layanan{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:38px;}
+.lay-card{background:#fff;border-radius:28px;padding:32px 28px;display:flex;flex-direction:column;gap:12px;border:2px solid transparent;transition:transform .3s,border-color .3s,box-shadow .3s;box-shadow:0 22px 40px -34px var(--p);}
+.lay-card:hover{transform:translateY(-8px);border-color:var(--a);box-shadow:0 34px 48px -30px var(--p);}
+.lay-card .ic{width:60px;height:60px;border-radius:20px;background:var(--p);color:var(--on);display:grid;place-items:center;}
+.lay-card .ic .i{width:28px;height:28px;}
+.lay-card h3{font-size:26px;color:var(--pd);}
+.lay-card p{color:var(--mu);font-size:15px;margin:0;}
+.lay-card .go{margin-top:auto;padding-top:6px;font-weight:800;font-size:14px;display:inline-flex;gap:8px;align-items:center;color:var(--p);}
+@media(max-width:900px){.layanan{grid-template-columns:1fr;}}
+/* ===== Berita ===== */
+.berita-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:36px;}
+.bk{background:#fff;border-radius:26px;overflow:hidden;display:flex;flex-direction:column;transition:transform .3s,box-shadow .3s;box-shadow:0 22px 40px -34px var(--p);}
+.bk:hover{transform:translateY(-8px);box-shadow:0 34px 48px -30px var(--p);}
+.bk .th{aspect-ratio:16/10;background:linear-gradient(135deg,var(--p),var(--pd));overflow:hidden;display:grid;place-items:center;color:var(--al);}
+.bk .th img{width:100%;height:100%;object-fit:cover;transition:transform .7s;}
+.bk:hover .th img{transform:scale(1.08);}
+.bk .th .i{width:48px;height:48px;opacity:.6;}
+.bk .bd{padding:22px 24px 26px;display:flex;flex-direction:column;gap:8px;}
+.bk .kt{font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--p);}
+.bk h3{font-size:24px;color:var(--pd);line-height:1.15;}
+.bk .tg{font-size:13.5px;color:var(--mu);}
+.more-row{text-align:center;margin-top:34px;}
+@media(max-width:900px){.berita-grid{grid-template-columns:1fr;}}
+/* ===== Galeri ===== */
+.gs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:34px;}
+.gs a{aspect-ratio:1;border-radius:24px;overflow:hidden;position:relative;display:block;background:var(--bg2);transition:transform .4s;}
+.gs a:nth-child(2n){border-radius:50%;}
+.gs a:nth-child(3n){border-radius:34px 8px;}
+.gs a:hover{transform:scale(1.08) rotate(-3deg);z-index:2;}
+.gs img{width:100%;height:100%;object-fit:cover;}
+@media(max-width:800px){.gs{grid-template-columns:repeat(3,minmax(0,1fr));}}
+/* ===== CTA ===== */
+.qs{background:linear-gradient(160deg,var(--pd),var(--p));color:var(--on);border-radius:36px;padding:60px 40px;text-align:center;position:relative;overflow:hidden;}
+.qs::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-120px;top:-160px;background:radial-gradient(circle,color-mix(in srgb,var(--a) 45%,transparent),transparent 65%);}
+.qs h2{font-size:clamp(30px,4.2vw,54px);position:relative;}
+.qs p{opacity:.9;max-width:50ch;margin:14px auto 26px;position:relative;}
+.qs .btn{position:relative;}
 
-.t-tentang{grid-column:span 6;}
-.t-tentang h2,.t-vm h3,.t-info h3{font-weight:700;}
-.t-tentang h2{font-size:clamp(28px,3vw,38px);font-weight:800;margin:8px 0 12px;}
-.t-tentang p{color:var(--mute);margin:0 0 16px;white-space:pre-line;max-width:60ch;}
-.t-vm{grid-column:span 3;}
-.t-vm .vm-ic{width:46px;height:46px;border-radius:16px;background:var(--rose);color:var(--maroon);display:grid;place-items:center;margin-bottom:12px;}
-.t-vm .vm-ic .i{width:26px;height:26px;}
-.t-vm h3{font-size:26px;margin-bottom:8px;}
-.t-vm ol{padding-left:20px;color:var(--mute);font-size:15px;}
-.t-vm li{margin-bottom:5px;}
-
-.t-info{grid-column:span 4;display:flex;flex-direction:column;gap:10px;transition:background .25s,color .25s;}
-.t-info .ic{width:56px;height:56px;border-radius:18px;background:var(--rose);color:var(--maroon);display:grid;place-items:center;}
-.t-info .ic .i{width:30px;height:30px;}
-.t-info h3{font-size:25px;}
-.t-info p{color:var(--mute);font-size:15px;margin:0;}
-.t-info .go{margin-top:auto;font-weight:600;font-size:14.5px;display:inline-flex;gap:8px;align-items:center;color:var(--maroon);}
-.t-info:hover,.t-info.dark{background:var(--maroon);color:#fff;}
-.t-info:hover p,.t-info:hover .go,.t-info.dark p,.t-info.dark .go{color:#fff;opacity:.92;}
-.t-info:hover .ic,.t-info.dark .ic{background:rgba(255,255,255,.16);color:var(--gold-l);}
-.t-info.dark:hover{background:var(--maroon-d);}
-
-.t-galeri{grid-column:span 6;}
-.t-berita{grid-column:span 6;}
-.t-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;}
-.t-head .more{font-size:14px;font-weight:600;color:var(--maroon);display:inline-flex;gap:6px;align-items:center;}
-.mini-galeri-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.mini-galeri-grid img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:18px;}
-.mini-berita-item{display:block;padding:12px 0;border-bottom:1px solid var(--line);}
-.mini-berita-item:last-child{border-bottom:0;}
-.mini-berita-item h4{font:700 18px 'Bricolage Grotesque',sans-serif;color:var(--ink);margin:0 0 3px;line-height:1.25;}
-.mini-berita-item:hover h4{color:var(--maroon);}
-.mini-berita-item .tgl{font-size:13px;color:var(--mute);}
-
-@media(max-width:980px){
-  .t-hero,.t-photo,.t-data,.t-tentang,.t-info,.t-galeri,.t-berita{grid-column:span 12;}
-  .t-vm{grid-column:span 6;}
-  .t-photo{min-height:240px;grid-row:auto;}
-  .t-hero{grid-row:auto;min-height:480px;padding:30px;padding-top:84px;}
-  .chip{left:26px;}
-}
-@media(max-width:560px){.t-vm{grid-column:span 12;}.t-data{grid-template-columns:1fr;}.t-hero{min-height:440px;}}
 </style>
 </head>
 <body>
+<div id="bar"></div>
 <script src="icons.js"></script>
-
 <nav class="navbar">
   <div class="navbar-inner">
     <a href="index.html" class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</a>
@@ -133,124 +170,141 @@
       <a href="#kontak">Kontak</a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <a href="ppdb.html" class="nav-cta">Daftar sekarang</a>
+      <a href="ppdb.html" class="nav-cta mg">Daftar Santri Baru</a>
       <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><svg class="i"><use href="#i-menu"/></svg></button>
     </div>
   </div>
 </nav>
+<div class="ticker-wrap" id="tickerWrap"><div class="ticker-track" id="tickerTrack">Memuat info terkini…</div></div>
+<main data-lay="main">
 
-<div class="ticker-wrap" id="tickerWrap">
-  <div class="ticker-track" id="tickerTrack">Memuat info terkini…</div>
-</div>
-
-<main class="shell" data-lay="main">
-<div class="bento" data-lay="bento" data-rowh="112">
-
-  <section class="t t-hero" id="heroSection">
-    <span class="chip"><svg class="i"><use href="#i-pin"/></svg> Gunungpati, Semarang</span>
-    <div class="hero-arabic">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
-    <h1 class="hero-title">Membentuk Generasi <em>Penghafal Al&#8209;Qur'an</em> yang Berakhlak Mulia</h1>
-    <p class="hero-sub">PPTQ Al Azzaam, pondok tahfidz Semarang di Gunungpati, Jawa Tengah — memadukan pendidikan tahfidz, diniyah, dan formal (SMP Tahfidz &amp; MA Tahfidz) dalam satu lingkungan pesantren yang mendidik hati dan pikiran.</p>
-    <div class="hero-ctas">
-      <a href="ppdb.html" class="btn btn-gold">Info pendaftaran <svg class="i"><use href="#i-arrow"/></svg></a>
-      <a href="profil.html" class="btn btn-w">Kenali kami</a>
+  <section class="hero" id="heroSection">
+    <div class="wrap">
+      <div>
+        <div class="ar">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+        <h1>Setiap hafidz dimulai dari <span class="type" id="ty"></span></h1>
+        <p class="lead">PPTQ Al Azzaam, pondok tahfidz Semarang di Gunungpati, Jawa Tengah — memadukan pendidikan tahfidz, diniyah, dan formal dalam satu lingkungan pesantren yang mendidik hati dan pikiran.</p>
+        <div class="btn-row"><a href="ppdb.html" class="btn btn-a mg">Informasi Pendaftaran <svg class="i"><use href="#i-arrow"/></svg></a><a href="#jalan" class="btn btn-o mg">Lihat perjalanannya ↓</a></div>
+      </div>
+      <aside class="card3" data-dyn>
+        <h3>Cari program yang cocok</h3>
+        <label for="selProg">Pilih program</label>
+        <select id="selProg"><option>Memuat…</option></select>
+        <div class="out" id="progOut">Pilih program untuk melihat ringkasannya.</div>
+        <div class="ppdb-line" id="ppdbLine" style="display:none"></div>
+      </aside>
     </div>
   </section>
 
-  <div class="t t-photo" id="photoTile" role="img" aria-label="Foto kegiatan santri"><svg class="i"><use href="#i-quran"/></svg><span class="cap" id="photoCap" data-dyn>Kegiatan santri</span></div>
-
-  <div class="t-data">
-    <div class="stat"><svg class="i"><use href="#i-users"/></svg><div><b id="stSantri" data-dyn>–</b><span>Santri aktif</span></div></div>
-    <div class="stat"><svg class="i"><use href="#i-cap"/></svg><div><b id="stUstadz" data-dyn>–</b><span>Asatidzah</span></div></div>
-  </div>
-
-  <section class="t t-tentang">
-    <div class="eyebrow">Tentang kami</div>
-    <h2>Tentang Pondok</h2>
-    <p id="tentangText" data-dyn>Memuat…</p>
-    <a href="profil.html" class="btn-outline-mini">Selengkapnya <svg class="i"><use href="#i-arrow"/></svg></a>
-  </section>
-  <section class="t t-vm">
-    <div class="vm-ic"><svg class="i"><use href="#i-target"/></svg></div>
-    <h3>Visi</h3>
-    <ol id="accVisi" data-dyn></ol>
-  </section>
-  <section class="t t-vm">
-    <div class="vm-ic"><svg class="i"><use href="#i-compass"/></svg></div>
-    <h3>Misi</h3>
-    <ol id="accMisi" data-dyn></ol>
+  <section class="stats">
+    <div class="wrap">
+      <div class="stat rv"><svg class="i"><use href="#i-users"/></svg><div><b id="stSantri" data-dyn>–</b><span>Santri aktif</span></div></div>
+      <div class="stat rv"><svg class="i"><use href="#i-cap"/></svg><div><b id="stUstadz" data-dyn>–</b><span>Asatidzah &amp; pengajar</span></div></div>
+      <div class="stat rv"><svg class="i"><use href="#i-quran"/></svg><div><b id="stProgram" data-dyn>–</b><span>Program pendidikan</span></div></div>
+    </div>
   </section>
 
-  <a class="t t-info" href="ppdb.html">
-    <span class="ic"><svg class="i"><use href="#i-cap"/></svg></span>
-    <h3>Calon Santri &amp; Wali</h3>
-    <p>Cari tahu syarat, jadwal, dan biaya pendaftaran santri baru tahun ini.</p>
-    <span class="go">Lihat info PPDB <svg class="i"><use href="#i-arrow"/></svg></span>
-  </a>
-  <a class="t t-info dark" href="https://tahfidzalazzaam.com">
-    <span class="ic"><svg class="i"><use href="#i-quran"/></svg></span>
-    <h3>Wali Santri</h3>
-    <p>Pantau perkembangan hafalan dan kehadiran putra-putri Anda lewat Portal Al-Hafizh.</p>
-    <span class="go">Masuk portal <svg class="i"><use href="#i-arrow"/></svg></span>
-  </a>
-  <a class="t t-info" href="#kontak">
-    <span class="ic"><svg class="i"><use href="#i-donate"/></svg></span>
-    <h3>Umum &amp; Donatur</h3>
-    <p>Kenali profil lembaga dan salurkan infaq untuk mendukung pendidikan santri.</p>
-    <span class="go">Lihat cara berdonasi <svg class="i"><use href="#i-arrow"/></svg></span>
-  </a>
-
-  <section class="t t-galeri">
-    <div class="t-head"><div class="eyebrow">Galeri</div><a href="galeri.html" class="more">Lihat semua <svg class="i"><use href="#i-arrow"/></svg></a></div>
-    <div class="mini-galeri-grid" id="miniGaleriGrid" data-dyn></div>
+  <section class="band" id="tentang">
+    <div class="wrap tentang">
+      <div class="rv">
+        <div class="eb">Tentang kami</div>
+        <h2 class="sec-t">Tentang Pondok</h2>
+        <p id="tentangText" data-dyn>Memuat…</p>
+        <a href="profil.html" class="btn mg">Selengkapnya <svg class="i"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="vm-panel">
+        <div class="vm-box rv"><h3><svg class="i"><use href="#i-target"/></svg> Visi</h3><ol id="accVisi" data-dyn></ol></div>
+        <div class="vm-box rv"><h3><svg class="i"><use href="#i-compass"/></svg> Misi</h3><ol id="accMisi" data-dyn></ol></div>
+      </div>
+    </div>
   </section>
-  <section class="t t-berita">
-    <div class="t-head"><div class="eyebrow">Info terkini</div><a href="berita.html" class="more">Lihat semua <svg class="i"><use href="#i-arrow"/></svg></a></div>
-    <div id="miniBeritaList" data-dyn></div>
+
+  <section class="band alt" id="jalan">
+    <div class="wrap">
+      <div class="eb rv">Program pendidikan</div>
+      <h2 class="sec-t rv">Jalan Menghafal, Jalan Berilmu</h2>
+      <p class="sub rv">Gulir ke bawah, dan lihat jalurnya menyala satu per satu.</p>
+      <div class="jr" id="jr" data-dyn><div class="jf" id="jf"></div><div class="empty-state">Memuat program…</div></div>
+    </div>
   </section>
-</div>
 
-<div class="sec" id="program">
-  <div><div class="eyebrow">Program pendidikan</div><h2 style="margin-top:8px;">Jalan menghafal, jalan berilmu</h2></div>
-  <p>Program-program pendidikan yang berjalan beriringan, membentuk santri yang hafal Qur'an sekaligus siap menghadapi dunia.</p>
-</div>
-<div class="program-grid" id="programGrid" data-dyn>
-  <div class="empty-state">Memuat program…</div>
-</div>
+  <section class="band" id="layanan">
+    <div class="wrap">
+      <div class="eb rv">Layanan informasi</div>
+      <h2 class="sec-t rv">Untuk Siapa Anda Berkunjung?</h2>
+      <p class="sub rv">Pilih jalur informasi yang sesuai dengan kebutuhan Anda.</p>
+      <div class="layanan">
+        <a class="lay-card rv" href="ppdb.html">
+          <span class="ic"><svg class="i"><use href="#i-cap"/></svg></span>
+          <h3>Calon Santri &amp; Wali</h3>
+          <p>Cari tahu syarat, jadwal, dan biaya pendaftaran santri baru tahun ini.</p>
+          <span class="go">Lihat informasi PPDB <svg class="i"><use href="#i-arrow"/></svg></span>
+        </a>
+        <a class="lay-card rv" href="https://tahfidzalazzaam.com">
+          <span class="ic"><svg class="i"><use href="#i-quran"/></svg></span>
+          <h3>Wali Santri</h3>
+          <p>Pantau perkembangan hafalan dan kehadiran putra-putri Anda lewat Portal Al-Hafizh.</p>
+          <span class="go">Masuk portal <svg class="i"><use href="#i-arrow"/></svg></span>
+        </a>
+        <a class="lay-card rv" href="#kontak">
+          <span class="ic"><svg class="i"><use href="#i-donate"/></svg></span>
+          <h3>Umum &amp; Donatur</h3>
+          <p>Kenali profil lembaga dan salurkan infaq untuk mendukung pendidikan santri.</p>
+          <span class="go">Lihat kontak kami <svg class="i"><use href="#i-arrow"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
 
-<div class="sec" id="berita">
-  <div><div class="eyebrow">Kabar terbaru</div><h2 style="margin-top:8px;">Berita &amp; kegiatan santri</h2></div>
-  <a class="btn btn-m" href="berita.html">Semua berita <svg class="i"><use href="#i-arrow"/></svg></a>
-</div>
-<div class="berita-grid" id="beritaGrid" data-dyn>
-  <div class="empty-state">Memuat berita…</div>
-</div>
+  <section class="band alt" id="berita">
+    <div class="wrap">
+      <div class="eb rv">Kabar terbaru</div>
+      <h2 class="sec-t rv">Berita &amp; Kegiatan Santri</h2>
+      <div class="berita-grid" id="beritaGrid" data-dyn><div class="empty-state">Memuat berita…</div></div>
+      <div class="more-row"><a class="btn btn-line mg" href="berita.html">Semua Berita <svg class="i"><use href="#i-arrow"/></svg></a></div>
+    </div>
+  </section>
 
-<div class="sec">
-  <div><div class="eyebrow"><svg class="i" style="width:16px;height:16px;"><use href="#i-camera"/></svg> Update Instagram</div><h2 style="margin-top:8px;">Dari layar kami</h2></div>
-</div>
-<div class="ig-embed-grid" id="igGridHome" data-dyn>
-  <div class="empty-state">Memuat postingan Instagram…</div>
-</div>
+  <section class="band" id="galeri">
+    <div class="wrap">
+      <div class="eb rv">Galeri</div>
+      <h2 class="sec-t rv">Potret Kegiatan</h2>
+      <div class="gs" id="miniGaleriGrid" data-dyn></div>
+      <div class="more-row"><a class="btn btn-line mg" href="galeri.html">Lihat semua galeri <svg class="i"><use href="#i-arrow"/></svg></a></div>
+    </div>
+  </section>
 
-<section class="section" id="ppdb" style="margin-top:62px;">
-  <div class="cta-strip">
-    <h2>Pendaftaran santri baru dibuka</h2>
-    <p>Amanahkan pendidikan Al-Qur'an putra-putri Anda bersama kami.</p>
-    <a href="#kontak" class="btn btn-m">Hubungi panitia PPDB <svg class="i"><use href="#i-arrow"/></svg></a>
-  </div>
-</section>
+  <section class="band alt" id="instagram">
+    <div class="wrap">
+      <div class="eb rv"><svg class="i" style="width:16px;height:16px;"><use href="#i-camera"/></svg> Update Instagram</div>
+      <h2 class="sec-t rv">Dari Layar Kami</h2>
+      <div class="ig-embed-grid" id="igGridHome" data-dyn><div class="empty-state">Memuat postingan Instagram…</div></div>
+    </div>
+  </section>
+
+  <section class="band" id="ppdb">
+    <div class="wrap">
+      <div class="qs rv">
+        <h2>Pendaftaran Santri Baru Dibuka</h2>
+        <p>Amanahkan pendidikan Al-Qur'an putra-putri Anda bersama kami.</p>
+        <a href="ppdb.html" class="btn btn-a mg" id="ctaBtn">Informasi &amp; Pendaftaran <svg class="i"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+</main>
 
 <footer id="kontak">
   <div class="footer-grid">
     <div>
       <div class="footer-brand"><svg class="i"><use href="#i-star8"/></svg> PPTQ Al Azzaam</div>
-      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
+      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang, Jawa Tengah.</p>
       <div class="social-row" id="socialRow" data-dyn></div>
     </div>
     <div>
       <h4>Tautan</h4>
       <ul>
+        <li><a href="index.html">Beranda</a></li>
         <li><a href="profil.html">Profil</a></li>
         <li><a href="program.html">Program</a></li>
         <li><a href="berita.html">Berita</a></li>
@@ -266,128 +320,108 @@
       </ul>
     </div>
   </div>
-  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang.</div>
+  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang. Seluruh hak cipta dilindungi.</div>
 </footer>
-</main>
-
 <div class="flyer-overlay" id="flyerOverlay" onclick="if(event.target.id==='flyerOverlay') closeFlyer()">
   <div class="flyer-box">
     <button class="flyer-close" onclick="closeFlyer()" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button>
     <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
   </div>
 </div>
-
-<script src="shared.js?v=3"></script>
-<script src="layout.js?v=1"></script>
+<script src="shared.js?v=5"></script>
+<script src="layout.js?v=3"></script>
 <script>
-const ICONS = {'Tahfidz':'quran','Diniyah':'dome','SMP':'school','MA':'cap'};
 
+const ICONS = {'Tahfidz':'quran','Diniyah':'dome','SMP':'school','MA':'cap'};
+let PROG = [];
+
+typeWords($('#ty'), ['hafalan pertama','niat yang lurus','satu ayat','doa orang tua']);
+
+function setStat(id, val){
+  const el = document.getElementById(id); if(!el) return;
+  const v = (val == null || val === '') ? '—' : String(val).trim();
+  if(/^\d+$/.test(v)){
+    el.setAttribute('data-n', v); el.__cu = 0; el.textContent = '0';
+    const r = el.closest('.rv');
+    if(!r || r.classList.contains('on')) countUp(el);
+  } else el.textContent = v;
+}
 async function loadPengaturan(){
   const {data} = await sb.from('pengaturan_situs').select('key,value');
   const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
-  document.getElementById('stSantri').textContent = map.jumlah_santri || '—';
-  document.getElementById('stUstadz').textContent = map.jumlah_ustadz || '—';
-}
-
-async function loadTentangPondok(){
-  const {data} = await sb.from('pengaturan_situs').select('value').eq('key','ringkasan_tentang').maybeSingle();
-  document.getElementById('tentangText').textContent = (data && data.value) || 'Ringkasan profil pondok akan tampil di sini. Isi lewat panel admin (Pengaturan Situs → Ringkasan Singkat).';
-}
-
-async function loadVisiMisi(){
-  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['profil_visi','profil_misi']);
-  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
-  const toItems = (text, fallback) => {
+  setStat('stSantri', map.jumlah_santri);
+  setStat('stUstadz', map.jumlah_ustadz);
+  document.getElementById('tentangText').textContent = map.ringkasan_tentang || 'Ringkasan profil pondok akan tampil di sini. Isi lewat panel admin (Pengaturan Situs → Ringkasan Singkat).';
+  const toItems = (text, fb) => {
     const items = (text||'').split('\n').map(s=>s.trim()).filter(Boolean);
-    return items.length ? items.map(s=>`<li>${s}</li>`).join('') : `<li>${fallback}</li>`;
+    return items.length ? items.map(s=>`<li>${esc(s)}</li>`).join('') : `<li>${fb}</li>`;
   };
   document.getElementById('accVisi').innerHTML = toItems(map.profil_visi, 'Konten visi belum diisi.');
   document.getElementById('accMisi').innerHTML = toItems(map.profil_misi, 'Konten misi belum diisi.');
 }
+async function loadProgram(){
+  const {data, error} = await sb.from('program').select('*').order('urutan');
+  const jr = document.getElementById('jr');
+  if(error || !data || data.length===0){
+    jr.innerHTML = '<div class="jf" id="jf"></div><div class="empty-state">Belum ada data program. Tambahkan lewat panel admin.</div>';
+    document.getElementById('selProg').innerHTML = '<option>Belum ada program</option>';
+    setStat('stProgram', 0);
+    return;
+  }
+  PROG = data;
+  setStat('stProgram', data.length);
+  jr.innerHTML = '<div class="jf" id="jf"></div>' + data.map((p,i)=>`
+    <div class="stp"><span class="dot">${i+1}</span>
+      ${p.jenjang ? `<span class="tg">${esc(p.jenjang)}</span>` : ''}
+      <h3>${esc(p.nama)}</h3>
+      <p>${esc(p.deskripsi || '')}</p>
+      ${p.tombol_label ? `<a href="${esc(normalizeLink(p.tombol_link))}" class="btn-outline-mini" target="_blank" rel="noopener">${esc(p.tombol_label)} ${ic('arrow')}</a>` : ''}
+    </div>`).join('');
+  const sel = document.getElementById('selProg');
+  sel.innerHTML = data.map((p,i)=>`<option value="${i}">${esc(p.nama)}</option>`).join('');
+  sel.onchange = showProg; showProg(); journey();
+}
+function showProg(){
+  const p = PROG[+document.getElementById('selProg').value]; if(!p) return;
+  document.getElementById('progOut').innerHTML = `<b>${esc(p.nama)}</b>${esc((p.deskripsi||'').slice(0,140))}${(p.deskripsi||'').length>140?'…':''}<br><a href="program.html${p.jenjang?'?jenjang='+encodeURIComponent(p.jenjang):''}">Lihat detail program →</a>`;
+}
+function journey(){
+  const jr = document.getElementById('jr'); if(!jr) return;
+  const r = jr.getBoundingClientRect(), mid = innerHeight * .6;
+  const p = Math.max(0, Math.min(1, (mid - r.top) / Math.max(1, r.height)));
+  const f = document.getElementById('jf'); if(f) f.style.height = p * 100 + '%';
+  $$('.stp').forEach(s=>s.classList.toggle('on', s.getBoundingClientRect().top < mid));
+}
+addEventListener('scroll', journey, {passive:true}); addEventListener('resize', journey);
 
+async function loadPpdbLine(){
+  const {data} = await sb.from('info_ppdb').select('tahun_ajaran').eq('status','published').order('updated_at',{ascending:false}).limit(1);
+  if(data && data[0] && data[0].tahun_ajaran){
+    const el = document.getElementById('ppdbLine'); el.style.display = 'flex';
+    el.innerHTML = `<span>Pendaftaran tahun ajaran ${esc(data[0].tahun_ajaran)} dibuka — <a href="ppdb.html" style="text-decoration:underline">lihat caranya</a></span>`;
+  }
+}
 async function loadGaleriMini(){
   const {data} = await sb.from('galeri').select('*').order('urutan').order('created_at',{ascending:false}).limit(6);
   const grid = document.getElementById('miniGaleriGrid');
-  if(!data || data.length===0){
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;padding:18px;font-size:14px;">Belum ada foto.</div>';
-    return;
-  }
-  // Foto terbaru juga dipakai untuk kotak foto besar di bagian atas
-  const cover = data.find(g=>g.tipe!=='youtube' && g.media_url);
-  if(cover){
-    const tile = document.getElementById('photoTile');
-    tile.style.backgroundImage = `url('${cover.media_url}')`;
-    const svg = tile.querySelector('svg'); if(svg) svg.remove();
-    document.getElementById('photoCap').textContent = cover.judul || cover.kategori || 'Kegiatan santri';
-  }
+  if(!data || data.length===0){ grid.innerHTML = '<div class="empty-state">Belum ada foto.</div>'; return; }
   grid.innerHTML = data.map(g=>{
     const thumb = g.tipe === 'youtube' ? getYoutubeThumbnail(g.youtube_url) : g.media_url;
-    if(g.tipe === 'youtube'){
-      return `<div class="yt-thumb-wrap"><img src="${thumb}" alt="${g.judul||''}" loading="lazy"><div class="yt-play-icon"></div></div>`;
-    }
-    return `<img src="${thumb}" alt="${g.judul||''}" loading="lazy">`;
+    return `<a href="galeri.html" class="${g.tipe==='youtube'?'yt-thumb-wrap':''}"><img src="${esc(thumb)}" alt="${esc(g.judul||'')}" loading="lazy">${g.tipe==='youtube'?'<div class="yt-play-icon"></div>':''}</a>`;
   }).join('');
 }
-
-async function loadBeritaMini(){
-  const {data} = await sb.from('berita').select('*').eq('status','published').order('tanggal_publish',{ascending:false}).limit(3);
-  const list = document.getElementById('miniBeritaList');
-  if(!data || data.length===0){
-    list.innerHTML = '<div class="empty-state" style="padding:18px;font-size:14px;">Belum ada berita.</div>';
-    return;
-  }
-  list.innerHTML = data.map(b=>`
-    <a href="berita.html?slug=${b.slug}" class="mini-berita-item">
-      <h4>${b.judul}</h4>
-      <div class="tgl">${new Date(b.tanggal_publish).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})}</div>
-    </a>
-  `).join('');
-}
-
-async function loadProgram(){
-  const {data, error} = await sb.from('program').select('*').order('urutan');
-  const grid = document.getElementById('programGrid');
-  if(error || !data || data.length===0){
-    grid.innerHTML = '<div class="empty-state">Belum ada data program. Tambahkan lewat panel admin.</div>';
-    return;
-  }
-  grid.innerHTML = data.map(p=>`
-    <div class="program-card">
-      <div class="icon">${p.icon || ic(ICONS[p.jenjang] || 'quran')}</div>
-      <h3>${p.nama}</h3>
-      <p>${p.deskripsi || ''}</p>
-      ${p.tombol_label ? `<a href="${normalizeLink(p.tombol_link)}" class="btn-outline-mini" target="_blank">${p.tombol_label} ${ic('arrow')}</a>` : ''}
-    </div>
-  `).join('');
-}
-
 async function loadBerita(){
   const {data, error} = await sb.from('berita').select('*').eq('status','published').order('tanggal_publish',{ascending:false}).limit(3);
   const grid = document.getElementById('beritaGrid');
-  if(error || !data || data.length===0){
-    grid.innerHTML = '<div class="empty-state">Belum ada berita. Tambahkan lewat panel admin.</div>';
-    return;
-  }
+  if(error || !data || data.length===0){ grid.innerHTML = '<div class="empty-state">Belum ada berita. Tambahkan lewat panel admin.</div>'; return; }
   grid.innerHTML = data.map(b=>`
-    <a href="berita.html?slug=${b.slug}" class="berita-card">
-      <div class="thumb">${b.foto_url ? `<img src="${b.foto_url}" alt="${b.judul}">` : ic('image')}</div>
-      <div class="berita-body">
-        <div class="berita-kategori">${b.kategori}</div>
-        <h3>${b.judul}</h3>
-        <div class="tanggal">${new Date(b.tanggal_publish).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
-      </div>
-    </a>
-  `).join('');
+    <a href="berita.html?slug=${encodeURIComponent(b.slug)}" class="bk rv">
+      <div class="th">${b.foto_url ? `<img src="${esc(b.foto_url)}" alt="${esc(b.judul)}" loading="lazy">` : ic('image')}</div>
+      <div class="bd"><div class="kt">${esc(b.kategori)}</div><h3>${esc(b.judul)}</h3><div class="tg">${fmtTanggal(b.tanggal_publish)}</div></div>
+    </a>`).join('');
 }
+loadPengaturan(); loadProgram(); loadPpdbLine(); loadGaleriMini(); loadBerita(); loadInstagramEmbeds('igGridHome', 6);
 
-loadPengaturan();
-loadTentangPondok();
-loadVisiMisi();
-loadGaleriMini();
-loadBeritaMini();
-loadProgram();
-loadBerita();
-loadInstagramEmbeds('igGridHome', 6);
 </script>
 </body>
 </html>
