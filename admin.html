@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-no-tema>
 <head>
 <meta charset="UTF-8">
 <link id="faviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2730%27 fill=%27%232b0810%27/%3E%3Ctext x=%2732%27 y=%2743%27 font-family=%27Georgia,serif%27 font-size=%2732%27 font-weight=%27700%27 fill=%27%23d4af37%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
@@ -93,6 +93,16 @@ label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-b
 .sv-dev{border:0;background:none;border-radius:16px;padding:6px 12px;font-weight:700;font-size:12px;color:var(--ink-600);cursor:pointer;font-family:inherit;}
 .sv-dev.active{background:#fff;color:var(--maroon-800);box-shadow:0 1px 4px rgba(0,0,0,.12);}
 .sv-help{font-size:12px;color:var(--ink-600);background:#fff8e6;border:1px solid #f0dca0;border-radius:12px;padding:9px 12px;margin-bottom:12px;line-height:1.6;}
+.sv-theme{display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;box-shadow:var(--shadow);margin-bottom:12px;}
+.sv-theme>b{font-size:13px;color:var(--maroon-900);}
+.sv-sws{display:flex;gap:8px;align-items:center;}
+.sv-sw{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px #cdbfc3;cursor:pointer;transition:.2s;padding:0;font:800 16px 'Plus Jakarta Sans',sans-serif;color:#fff;}
+.sv-sw:hover{transform:scale(1.14);}
+.sv-sw.on{box-shadow:0 0 0 3px var(--maroon-950);transform:scale(1.1);}
+.sv-sw.cus{background:conic-gradient(#e0455a,#e9b949,#2f9e7a,#2f6fd0,#8a3fb0,#e0455a);}
+.sv-cc{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ink-600);}
+.sv-cc input{width:36px;height:30px;padding:0;border:1.5px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;}
+.sv-tn{font-size:12.5px;font-weight:700;color:var(--ink-900);} .sv-tn small{display:block;font-weight:500;color:var(--ink-600);font-size:11.5px;}
 .sv-frame-wrap{background:#d9d3d5;border-radius:16px;padding:12px;display:flex;justify-content:center;overflow:auto;}
 .sv-frame{border:0;background:#f1eff0;border-radius:10px;box-shadow:0 10px 30px -10px rgba(0,0,0,.4);width:100%;height:calc(100vh - 300px);min-height:560px;transition:width .2s;}
 .btn[disabled]{opacity:.45;pointer-events:none;}
@@ -1132,6 +1142,15 @@ function renderSiteView(){
       <button class="btn btn-outline btn-sm" id="svSaveBtn" onclick="svSave(false)">Simpan draf</button>
       <button class="btn btn-gold btn-sm" id="svPubBtn" onclick="svSave(true)">Publikasikan</button>
     </div>
+    <div class="sv-theme" id="svTheme">
+      <b>🎨 Warna situs</b>
+      <div class="sv-sws" id="svSw"></div>
+      <div class="sv-tn" id="svTn">Memuat…</div>
+      <span class="sv-cc">Utama <input type="color" id="thP" oninput="svThemeLive()" onchange="svThemeCommit()"></span>
+      <span class="sv-cc">Aksen <input type="color" id="thA" oninput="svThemeLive()" onchange="svThemeCommit()"></span>
+      <span class="sv-cc">Latar <input type="color" id="thB" oninput="svThemeLive()" onchange="svThemeCommit()"></span>
+      <button class="btn btn-outline btn-sm" onclick="svThemePick('maroon')">Warna asli pondok</button>
+    </div>
     <div class="sv-help"><b>Cara pakai:</b> klik sebuah blok untuk memilihnya. <b>Seret ikon panah</b> di sudut kiri atas untuk memindahkan. <b>Tarik tepi kanan, bawah, atau sudut</b> untuk membesarkan atau mengecilkan (tampilan Desktop). <b>Klik 2x pada tulisan</b> untuk mengeditnya, lalu klik di luar untuk selesai. Editan ini hanya mengubah tampilan, <b>tidak mengubah data berita, program, galeri, dan lainnya</b>. Tulisan yang berasal dari data (isi berita, nama program, dsb) tetap diubah lewat menu biasa.</div>
     ` : `
     <div class="sv-bar">
@@ -1155,6 +1174,7 @@ async function svFrameLoaded(){
   await a.ready;
   a.onChange(svUpdateBar);
   svUpdateBar();
+  svThemeRender();
 }
 function svUpdateBar(){
   const a = svApi(); if(!a) return;
@@ -1166,6 +1186,33 @@ function svUpdateBar(){
   }
   const u = document.getElementById('svUndo'), r = document.getElementById('svRedo');
   if(u) u.disabled = !a.canUndo(); if(r) r.disabled = !a.canRedo();
+  svThemeRender();
+}
+// ---- Warna situs (berlaku untuk semua halaman; disimpan bersama draf / publikasi) ----
+let svThemePrev = null;
+function svTema(){ const f = document.getElementById('svFrame'); try{ return f.contentWindow.PPTQTema || null; }catch(e){ return null; } }
+function svThemeRender(){
+  const T = svTema(), a = svApi(), box = document.getElementById('svTheme'); if(!T || !a || !box) return;
+  const cur = a.getTheme() || {pal:'maroon'};
+  const c = T.resolve(cur) || T.PALS.maroon;
+  document.getElementById('svSw').innerHTML = Object.keys(T.PALS).map(k=>
+    `<button type="button" class="sv-sw ${cur.pal===k?'on':''}" title="${T.PALS[k].n} — ${T.PALS[k].d}" style="background:linear-gradient(135deg,${T.PALS[k].p} 50%,${T.PALS[k].a} 50%)" onclick="svThemePick('${k}')"></button>`).join('')
+    + `<button type="button" class="sv-sw cus ${cur.pal==='custom'?'on':''}" title="Warna kustom: pilih sendiri di kotak sebelah" onclick="svThemeCustom()">+</button>`;
+  document.getElementById('svTn').innerHTML = cur.pal === 'custom' ? 'Kustom<small>Warna pilihan sendiri</small>' : `${T.PALS[cur.pal].n}<small>${T.PALS[cur.pal].d}</small>`;
+  document.getElementById('thP').value = c.p; document.getElementById('thA').value = c.a; document.getElementById('thB').value = c.bg;
+}
+function svThemePick(k){ const a = svApi(); if(!a) return; a.setTheme({pal:k}); }
+function svThemeCustom(){ const a = svApi(); if(!a) return; const T = svTema(), cur = T.resolve(a.getTheme() || {pal:'maroon'}) || T.PALS.maroon; a.setTheme({pal:'custom', p:cur.p, a:cur.a, bg:cur.bg}); }
+function svThemeLive(){
+  const a = svApi(); if(!a) return;
+  if(!svThemePrev) svThemePrev = a.getState();
+  a.previewTheme({pal:'custom', p:document.getElementById('thP').value, a:document.getElementById('thA').value, bg:document.getElementById('thB').value});
+}
+function svThemeCommit(){
+  const a = svApi(); if(!a || !svThemePrev) return;
+  const t = {pal:'custom', p:document.getElementById('thP').value, a:document.getElementById('thA').value, bg:document.getElementById('thB').value};
+  const prev = svThemePrev; svThemePrev = null;
+  a.finishPreview(prev, Object.assign({}, prev, {theme:t}));
 }
 function svChoosePage(k){
   if(k === svPage) return;
@@ -1188,9 +1235,16 @@ function svResetDesign(){
 async function svSave(publish){
   const a = svApi(); if(!a) return;
   if(publish && !confirm('Publikasikan ke website? Pengunjung akan langsung melihat tampilan ini.')) return;
-  const data = a.getState(), now = new Date().toISOString();
+  const st = a.getState(), theme = st.theme; delete st.theme;
+  const data = Object.assign({v:2}, st), now = new Date().toISOString();
   const rows = [{halaman:svPage, status:'draft', data, updated_at:now}];
   if(publish) rows.push({halaman:svPage, status:'live', data, updated_at:now});
+  // warna situs: baris terpisah '_tema' (berlaku untuk semua halaman)
+  if(theme){
+    const td = Object.assign({v:2}, theme);
+    rows.push({halaman:'_tema', status:'draft', data:td, updated_at:now});
+    if(publish) rows.push({halaman:'_tema', status:'live', data:td, updated_at:now});
+  }
   const {error} = await sb.from('layout_halaman').upsert(rows);
   if(error){ showToast('Gagal menyimpan: ' + error.message); return; }
   a.markSaved();
