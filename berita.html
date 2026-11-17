@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+
 <meta charset="UTF-8">
 <link id="faviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2730%27 fill=%27%232b0810%27/%3E%3Ctext x=%2732%27 y=%2743%27 font-family=%27Georgia,serif%27 font-size=%2732%27 font-weight=%27700%27 fill=%27%23d4af37%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="pageTitle">Berita & Kegiatan — PPTQ Al Azzaam</title>
 <meta name="description" content="Berita, kegiatan, dan prestasi santri PPTQ Al Azzaam Gunungpati, Semarang.">
 <link rel="canonical" href="https://pesantrenalazzaam.org/berita.html">
@@ -20,28 +20,112 @@
 <meta name="twitter:title" content="Berita & Kegiatan — PPTQ Al Azzaam">
 <meta name="twitter:description" content="Berita, kegiatan, dan prestasi santri PPTQ Al Azzaam Gunungpati, Semarang.">
 <meta name="twitter:image" content="https://pesantrenalazzaam.org/og-image.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="tema.js?v=1"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Newsreader:opsz,wght@6..72,500;6..72,700;6..72,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link rel="stylesheet" href="shared.css?v=3">
+<link rel="stylesheet" href="shared.css?v=6">
 <style>
-.wrap-narrow{max-width:800px;margin:0 auto;}
-.berita-grid{grid-template-columns:repeat(auto-fill,minmax(290px,1fr));}
-.berita-card:first-child{grid-column:auto;}
-.berita-card:first-child .thumb{aspect-ratio:16/10;}
-.berita-card:first-child h3{font-size:24px;}
-.artikel-box{background:#fff;border-radius:40px;padding:36px;}
-.artikel-hero-img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:28px;margin-bottom:26px;}
-.artikel-kategori{display:inline-block;font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:999px;background:var(--rose);color:var(--maroon);}
-.artikel-judul{font-size:clamp(30px,4.4vw,48px);font-weight:800;color:var(--ink);margin:14px 0 10px;line-height:1.08;}
-.artikel-tanggal{font-size:14px;color:var(--mute);margin-bottom:26px;}
-.artikel-isi{font-size:17px;color:var(--ink);line-height:1.9;white-space:pre-line;}
-.back-link{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;color:var(--maroon);background:#fff;padding:10px 18px;border-radius:999px;margin-bottom:16px;}
-@media(max-width:640px){.artikel-box{padding:22px;border-radius:30px;}}
+
+:root{--hf:'DM Serif Display',Georgia,serif;--sf:'Newsreader',Georgia,serif;}
+body[data-nav="over"] .ticker-wrap{position:absolute;top:72px;left:0;right:0;z-index:90;}@media(max-width:1020px){body[data-nav="over"] .ticker-wrap{top:64px;}}
+/* ===== Hero fajar (desain 15) ===== */
+.hero{height:88vh;min-height:580px;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--pd),var(--p) 70%,color-mix(in srgb,var(--a) 70%,var(--p)));color:var(--on);display:grid;place-items:center;text-align:center;}
+.ly{position:absolute;inset:0;pointer-events:none;will-change:transform;}
+.sun{position:absolute;left:50%;bottom:-120px;width:min(620px,80vw);aspect-ratio:1;margin-left:calc(min(620px,80vw)/-2);border-radius:50%;background:radial-gradient(circle,var(--al),var(--a) 55%,transparent 70%);opacity:.85;}
+.mos{position:absolute;bottom:0;left:0;right:0;height:34%;background:var(--pd);clip-path:polygon(0 100%,0 62%,6% 62%,6% 40%,7% 22%,8% 40%,8% 62%,18% 62%,18% 50%,24% 36%,30% 50%,30% 62%,44% 62%,44% 44%,50% 20%,56% 44%,56% 62%,70% 62%,70% 50%,76% 36%,82% 50%,82% 62%,92% 62%,92% 40%,93% 22%,94% 40%,94% 62%,100% 62%,100% 100%);}
+.mos.b{height:24%;background:color-mix(in srgb,var(--pd) 70%,#000);opacity:.9;transform:scaleX(-1);}
+.hc{position:relative;z-index:3;padding:0 22px;margin-top:-40px;}
+.hc .ar{font:700 28px 'Amiri',serif;color:var(--al);}
+.hc h1{font-size:clamp(46px,8vw,112px);margin:6px 0 16px;}
+.hc p{max-width:50ch;margin:0 auto 26px;opacity:.92;font-size:18px;}
+.sc{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:4;font-size:12px;letter-spacing:.2em;opacity:.8;animation:bn 2s infinite;}
+@keyframes bn{50%{transform:translate(-50%,8px);}}
+/* ===== Editorial (desain 19) ===== */
+section.band{padding:70px 0;}
+section.band.alt{background:var(--bg2);}
+.meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--mu);border-bottom:1px solid var(--line);padding-bottom:12px;}
+.feat{display:grid;grid-template-columns:1.5fr 1fr;gap:26px;margin:30px 0 0;align-items:stretch;}
+.fb{position:relative;border-radius:10px;overflow:hidden;min-height:480px;cursor:pointer;background:linear-gradient(150deg,var(--p),var(--pd));display:block;}
+.fb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1s;}
+.fb:hover img{transform:scale(1.06);}
+.fb::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.78),transparent 62%);}
+.fb div{position:absolute;z-index:2;left:26px;right:26px;bottom:24px;color:#fff;}
+.fb .tg{display:inline-block;background:var(--a);color:var(--pd);font-size:11px;font-weight:800;letter-spacing:.1em;padding:4px 10px;margin-bottom:10px;text-transform:uppercase;}
+.fb h2{font-size:clamp(28px,3.6vw,50px);}
+.fb span.dt{opacity:.85;font-size:14px;display:block;margin-top:8px;}
+.side{display:flex;flex-direction:column;gap:14px;}
+.sd{display:grid;grid-template-columns:120px 1fr;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--line);cursor:pointer;align-items:center;}
+.sd .im{width:120px;height:90px;border-radius:6px;overflow:hidden;background:linear-gradient(150deg,var(--p),var(--pd));}
+.sd img{width:100%;height:100%;object-fit:cover;transition:.4s;}
+.sd:hover img{transform:scale(1.08) rotate(-2deg);}
+.sd small{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--p);font-weight:800;}
+.sd h3{font-size:22px;margin-top:4px;color:var(--ink);}
+.sd:hover h3{color:var(--p);}
+@media(max-width:860px){.feat{grid-template-columns:1fr;}.fb{min-height:340px;}}
+/* ===== Gulir ke samping (desain 15) ===== */
+.hz{position:relative;background:var(--pd);color:var(--on);}
+.hs{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;justify-content:center;}
+.hs h2{font-size:clamp(34px,5vw,64px);padding:0 24px;max-width:var(--wrapw);margin:0 auto 28px;width:100%;}
+.hs h2 small{display:block;font:800 12.5px var(--bf);letter-spacing:.18em;text-transform:uppercase;color:var(--a);margin-bottom:10px;}
+.tr{display:flex;gap:22px;padding:0 8vw;will-change:transform;}
+.hc2{flex:0 0 min(400px,74vw);aspect-ratio:4/5;border-radius:30px;display:flex;align-items:flex-end;padding:26px;color:#fff;position:relative;overflow:hidden;transition:transform .4s;background:linear-gradient(150deg,var(--p),var(--a));}
+.hc2:hover{transform:translateY(-12px) rotate(-1.5deg);}
+.hc2 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.hc2::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.72),transparent 60%);}
+.hc2 div{position:relative;z-index:2;}
+.hc2 small{display:block;font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--a);margin-bottom:6px;}
+.hc2 h3{font-size:30px;line-height:1.1;}
+.hz.flat{height:auto!important;}.hz.flat .hs{position:static;height:auto;padding:70px 0;}.hz.flat .tr{overflow-x:auto;padding-bottom:14px;}
+/* ===== Arsip: kartu bertumpuk (desain 19) ===== */
+.tools{display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:26px 0 8px;}
+.srch{flex:1 1 240px;max-width:360px;padding:13px 18px;border-radius:99px;border:2px solid var(--line);background:#fff;font:600 15px var(--bf);color:var(--ink);}
+.srch:focus{outline:none;border-color:var(--p);}
+.ag{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:30px;}
+.ac{cursor:pointer;position:relative;display:block;}
+.ac .ph{position:relative;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:linear-gradient(150deg,var(--p),var(--pd));display:grid;place-items:center;color:var(--al);}
+.ac .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s;}
+.ac:hover .ph img{transform:scale(1.1);}
+.ac .ph .i{width:44px;height:44px;opacity:.6;}
+.ac .st{position:absolute;inset:8px -8px -8px 8px;z-index:-1;border-radius:8px;background:var(--bg);border:1px solid var(--line);transition:.4s;}
+.ac:hover .st{transform:translate(6px,6px) rotate(2deg);}
+.ac small{display:block;margin-top:14px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--p);font-weight:800;}
+.ac h3{font-size:22px;margin-top:4px;line-height:1.15;}
+.ac:hover h3{color:var(--p);}
+.ac .ds{font-size:13px;color:var(--mu);margin-top:4px;}
+@media(max-width:1000px){.ag{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:720px){.ag{grid-template-columns:1fr 1fr;gap:20px;}.ac h3{font-size:18px;}}
+.more{text-align:center;margin-top:40px;}
+/* ===== Halaman baca (overlay) ===== */
+.ov{position:fixed;inset:0;z-index:300;background:var(--bg);overflow-y:auto;display:none;}
+.ov.on{display:block;animation:up .5s cubic-bezier(.2,.7,.2,1);}
+@keyframes up{from{transform:translateY(60px);opacity:0;}}
+#rp{position:fixed;top:0;left:0;height:4px;width:0;background:var(--p);z-index:320;}
+.ovh{position:relative;height:min(62vh,520px);overflow:hidden;background:linear-gradient(150deg,var(--p),var(--pd));}
+.ovh img{width:100%;height:100%;object-fit:cover;animation:kb 14s linear forwards;}
+@keyframes kb{to{transform:scale(1.12);}}
+.ovh::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 2%,transparent 62%);}
+.ovh .w{position:absolute;z-index:2;left:0;right:0;bottom:20px;}
+.ovh h1{font-size:clamp(32px,4.6vw,62px);color:var(--pd);max-width:26ch;}
+.ovh .eb{display:block;margin-bottom:10px;}
+.ovx{position:fixed;top:16px;right:18px;z-index:330;border:0;background:var(--ink);color:var(--bg);width:48px;height:48px;border-radius:50%;font-size:20px;cursor:pointer;}
+.art{max-width:720px;margin:10px auto 0;padding:0 24px;font:500 21px/1.75 var(--sf);color:var(--ink);}
+.art p{margin:0 0 1.1em;}
+.art p.dc::first-letter{font-size:72px;float:left;line-height:.8;padding:8px 12px 0 0;color:var(--p);font-weight:800;}
+.art img{width:100%;border-radius:12px;margin:10px 0 24px;}
+.share{max-width:720px;margin:20px auto;padding:20px 24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);}
+.share b{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-right:auto;}
+.rel{padding:50px 0 80px;background:var(--bg2);margin-top:30px;}
+.rel h2{font-size:34px;color:var(--pd);margin-bottom:24px;}
+.rel .ag{grid-template-columns:repeat(3,1fr);margin-top:0;}
+@media(max-width:720px){.rel .ag{grid-template-columns:1fr 1fr;}.art{font-size:19px;}}
+
 </style>
 </head>
-<body>
+<body data-nav="over">
+<div id="bar"></div>
 <script src="icons.js"></script>
-
 <nav class="navbar">
   <div class="navbar-inner">
     <a href="index.html" class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</a>
@@ -65,43 +149,67 @@
       <a href="#kontak">Kontak</a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <a href="ppdb.html" class="nav-cta">Daftar sekarang</a>
+      <a href="ppdb.html" class="nav-cta mg">Daftar Santri Baru</a>
       <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><svg class="i"><use href="#i-menu"/></svg></button>
     </div>
   </div>
 </nav>
+<div class="ticker-wrap" id="tickerWrap"><div class="ticker-track" id="tickerTrack">Memuat info terkini…</div></div>
+<main data-lay="main">
 
-<div id="listView" data-lay="page" data-lay-sel=".page-hero,section">
-  <div class="page-hero">
-    <div class="hero-arabic">وَقُلْ رَبِّ زِدْنِي عِلْمًا</div>
-    <h1>Berita &amp; kegiatan</h1>
-    <p>Update kegiatan, prestasi, dan momen wisuda tahfidz santri kami.</p>
-  </div>
-  <section class="section wrap" data-lay="wrap">
-    <div class="pill-tabs" id="kategoriTabs" data-dyn>
-      <button class="pill-tab kategori-tab active" data-k="Semua" onclick="filterKategori('Semua')">Semua</button>
-      <button class="pill-tab kategori-tab" data-k="Prestasi" onclick="filterKategori('Prestasi')">Prestasi</button>
-      <button class="pill-tab kategori-tab" data-k="Kegiatan" onclick="filterKategori('Kegiatan')">Kegiatan</button>
-      <button class="pill-tab kategori-tab" data-k="Pengumuman" onclick="filterKategori('Pengumuman')">Pengumuman</button>
+  <header class="hero" id="bHero">
+    <div class="ly" id="l1"><div class="sun"></div></div>
+    <div class="ly" id="l2"><div class="mos b"></div></div>
+    <div class="ly" id="l3"><div class="mos"></div></div>
+    <div class="hc" id="hcont">
+      <div class="ar">وَقُلْ رَبِّ زِدْنِي عِلْمًا</div>
+      <h1>Berita &amp; kegiatan</h1>
+      <p>Update kegiatan, prestasi, dan momen wisuda tahfidz santri kami.</p>
+      <a class="btn btn-a mg" href="#terbaru">Baca kabar terbaru ↓</a>
     </div>
-    <div class="berita-grid" id="beritaGrid" data-dyn>
-      <div class="empty-state">Memuat berita…</div>
+    <div class="sc">GULIR</div>
+  </header>
+
+  <section class="band" id="terbaru">
+    <div class="wrap">
+      <div class="meta rv"><span>PPTQ Al Azzaam</span><span>Kabar &amp; Kegiatan</span><span id="mDate"></span></div>
+      <div class="feat" id="feat" data-dyn><div class="empty-state">Memuat berita…</div></div>
     </div>
   </section>
-</div>
 
-<div id="detailView" style="display:none;">
-  <section class="section wrap-narrow">
-    <a href="berita.html" class="back-link"><svg class="i" style="transform:rotate(180deg)"><use href="#i-arrow"/></svg> Kembali ke semua berita</a>
-    <div id="detailContent" class="artikel-box"></div>
+  <section class="hz" id="hz" style="display:none" data-dyn>
+    <div class="hs"><h2><small>Terbaru</small>Gulir ke bawah, kabar bergeser ke samping</h2><div class="tr" id="tr"></div></div>
   </section>
+
+  <section class="band alt" id="arsip">
+    <div class="wrap">
+      <div class="eb rv">Arsip</div>
+      <h2 class="sec-t rv">Semua Berita</h2>
+      <div class="tools">
+        <div class="chips" id="kategoriTabs" data-dyn></div>
+        <input class="srch" id="srch" type="search" placeholder="Cari berita…" aria-label="Cari berita">
+      </div>
+      <div class="ag" id="beritaGrid" data-dyn><div class="empty-state">Memuat berita…</div></div>
+      <div class="more"><button class="btn btn-line" id="moreBtn" type="button" style="display:none">Muat lebih banyak</button></div>
+    </div>
+  </section>
+
+</main>
+
+<div class="ov" id="ov" aria-hidden="true">
+  <div id="rp"></div>
+  <button class="ovx" id="ox" aria-label="Tutup">✕</button>
+  <div class="ovh"><img id="oi" alt=""><div class="w"><span class="eb" id="oe"></span><h1 id="ot"></h1></div></div>
+  <article class="art" id="ob"></article>
+  <div class="share"><b>Bagikan</b><a class="btn btn-m" id="shWa" target="_blank" rel="noopener">WhatsApp</a><button class="btn btn-line" id="shCp" type="button">Salin tautan</button></div>
+  <div class="rel"><div class="wrap"><h2>Berita lainnya</h2><div class="ag" id="relGrid"></div></div></div>
 </div>
 
 <footer id="kontak">
   <div class="footer-grid">
     <div>
       <div class="footer-brand"><svg class="i"><use href="#i-star8"/></svg> PPTQ Al Azzaam</div>
-      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
+      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang, Jawa Tengah.</p>
       <div class="social-row" id="socialRow" data-dyn></div>
     </div>
     <div>
@@ -123,92 +231,145 @@
       </ul>
     </div>
   </div>
-  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang.</div>
+  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang. Seluruh hak cipta dilindungi.</div>
 </footer>
-
 <div class="flyer-overlay" id="flyerOverlay" onclick="if(event.target.id==='flyerOverlay') closeFlyer()">
   <div class="flyer-box">
     <button class="flyer-close" onclick="closeFlyer()" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button>
     <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
   </div>
 </div>
-
-<script src="shared.js?v=3"></script>
-<script src="layout.js?v=1"></script>
+<script src="shared.js?v=5"></script>
+<script src="layout.js?v=3"></script>
 <script>
-const params = new URLSearchParams(location.search);
-const slug = params.get('slug');
-let allBerita = [];
 
-if(slug){
-  loadDetail(slug);
-} else {
-  loadList();
+let ALL = [], VIEW = [], KAT = 'Semua', QRY = '', SHOWN = 12, openSlug = null;
+const PER = 12;
+const NEWSPATH = location.pathname;
+const tgl = b => fmtTanggal(b.tanggal_publish);
+const thumb = (b, cls) => b.foto_url ? `<img src="${esc(b.foto_url)}" alt="${esc(b.judul)}" loading="lazy">` : (cls === 'ph' ? ic('image') : '');
+$('#mDate').textContent = new Date().toLocaleDateString('id-ID', {month:'long', year:'numeric'});
+
+/* ---- hero fajar: parallax saat digulir ---- */
+function onScroll(){
+  const y = scrollY, vh = innerHeight;
+  if(y < vh * 1.2){
+    $('#l1').style.transform = `translateY(${y * .25}px)`; $('#l2').style.transform = `translateY(${y * .12}px)`; $('#l3').style.transform = `translateY(${y * .04}px)`;
+    const hc = $('#hcont'); hc.style.transform = `translateY(${y * .3}px)`; hc.style.opacity = Math.max(0, 1 - y / (vh * .8));
+  }
+  hzScroll();
 }
+/* ---- baris gulir ke samping ---- */
+function hzSetup(){
+  const hz = $('#hz'), tr = $('#tr');
+  const dist = Math.max(0, tr.scrollWidth - innerWidth + innerWidth * .1);
+  if(dist < 40 || innerWidth < 4){ hz.classList.add('flat'); hz.style.height = ''; tr.style.transform = ''; return; }
+  hz.classList.remove('flat'); hz.style.height = (innerHeight + dist) + 'px';
+}
+function hzScroll(){
+  const hz = $('#hz'); if(hz.style.display === 'none' || hz.classList.contains('flat')) return;
+  const r = hz.getBoundingClientRect(), p = Math.max(0, Math.min(1, -r.top / Math.max(1, r.height - innerHeight)));
+  const tr = $('#tr'); tr.style.transform = `translateX(${-p * Math.max(0, tr.scrollWidth - innerWidth + innerWidth * .1)}px)`;
+}
+addEventListener('scroll', onScroll, {passive:true}); addEventListener('resize', ()=>{ hzSetup(); hzScroll(); });
 
+/* ---- data ---- */
 async function loadList(){
   const {data, error} = await sb.from('berita').select('*').eq('status','published').order('tanggal_publish',{ascending:false});
-  const grid = document.getElementById('beritaGrid');
   if(error || !data || data.length===0){
-    grid.innerHTML = '<div class="empty-state">Belum ada berita. Tambahkan lewat panel admin.</div>';
-    return;
+    $('#feat').innerHTML = '<div class="empty-state">Belum ada berita. Tambahkan lewat panel admin.</div>';
+    $('#beritaGrid').innerHTML = '<div class="empty-state">Belum ada berita.</div>';
+    return handleDeepLink();
   }
-  allBerita = data;
-  renderList(allBerita);
+  ALL = data;
+  renderFeat(); renderStrip(); renderChips(); applyFilter();
+  handleDeepLink();
 }
-function renderList(list){
-  const grid = document.getElementById('beritaGrid');
-  if(list.length===0){
-    grid.innerHTML = '<div class="empty-state">Belum ada berita di kategori ini.</div>';
-    return;
-  }
-  grid.innerHTML = list.map(b=>`
-    <a href="berita.html?slug=${b.slug}" class="berita-card">
-      <div class="thumb">${b.foto_url ? `<img src="${b.foto_url}" alt="${b.judul}">` : ic('image')}</div>
-      <div class="berita-body">
-        <div class="berita-kategori">${b.kategori}</div>
-        <h3>${b.judul}</h3>
-        <div class="tanggal">${new Date(b.tanggal_publish).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
-      </div>
-    </a>
-  `).join('');
+function renderFeat(){
+  const f = ALL[0], side = ALL.slice(1, 5);
+  $('#feat').innerHTML = `
+    <a class="fb" href="?slug=${encodeURIComponent(f.slug)}" data-s="${esc(f.slug)}">${f.foto_url ? `<img src="${esc(f.foto_url)}" alt="${esc(f.judul)}">` : ''}<div><span class="tg">Utama · ${esc(f.kategori)}</span><h2>${esc(f.judul)}</h2><span class="dt">${tgl(f)}</span></div></a>
+    <div class="side">${side.map(b=>`<a class="sd" href="?slug=${encodeURIComponent(b.slug)}" data-s="${esc(b.slug)}"><div class="im">${thumb(b,'im')}</div><div><small>${esc(b.kategori)} · ${tgl(b)}</small><h3>${esc(b.judul)}</h3></div></a>`).join('')}</div>`;
 }
-function filterKategori(k){
-  document.querySelectorAll('.kategori-tab').forEach(t=>t.classList.toggle('active', t.dataset.k===k));
-  renderList(k==='Semua' ? allBerita : allBerita.filter(b=>b.kategori===k));
+function renderStrip(){
+  const items = ALL.slice(0, 8);
+  const hz = $('#hz');
+  if(items.length < 3){ hz.style.display = 'none'; return; }
+  hz.style.display = '';
+  $('#tr').innerHTML = items.map(b=>`<a class="hc2" href="?slug=${encodeURIComponent(b.slug)}" data-s="${esc(b.slug)}">${b.foto_url ? `<img src="${esc(b.foto_url)}" alt="" loading="lazy">` : ''}<div><small>${esc(b.kategori)} · ${tgl(b)}</small><h3>${esc(b.judul)}</h3></div></a>`).join('');
+  requestAnimationFrame(()=>{ hzSetup(); hzScroll(); });
 }
+function renderChips(){
+  const set = [...new Set(ALL.map(b=>b.kategori).filter(Boolean))];
+  $('#kategoriTabs').innerHTML = ['Semua'].concat(set).map(k=>`<button type="button" class="chip kategori-tab ${k===KAT?'active':''}" data-k="${esc(k)}">${esc(k)}</button>`).join('');
+  $$('.kategori-tab').forEach(t=>t.onclick=()=>{ KAT = t.dataset.k; SHOWN = PER; $$('.kategori-tab').forEach(x=>x.classList.toggle('active', x===t)); applyFilter(); });
+}
+function applyFilter(){
+  const q = QRY.trim().toLowerCase();
+  VIEW = ALL.filter(b=>(KAT==='Semua' || b.kategori===KAT) && (!q || (b.judul||'').toLowerCase().includes(q) || (b.ringkasan||'').toLowerCase().includes(q)));
+  renderGrid();
+}
+function card(b){
+  return `<a class="ac rv" href="?slug=${encodeURIComponent(b.slug)}" data-s="${esc(b.slug)}"><div class="st"></div><div class="ph">${thumb(b,'ph')}</div><small>${esc(b.kategori)}</small><h3>${esc(b.judul)}</h3><div class="ds">${tgl(b)}</div></a>`;
+}
+function renderGrid(){
+  const g = $('#beritaGrid');
+  if(!VIEW.length){ g.innerHTML = '<div class="empty-state">Belum ada berita yang cocok.</div>'; $('#moreBtn').style.display = 'none'; return; }
+  g.innerHTML = VIEW.slice(0, SHOWN).map(card).join('');
+  $('#moreBtn').style.display = VIEW.length > SHOWN ? '' : 'none';
+}
+$('#moreBtn').onclick = ()=>{ SHOWN += PER; renderGrid(); };
+$('#srch').oninput = e=>{ QRY = e.target.value; SHOWN = PER; applyFilter(); };
 
-// Mengubah kode [[gambar:URL]] yang disisipkan admin di tengah teks
-// menjadi elemen <img> sungguhan saat ditampilkan ke pengunjung.
-function renderIsiWithImages(isi){
-  const parts = (isi || '').split(/\[\[gambar:(.*?)\]\]/g);
-  return parts.map((part, i) => {
-    if(i % 2 === 0){
-      return part ? `<span style="display:block;white-space:pre-line;">${part}</span>` : '';
-    }
-    return `<img src="${part}" alt="" style="width:100%;border-radius:24px;margin:18px 0;">`;
+/* ---- membuka artikel (halaman baca) ---- */
+document.addEventListener('click', e=>{
+  const a = e.target.closest && e.target.closest('[data-s]');
+  if(!a || e.metaKey || e.ctrlKey || e.shiftKey || /[?&]editor=1/.test(location.search)) return;
+  e.preventDefault(); openArticle(a.dataset.s, true);
+});
+// teks isi: paragraf dipisah baris kosong, [[gambar:URL]] jadi foto
+function isiHtml(isi){
+  const parts = String(isi || '').split(/\[\[gambar:(.*?)\]\]/g); let first = true;
+  return parts.map((part, i)=>{
+    if(i % 2 === 1) return `<img src="${esc(part)}" alt="" loading="lazy">`;
+    return part.split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean).map(p=>{ const h = `<p${first?' class="dc"':''} style="white-space:pre-line">${esc(p)}</p>`; first = false; return h; }).join('');
   }).join('');
 }
-
-async function loadDetail(slugVal){
-  document.getElementById('listView').style.display = 'none';
-  document.getElementById('detailView').style.display = 'block';
-  const {data, error} = await sb.from('berita').select('*').eq('slug', slugVal).eq('status','published').limit(1);
-  const area = document.getElementById('detailContent');
-  if(error || !data || data.length===0){
-    area.innerHTML = '<div class="empty-state">Berita tidak ditemukan atau belum dipublikasikan.</div>';
-    return;
+async function openArticle(slug, push){
+  let b = ALL.find(x=>x.slug === slug);
+  if(!b){
+    const {data} = await sb.from('berita').select('*').eq('slug', slug).eq('status','published').limit(1);
+    b = data && data[0];
   }
-  const b = data[0];
-  document.getElementById('pageTitle').textContent = b.judul + ' — PPTQ Al Azzaam';
-  area.innerHTML = `
-    ${b.foto_url ? `<img src="${b.foto_url}" class="artikel-hero-img" alt="${b.judul}">` : ''}
-    <div class="artikel-kategori">${b.kategori}</div>
-    <h1 class="artikel-judul">${b.judul}</h1>
-    <div class="artikel-tanggal">${new Date(b.tanggal_publish).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
-    <div class="artikel-isi">${renderIsiWithImages(b.isi)}</div>
-  `;
+  const ov = $('#ov');
+  if(!b){ alert('Berita tidak ditemukan atau belum dipublikasikan.'); return; }
+  openSlug = slug;
+  const im = $('#oi'); im.style.display = b.foto_url ? '' : 'none'; if(b.foto_url){ im.src = b.foto_url; im.alt = b.judul; im.style.animation = 'none'; im.offsetHeight; im.style.animation = ''; }
+  $('#oe').textContent = b.kategori + ' · ' + tgl(b);
+  $('#ot').textContent = b.judul;
+  $('#ob').innerHTML = isiHtml(b.isi);
+  const url = location.origin + NEWSPATH + '?slug=' + encodeURIComponent(slug);
+  $('#shWa').href = 'https://wa.me/?text=' + encodeURIComponent(b.judul + ' — ' + url);
+  $('#shCp').onclick = async ()=>{ try{ await navigator.clipboard.writeText(url); $('#shCp').textContent = 'Tersalin ✓'; setTimeout(()=>$('#shCp').textContent = 'Salin tautan', 1800); }catch(e){ prompt('Salin tautan:', url); } };
+  $('#relGrid').innerHTML = ALL.filter(x=>x.slug !== slug).slice(0, 3).map(card).join('');
+  $$('#relGrid .rv').forEach(el=>el.classList.add('on'));
+  document.title = b.judul + ' — PPTQ Al Azzaam';
+  ov.classList.add('on'); ov.setAttribute('aria-hidden','false'); ov.scrollTop = 0; document.body.style.overflow = 'hidden';
+  if(push) history.pushState({s:slug}, '', '?slug=' + encodeURIComponent(slug));
 }
+function closeArticle(push){
+  const ov = $('#ov'); if(!ov.classList.contains('on')) return;
+  ov.classList.remove('on'); ov.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; openSlug = null;
+  document.title = 'Berita & Kegiatan — PPTQ Al Azzaam';
+  if(push) history.pushState({}, '', NEWSPATH);
+}
+$('#ox').onclick = ()=>closeArticle(true);
+addEventListener('keydown', e=>{ if(e.key === 'Escape') closeArticle(true); });
+addEventListener('popstate', ()=>{ const s = new URLSearchParams(location.search).get('slug'); if(s) openArticle(s, false); else closeArticle(false); });
+$('#ov').addEventListener('scroll', ()=>{ const o = $('#ov'); $('#rp').style.width = (o.scrollTop / Math.max(1, o.scrollHeight - o.clientHeight) * 100) + '%'; });
+function handleDeepLink(){ const s = new URLSearchParams(location.search).get('slug'); if(s && !/[?&]editor=1/.test(location.search)) openArticle(s, false); }
+loadList();
+
 </script>
 </body>
 </html>
