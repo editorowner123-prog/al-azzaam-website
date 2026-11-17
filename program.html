@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+
 <meta charset="UTF-8">
 <link id="faviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2730%27 fill=%27%232b0810%27/%3E%3Ctext x=%2732%27 y=%2743%27 font-family=%27Georgia,serif%27 font-size=%2732%27 font-weight=%27700%27 fill=%27%23d4af37%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SMP Tahfidz & MA Tahfidz Semarang — PPTQ Al Azzaam</title>
 <meta name="description" content="Program SMP Tahfidz dan MA Tahfidz di Semarang — PPTQ Al Azzaam memadukan hafalan Al-Qur'an dengan pendidikan formal berkualitas di Gunungpati, Jawa Tengah.">
 <link rel="canonical" href="https://pesantrenalazzaam.org/program.html">
@@ -20,16 +20,73 @@
 <meta name="twitter:title" content="SMP Tahfidz & MA Tahfidz Semarang — PPTQ Al Azzaam">
 <meta name="twitter:description" content="Program SMP Tahfidz dan MA Tahfidz di Semarang — PPTQ Al Azzaam memadukan hafalan Al-Qur'an dengan pendidikan formal berkualitas di Gunungpati, Jawa Tengah.">
 <meta name="twitter:image" content="https://pesantrenalazzaam.org/og-image.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="tema.js?v=1"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link rel="stylesheet" href="shared.css?v=3">
+<link rel="stylesheet" href="shared.css?v=6">
 <style>
-.jenjang-tabs{margin-bottom:22px;}
+
+:root{--hf:'Fraunces',Georgia,serif;}
+.fx-hero{padding:84px 0 90px;}
+.fx-hero .ar{font:700 26px 'Amiri',serif;color:var(--al);}
+.fx-hero h1{font-size:clamp(40px,6vw,78px);font-weight:800;margin:8px 0 14px;}
+.fx-hero h1 em{font-style:normal;color:var(--a);}
+.fx-hero p{max-width:58ch;opacity:.9;font-size:17px;margin:0;}
+section.band{padding:80px 0;}
+section.band.alt{background:var(--bg2);}
+/* kartu miring + sorot */
+.tilts{perspective:1100px;}
+.tc{position:relative;border-radius:28px;padding:32px 30px;background:var(--bg2);border:1px solid var(--line);transform-style:preserve-3d;transition:transform .15s,box-shadow .3s;overflow:hidden;display:flex;flex-direction:column;gap:10px;}
+.tc::before{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%),color-mix(in srgb,var(--a) 50%,transparent),transparent 60%);opacity:0;transition:.3s;pointer-events:none;}
+.tc:hover::before{opacity:1;}
+.tc:hover{box-shadow:0 36px 50px -32px var(--pd);}
+.tc>*{position:relative;}
+/* kartu balik */
+.fl{display:grid;gap:20px;margin-top:34px;}
+.fc{perspective:900px;cursor:pointer;}
+.fi{display:grid;}
+.ff,.fb{grid-area:1/1;border-radius:28px;padding:32px;display:flex;flex-direction:column;justify-content:center;transition:transform .7s cubic-bezier(.3,.7,.2,1),opacity 0s linear .35s;min-height:260px;}
+.ff{background:linear-gradient(160deg,var(--p),var(--pd));color:var(--on);align-items:center;text-align:center;}
+.ff .ar{font:700 34px 'Amiri',serif;line-height:1.7;color:var(--al);}
+.ff h3{font-size:44px;}
+.ff small{opacity:.75;margin-top:12px;font-weight:700;letter-spacing:.06em;}
+.fb{background:var(--a);color:var(--pd);transform:rotateY(-180deg);opacity:0;}
+.fc.fp .ff{transform:rotateY(180deg);opacity:0;}
+.fc.fp .fb{transform:rotateY(0);opacity:1;}
+.fb h3{font-size:28px;margin-bottom:10px;}
+.fb p{margin:0;font-size:15.5px;line-height:1.65;}
+.fb ol{margin:0;padding-left:20px;font-size:15.5px;line-height:1.6;}
+.fb li{margin-bottom:6px;}
+.cta{background:linear-gradient(150deg,var(--pd),var(--p));color:var(--on);border-radius:40px;padding:56px;text-align:center;position:relative;overflow:hidden;}
+.cta h2{font-size:clamp(30px,4vw,52px);font-weight:800;}
+.cta p{opacity:.88;max-width:48ch;margin:12px auto 26px;}
+@media(max-width:700px){.cta{padding:40px 24px;}}
+
+.pg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:30px;}
+.pg .tc{min-height:300px;}
+.pg .tc:nth-child(4n+1){background:linear-gradient(160deg,var(--p),var(--pd));color:var(--on);border-color:transparent;}
+.pg .tc:nth-child(4n+1) h3{color:var(--on);} .pg .tc:nth-child(4n+1) p{color:color-mix(in srgb,var(--on) 82%,transparent);}
+.pg .tc:nth-child(4n+1) .ic{background:var(--a);color:var(--pd);} .pg .tc:nth-child(4n+1) .jt{background:color-mix(in srgb,var(--on) 18%,transparent);color:var(--on);}
+.pg .tc:nth-child(4n+1) .btn-outline-mini{color:var(--a);border-color:var(--a);}
+.pg .tc:nth-child(4n+1) .btn-outline-mini:hover{background:var(--a);color:var(--pd);}
+.tc .ic{width:62px;height:62px;border-radius:20px;background:var(--p);color:var(--on);display:grid;place-items:center;font-size:30px;}
+.tc .ic .i{width:30px;height:30px;}
+.tc .jt{align-self:flex-start;font-size:12px;font-weight:800;letter-spacing:.08em;padding:4px 12px;border-radius:99px;background:var(--al);color:var(--p);}
+.tc h3{font-size:28px;color:var(--pd);font-weight:800;}
+.tc p{color:var(--mu);margin:0;font-size:15px;white-space:pre-line;}
+.tc .btn-outline-mini{margin-top:auto;align-self:flex-start;}
+@media(max-width:960px){.pg{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:620px){.pg{grid-template-columns:1fr;}.pg .tc{min-height:0;}}
+.fl.three{grid-template-columns:repeat(3,minmax(0,1fr));}
+@media(max-width:860px){.fl.three{grid-template-columns:1fr;}}
+
 </style>
 </head>
-<body data-lay="page" data-lay-sel=".page-hero,section,footer">
+<body>
+<div id="bar"></div>
 <script src="icons.js"></script>
-
 <nav class="navbar">
   <div class="navbar-inner">
     <a href="index.html" class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</a>
@@ -53,32 +110,49 @@
       <a href="#kontak">Kontak</a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <a href="ppdb.html" class="nav-cta">Daftar sekarang</a>
+      <a href="ppdb.html" class="nav-cta mg">Daftar Santri Baru</a>
       <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><svg class="i"><use href="#i-menu"/></svg></button>
     </div>
   </div>
 </nav>
+<div class="ticker-wrap" id="tickerWrap"><div class="ticker-track" id="tickerTrack">Memuat info terkini…</div></div>
+<main data-lay="main">
 
-<div class="page-hero">
-  <div class="hero-arabic">وَرَتِّلِ الْقُرْآنَ تَرْتِيْلًا</div>
-  <h1>Program pendidikan</h1>
-  <p>SMP Tahfidz dan MA Tahfidz di Semarang — program pendidikan yang berjalan beriringan di PPTQ Al Azzaam.</p>
-</div>
+  <header class="fx-hero">
+    <div class="wrap">
+      <div class="ar">وَرَتِّلِ الْقُرْآنَ تَرْتِيْلًا</div>
+      <h1>Program <em>pendidikan</em></h1>
+      <p>SMP Tahfidz dan MA Tahfidz di Semarang — program pendidikan yang berjalan beriringan di PPTQ Al Azzaam.</p>
+    </div>
+  </header>
+  <section class="band" id="daftarProgram">
+    <div class="wrap">
+      <div class="chips rv" id="jenjangTabs" data-dyn><button class="chip jenjang-tab active" data-jenjang="Semua" type="button">Semua</button></div>
+      <div class="pg tilts" id="programGrid" data-dyn><div class="empty-state">Memuat program…</div></div>
+    </div>
+  </section>
+  <section class="band alt" id="ayat">
+    <div class="wrap">
+      <div class="eb rv">Ayat pilihan</div>
+      <h2 class="sec-t rv">Ketuk kartu untuk membaliknya</h2>
+      <div class="fl three">
+        <div class="fc rv"><div class="fi"><div class="ff"><div class="ar">اِقْرَأْ بِاسْمِ رَبِّكَ</div><small>Al‑'Alaq · 1</small></div><div class="fb"><h3>Bacalah!</h3><p>"Bacalah dengan (menyebut) nama Tuhanmu." Perintah pertama: belajar dimulai dengan iqra'.</p></div></div></div>
+        <div class="fc rv"><div class="fi"><div class="ff"><div class="ar">وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا</div><small>Al‑Muzzammil · 4</small></div><div class="fb"><h3>Tartil</h3><p>"Dan bacalah Al‑Qur'an itu dengan perlahan‑lahan." Dasar tahsin dan adab membaca.</p></div></div></div>
+        <div class="fc rv"><div class="fi"><div class="ff"><div class="ar">وَلَقَدْ يَسَّرْنَا الْقُرْآنَ لِلذِّكْرِ</div><small>Al‑Qamar · 17</small></div><div class="fb"><h3>Dimudahkan</h3><p>"Sungguh, telah Kami mudahkan Al‑Qur'an untuk peringatan." Penyemangat para penghafal.</p></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="band">
+    <div class="wrap"><div class="cta rv"><h2>Temukan program yang tepat</h2><p>Klik tombol ini — ada kejutan kecil 🎉</p><a class="btn btn-a mg" href="ppdb.html" id="cb">Daftar Sekarang →</a></div></div>
+  </section>
 
-<section class="section wrap" data-lay="wrap">
-  <div class="pill-tabs jenjang-tabs" id="jenjangTabs" data-dyn>
-    <button class="pill-tab jenjang-tab active" data-jenjang="Semua" onclick="filterJenjang('Semua')">Semua</button>
-  </div>
-  <div class="program-grid" id="programGrid" data-dyn>
-    <div class="empty-state">Memuat program…</div>
-  </div>
-</section>
+</main>
 
 <footer id="kontak">
   <div class="footer-grid">
     <div>
       <div class="footer-brand"><svg class="i"><use href="#i-star8"/></svg> PPTQ Al Azzaam</div>
-      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
+      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang, Jawa Tengah.</p>
       <div class="social-row" id="socialRow" data-dyn></div>
     </div>
     <div>
@@ -100,65 +174,53 @@
       </ul>
     </div>
   </div>
-  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang.</div>
+  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang. Seluruh hak cipta dilindungi.</div>
 </footer>
-
 <div class="flyer-overlay" id="flyerOverlay" onclick="if(event.target.id==='flyerOverlay') closeFlyer()">
   <div class="flyer-box">
     <button class="flyer-close" onclick="closeFlyer()" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button>
     <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
   </div>
 </div>
-
-<script src="shared.js?v=3"></script>
-<script src="layout.js?v=1"></script>
+<script src="shared.js?v=5"></script>
+<script src="layout.js?v=3"></script>
 <script>
-let allProgram = [];
 
+let allProgram = [];
+$$('.fc').forEach(f=>f.onclick=()=>f.classList.toggle('fp'));
+// konfeti, lalu lanjut ke halaman pendaftaran
+document.getElementById('cb').addEventListener('click', e=>{ e.preventDefault(); const h = e.currentTarget.href; confetti(e.clientX, e.clientY); setTimeout(()=>location.href = h, 900); });
 async function loadProgram(){
   const {data, error} = await sb.from('program').select('*').order('urutan');
   const grid = document.getElementById('programGrid');
-  if(error || !data || data.length===0){
-    grid.innerHTML = '<div class="empty-state">Belum ada data program. Tambahkan lewat panel admin.</div>';
-    return;
-  }
+  if(error || !data || data.length===0){ grid.innerHTML = '<div class="empty-state">Belum ada data program. Tambahkan lewat panel admin.</div>'; return; }
   allProgram = data;
-
-  // Tab jenjang dibuat OTOMATIS dari data yang ada (bebas diisi apa saja lewat admin,
-  // tidak lagi dibatasi pilihan tetap Tahfidz/Diniyah/SMP/MA).
-  const jenjangSet = [...new Set(data.map(p=>p.jenjang).filter(Boolean))];
-  const tabsEl = document.getElementById('jenjangTabs');
-  tabsEl.innerHTML = '<button class="pill-tab jenjang-tab active" data-jenjang="Semua" onclick="filterJenjang(\'Semua\')">Semua</button>' +
-    jenjangSet.map(j=>`<button class="pill-tab jenjang-tab" data-jenjang="${j}" onclick="filterJenjang('${j}')">${j}</button>`).join('');
-
-  renderProgram(allProgram);
-
-  const params = new URLSearchParams(location.search);
-  const jenjang = params.get('jenjang');
-  if(jenjang) filterJenjang(jenjang);
+  // Tab jenjang dibuat otomatis dari data yang ada (bebas diisi apa saja lewat admin)
+  const set = [...new Set(data.map(p=>p.jenjang).filter(Boolean))];
+  const tabs = document.getElementById('jenjangTabs');
+  tabs.innerHTML = ['Semua'].concat(set).map((j,i)=>`<button type="button" class="chip jenjang-tab ${i===0?'active':''}" data-jenjang="${esc(j)}">${esc(j)}</button>`).join('');
+  $$('.jenjang-tab').forEach(t=>t.onclick=()=>filterJenjang(t.dataset.jenjang));
+  const j = new URLSearchParams(location.search).get('jenjang');
+  filterJenjang(j && set.includes(j) ? j : 'Semua');
 }
 function renderProgram(list){
   const grid = document.getElementById('programGrid');
-  if(list.length===0){
-    grid.innerHTML = '<div class="empty-state">Belum ada program untuk jenjang ini.</div>';
-    return;
-  }
+  if(list.length===0){ grid.innerHTML = '<div class="empty-state">Belum ada program untuk jenjang ini.</div>'; return; }
   grid.innerHTML = list.map(p=>`
-    <div class="program-card">
-      <div class="icon">${p.icon || ic('quran')}</div>
-      ${p.jenjang ? `<span class="jenjang-tag">${p.jenjang}</span>` : ''}
-      <h3>${p.nama}</h3>
-      <p>${p.deskripsi || ''}</p>
-      ${p.tombol_label ? `<a href="${normalizeLink(p.tombol_link)}" class="btn-outline-mini" target="_blank">${p.tombol_label} ${ic('arrow')}</a>` : ''}
-    </div>
-  `).join('');
+    <div class="tc rv">
+      <div class="ic">${p.icon || ic('quran')}</div>
+      ${p.jenjang ? `<span class="jt">${esc(p.jenjang)}</span>` : ''}
+      <h3>${esc(p.nama)}</h3>
+      <p>${esc(p.deskripsi || '')}</p>
+      ${p.tombol_label ? `<a href="${esc(normalizeLink(p.tombol_link))}" class="btn-outline-mini" target="_blank" rel="noopener">${esc(p.tombol_label)} ${ic('arrow')}</a>` : ''}
+    </div>`).join('');
 }
 function filterJenjang(j){
-  document.querySelectorAll('.jenjang-tab').forEach(t=>t.classList.toggle('active', t.dataset.jenjang===j));
+  $$('.jenjang-tab').forEach(t=>t.classList.toggle('active', t.dataset.jenjang===j));
   renderProgram(j==='Semua' ? allProgram : allProgram.filter(p=>p.jenjang===j));
 }
-
 loadProgram();
+
 </script>
 </body>
 </html>
