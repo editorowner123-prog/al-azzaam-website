@@ -72,6 +72,30 @@ label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-b
 .img-preview{width:100%;height:140px;object-fit:cover;border-radius:10px;margin-bottom:8px;background:var(--cream-100);}
 .upload-status{font-size:11.5px;color:var(--ink-600);margin-top:4px;}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--maroon-950);color:#fff;padding:12px 20px;border-radius:24px;font-size:13px;font-weight:600;z-index:200;display:none;}
+
+/* ---------- PREVIEW & LIVE (editor halaman) ---------- */
+.tab-sep{width:1px;background:var(--line);margin:10px 8px;flex:none;}
+.tab-btn.special{color:var(--maroon-700);}
+.siteview{display:none;padding:16px 16px 40px;max-width:1500px;margin:0 auto;}
+.sv-top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px;}
+.sv-title{font-size:18px;color:var(--maroon-900);font-family:'Outfit',sans-serif;font-weight:800;}
+.sv-title small{display:block;font-size:12px;color:var(--ink-600);font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;}
+.sv-pages{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.sv-pill{border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:8px 14px;font-weight:700;font-size:12.5px;color:var(--ink-600);cursor:pointer;display:inline-flex;gap:7px;align-items:center;font-family:inherit;}
+.sv-pill.active{background:var(--maroon-950);color:#fff;border-color:var(--maroon-950);}
+.sv-dot{width:8px;height:8px;border-radius:50%;background:#cfc3bb;}
+.sv-dot.draft{background:#e08a1e;} .sv-dot.live{background:var(--ok);}
+.sv-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 12px;box-shadow:var(--shadow);margin-bottom:12px;}
+.sv-bar .grow{flex:1;min-width:120px;}
+.sv-status{font-size:12px;font-weight:700;color:var(--ink-600);}
+.sv-status.dirty{color:#c4620a;}
+.sv-devs{display:inline-flex;background:var(--cream-100);border-radius:20px;padding:3px;}
+.sv-dev{border:0;background:none;border-radius:16px;padding:6px 12px;font-weight:700;font-size:12px;color:var(--ink-600);cursor:pointer;font-family:inherit;}
+.sv-dev.active{background:#fff;color:var(--maroon-800);box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.sv-help{font-size:12px;color:var(--ink-600);background:#fff8e6;border:1px solid #f0dca0;border-radius:12px;padding:9px 12px;margin-bottom:12px;line-height:1.6;}
+.sv-frame-wrap{background:#d9d3d5;border-radius:16px;padding:12px;display:flex;justify-content:center;overflow:auto;}
+.sv-frame{border:0;background:#f1eff0;border-radius:10px;box-shadow:0 10px 30px -10px rgba(0,0,0,.4);width:100%;height:calc(100vh - 300px);min-height:560px;transition:width .2s;}
+.btn[disabled]{opacity:.45;pointer-events:none;}
 </style>
 </head>
 <body>
@@ -106,6 +130,8 @@ label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-b
     </div>
     <div id="listArea"></div>
   </div>
+
+  <div class="siteview" id="siteViewArea"></div>
 </div>
 
 <div class="modal-overlay" id="bulkModalOverlay">
@@ -289,12 +315,26 @@ function renderTabs(){
   const bar = document.getElementById('tabBar');
   bar.innerHTML = Object.keys(TABLES).map(k =>
     `<button class="tab-btn" id="tab-${k}" onclick="switchTab('${k}')">${TABLES[k].label}</button>`
-  ).join('');
+  ).join('') +
+    `<span class="tab-sep"></span>` +
+    `<button class="tab-btn special" id="tab-__preview" onclick="switchTab('__preview')">Preview</button>` +
+    `<button class="tab-btn special" id="tab-__live" onclick="switchTab('__live')">Live</button>`;
 }
 function switchTab(key){
-  currentTab = key;
+  if(key !== '__preview' && key !== '__live' && svDirty() && !confirm('Ada perubahan di Preview yang belum disimpan. Tetap pindah menu?')) return;
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+key).classList.add('active');
+  if(key === '__preview' || key === '__live'){
+    document.querySelector('.content').style.display = 'none';
+    document.getElementById('siteViewArea').style.display = 'block';
+    svMode = key === '__preview' ? 'preview' : 'live';
+    openSiteView();
+    return;
+  }
+  document.querySelector('.content').style.display = '';
+  document.getElementById('siteViewArea').style.display = 'none';
+  svFrameUnload();
+  currentTab = key;
   document.getElementById('contentTitle').textContent = TABLES[key].label;
   document.getElementById('bulkBtn').style.display = (key === 'galeri' || key === 'instagram_embed') ? 'inline-flex' : 'none';
   loadList();
@@ -1027,7 +1067,158 @@ function showToast(msg){
   setTimeout(()=> t.style.display='none', 2500);
 }
 
+// ================= PREVIEW & LIVE =================
+const SITE_PAGES = [
+  {k:'index', n:'Beranda'}, {k:'profil', n:'Profil'}, {k:'program', n:'Program'},
+  {k:'berita', n:'Berita'}, {k:'galeri', n:'Galeri'}, {k:'ppdb', n:'Pendaftaran'}
+];
+const SV_WIDTH = {desktop:'100%', tablet:'820px', phone:'390px'};
+let svMode = 'preview', svPage = 'index', svDevice = 'desktop', svRows = {}, svTableError = null;
+
+function svApi(){
+  const f = document.getElementById('svFrame');
+  try{ return f && f.contentWindow && f.contentWindow.PPTQLayout && f.contentWindow.PPTQLayout.isEditor ? f.contentWindow.PPTQLayout : null; }catch(e){ return null; }
+}
+function svDirty(){
+  if(svMode !== 'preview' || document.getElementById('siteViewArea').style.display === 'none') return false;
+  const a = svApi(); return !!(a && a.isDirty());
+}
+function svFrameUnload(){ const f = document.getElementById('svFrame'); if(f) f.src = 'about:blank'; }
+
+async function loadLayoutRows(){
+  const {data, error} = await sb.from('layout_halaman').select('halaman,status,data,updated_at');
+  svRows = {}; svTableError = error ? error.message : null;
+  (data||[]).forEach(r=>{ (svRows[r.halaman] = svRows[r.halaman] || {})[r.status] = r; });
+}
+function svNorm(r){ return r && r.data ? JSON.stringify(r.data) : '{}'; }
+function svIsEmpty(r){ const d = (r && r.data) || {}; return !r || (!Object.keys(d.order||{}).length && !Object.keys(d.size||{}).length && !Object.keys(d.text||{}).length); }
+function pageState(k){
+  const r = svRows[k] || {};
+  if(r.draft && svNorm(r.draft) !== svNorm(r.live) && !(svIsEmpty(r.draft) && svIsEmpty(r.live))) return 'draft';
+  if(!svIsEmpty(r.live)) return 'live';
+  return 'asli';
+}
+const SV_STATE_LABEL = {draft:'Draf belum online', live:'Sudah online (diedit)', asli:'Desain awal'};
+
+async function openSiteView(){
+  await loadLayoutRows();
+  renderSiteView();
+}
+function renderSiteView(){
+  const area = document.getElementById('siteViewArea');
+  const isPrev = svMode === 'preview';
+  const pills = SITE_PAGES.map(p=>{
+    const st = pageState(p.k);
+    return `<button class="sv-pill ${p.k===svPage?'active':''}" onclick="svChoosePage('${p.k}')" title="${SV_STATE_LABEL[st]}"><span class="sv-dot ${st}"></span>${p.n}</button>`;
+  }).join('');
+  const devs = [['desktop','Desktop'],['tablet','Tablet'],['phone','HP']].map(([k,n])=>
+    `<button class="sv-dev ${k===svDevice?'active':''}" onclick="svSetDevice('${k}')">${n}</button>`).join('');
+  const missing = svTableError ? `<div class="sv-help" style="background:#fdecec;border-color:#f3bcbc;">Tabel <b>layout_halaman</b> belum ada. Jalankan file <b>013_layout_halaman.sql</b> di Supabase SQL Editor dulu supaya simpan draf dan publikasi bisa dipakai. (${svTableError})</div>` : '';
+  area.innerHTML = `
+    <div class="sv-top">
+      <div class="sv-title">${isPrev ? 'Preview — halaman yang belum online' : 'Live — halaman yang sedang online'}
+        <small>${isPrev ? 'Atur susunan dan tulisan di sini. Pengunjung baru melihatnya setelah kamu klik Publikasikan.' : 'Ini persis tampilan yang dilihat pengunjung website sekarang.'}</small></div>
+      <div class="sv-devs">${devs}</div>
+    </div>
+    ${missing}
+    <div class="sv-pages">${pills}</div>
+    ${isPrev ? `
+    <div class="sv-bar">
+      <button class="btn btn-outline btn-sm" id="svUndo" onclick="svUndo()" disabled>Urungkan</button>
+      <button class="btn btn-outline btn-sm" id="svRedo" onclick="svRedo()" disabled>Ulangi</button>
+      <span class="sv-status grow" id="svStatus">Memuat…</span>
+      <button class="btn btn-outline btn-sm" onclick="svResetDesign()">Kembalikan desain awal</button>
+      <button class="btn btn-outline btn-sm" onclick="svDiscard()">Buang draf</button>
+      <button class="btn btn-outline btn-sm" id="svSaveBtn" onclick="svSave(false)">Simpan draf</button>
+      <button class="btn btn-gold btn-sm" id="svPubBtn" onclick="svSave(true)">Publikasikan</button>
+    </div>
+    <div class="sv-help"><b>Cara pakai:</b> klik sebuah blok untuk memilihnya. <b>Seret ikon panah</b> di sudut kiri atas untuk memindahkan. <b>Tarik tepi kanan, bawah, atau sudut</b> untuk membesarkan atau mengecilkan (tampilan Desktop). <b>Klik 2x pada tulisan</b> untuk mengeditnya, lalu klik di luar untuk selesai. Editan ini hanya mengubah tampilan, <b>tidak mengubah data berita, program, galeri, dan lainnya</b>. Tulisan yang berasal dari data (isi berita, nama program, dsb) tetap diubah lewat menu biasa.</div>
+    ` : `
+    <div class="sv-bar">
+      <span class="sv-status grow">Halaman: ${SITE_PAGES.find(p=>p.k===svPage).n} · ${SV_STATE_LABEL[pageState(svPage)] === 'Desain awal' ? 'memakai desain awal' : 'memakai tata letak hasil publikasi'}</span>
+      <a class="btn btn-outline btn-sm" href="${svPage}.html" target="_blank" rel="noopener">Buka di tab baru</a>
+      <button class="btn btn-outline btn-sm" onclick="svReloadFrame()">Muat ulang</button>
+      <button class="btn btn-danger btn-sm" onclick="svUnpublish()">Cabut tata letak live</button>
+    </div>`}
+    <div class="sv-frame-wrap"><iframe id="svFrame" class="sv-frame" title="Tampilan halaman" style="width:${SV_WIDTH[svDevice]}"></iframe></div>`;
+  svReloadFrame();
+}
+function svReloadFrame(){
+  const f = document.getElementById('svFrame'); if(!f) return;
+  const q = (svMode === 'preview' ? '?editor=1&' : '?') + '_=' + Date.now();
+  f.onload = svFrameLoaded;
+  f.src = svPage + '.html' + q;
+}
+async function svFrameLoaded(){
+  if(svMode !== 'preview') return;
+  const a = svApi(); if(!a) { const st = document.getElementById('svStatus'); if(st) st.textContent = 'Editor tidak aktif (pastikan masih login).'; return; }
+  await a.ready;
+  a.onChange(svUpdateBar);
+  svUpdateBar();
+}
+function svUpdateBar(){
+  const a = svApi(); if(!a) return;
+  const st = document.getElementById('svStatus');
+  const dirty = a.isDirty();
+  if(st){
+    st.textContent = dirty ? 'Ada perubahan yang belum disimpan' : (SV_STATE_LABEL[pageState(svPage)] || '');
+    st.classList.toggle('dirty', dirty);
+  }
+  const u = document.getElementById('svUndo'), r = document.getElementById('svRedo');
+  if(u) u.disabled = !a.canUndo(); if(r) r.disabled = !a.canRedo();
+}
+function svChoosePage(k){
+  if(k === svPage) return;
+  if(svDirty() && !confirm('Ada perubahan yang belum disimpan di halaman ini. Tetap pindah halaman?')) return;
+  svPage = k; renderSiteView();
+}
+function svSetDevice(d){
+  svDevice = d;
+  document.querySelectorAll('.sv-dev').forEach(b=>b.classList.toggle('active', b.textContent === {desktop:'Desktop',tablet:'Tablet',phone:'HP'}[d]));
+  const f = document.getElementById('svFrame'); if(f) f.style.width = SV_WIDTH[d];
+  setTimeout(()=>{ const a = svApi(); if(a && window.frames[0] && 0){} }, 100);
+}
+function svUndo(){ const a = svApi(); if(a) a.undo(); }
+function svRedo(){ const a = svApi(); if(a) a.redo(); }
+function svResetDesign(){
+  const a = svApi(); if(!a) return;
+  if(!confirm('Kembalikan halaman ini ke desain awal (semua susunan, ukuran, dan tulisan hasil edit dihapus dari draf)? Kamu masih bisa menekan Urungkan.')) return;
+  a.clearAll();
+}
+async function svSave(publish){
+  const a = svApi(); if(!a) return;
+  if(publish && !confirm('Publikasikan ke website? Pengunjung akan langsung melihat tampilan ini.')) return;
+  const data = a.getState(), now = new Date().toISOString();
+  const rows = [{halaman:svPage, status:'draft', data, updated_at:now}];
+  if(publish) rows.push({halaman:svPage, status:'live', data, updated_at:now});
+  const {error} = await sb.from('layout_halaman').upsert(rows);
+  if(error){ showToast('Gagal menyimpan: ' + error.message); return; }
+  a.markSaved();
+  await loadLayoutRows();
+  document.querySelectorAll('.sv-pill').forEach((el,i)=>{
+    const k = SITE_PAGES[i].k, s2 = pageState(k);
+    el.querySelector('.sv-dot').className = 'sv-dot ' + s2; el.title = SV_STATE_LABEL[s2];
+  });
+  svUpdateBar();
+  showToast(publish ? 'Dipublikasikan. Website sudah memakai tampilan ini.' : 'Draf tersimpan (belum online).');
+}
+async function svDiscard(){
+  if(!confirm('Buang draf halaman ini? Preview kembali ke tampilan yang sedang online.')) return;
+  const {error} = await sb.from('layout_halaman').delete().eq('halaman', svPage).eq('status','draft');
+  if(error){ showToast('Gagal: ' + error.message); return; }
+  await loadLayoutRows(); renderSiteView(); showToast('Draf dibuang.');
+}
+async function svUnpublish(){
+  if(!confirm('Cabut tata letak live? Halaman ini di website kembali memakai desain awal. Drafmu tidak ikut terhapus.')) return;
+  const {error} = await sb.from('layout_halaman').delete().eq('halaman', svPage).eq('status','live');
+  if(error){ showToast('Gagal: ' + error.message); return; }
+  try{ localStorage.removeItem('lay_' + svPage); }catch(e){}
+  await loadLayoutRows(); renderSiteView(); showToast('Tata letak live dicabut.');
+}
+window.addEventListener('beforeunload', e=>{ if(svDirty()){ e.preventDefault(); e.returnValue = ''; } });
+
 checkSession();
+
 </script>
 </body>
 </html>
