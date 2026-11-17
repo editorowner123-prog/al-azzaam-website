@@ -20,45 +20,47 @@
 <meta name="twitter:title" content="Galeri — PPTQ Al Azzaam">
 <meta name="twitter:description" content="Galeri foto dan video kegiatan santri PPTQ Al Azzaam Gunungpati, Semarang.">
 <meta name="twitter:image" content="https://pesantrenalazzaam.org/og-image.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link rel="stylesheet" href="shared.css?v=2">
+<link rel="stylesheet" href="shared.css?v=3">
 <style>
-.wrap{max-width:1120px;margin:0 auto;}
-.mode-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:26px;}
-.mode-tab{background:var(--surface);border:1.5px solid var(--line);padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;color:var(--ink-600);cursor:pointer;}
-.mode-tab.active{background:var(--gold-shine);color:var(--maroon-950);border-color:transparent;}
-.folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
-.folder-card{border-radius:14px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;background:var(--surface);transition:transform .15s;}
+.folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;}
+.folder-card{border-radius:28px;overflow:hidden;cursor:pointer;background:#fff;transition:transform .2s;}
+.folder-card:nth-child(4n+1){border-radius:28px 80px 28px 28px;}
 .folder-card:hover{transform:translateY(-3px);}
-.folder-thumb{aspect-ratio:4/3;background:var(--cream-100);position:relative;overflow:hidden;}
+.folder-thumb{aspect-ratio:4/3;background:linear-gradient(135deg,var(--rose),var(--gold-l));position:relative;overflow:hidden;}
 .folder-thumb img{width:100%;height:100%;object-fit:cover;}
-.folder-thumb .stack{position:absolute;inset:0;background:linear-gradient(0deg,rgba(43,8,16,.55),transparent 55%);}
-.folder-thumb .icon-empty{display:flex;align-items:center;justify-content:center;height:100%;font-size:34px;opacity:.35;}
-.folder-info{padding:12px 14px;}
-.folder-info .fname{font-size:13.5px;font-weight:700;color:var(--maroon-900);margin-bottom:2px;}
-.folder-info .fcount{font-size:11px;color:var(--ink-600);}
-.back-link{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--maroon-600);margin-bottom:20px;cursor:pointer;}
-.galeri-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
-.galeri-item{border-radius:14px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;position:relative;aspect-ratio:4/3;background:var(--cream-100);}
-.galeri-item img{width:100%;height:100%;object-fit:cover;transition:transform .2s;}
+.folder-thumb .stack{position:absolute;inset:0;background:linear-gradient(0deg,rgba(29,18,22,.45),transparent 55%);}
+.folder-thumb .icon-empty{display:grid;place-items:center;height:100%;color:var(--maroon);}
+.folder-thumb .icon-empty .i{width:54px;height:54px;opacity:.5;}
+.folder-info{padding:16px 20px 18px;}
+.folder-info .fname{font:700 20px 'Bricolage Grotesque',sans-serif;color:var(--ink);margin-bottom:2px;display:flex;gap:8px;align-items:center;}
+.folder-info .fname .i{color:var(--maroon);width:20px;height:20px;}
+.folder-info .fcount{font-size:13.5px;color:var(--mute);}
+.back-link{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;color:var(--maroon);background:#fff;padding:10px 18px;border-radius:999px;margin-bottom:16px;cursor:pointer;}
+.galeri-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+.galeri-item{border-radius:28px;overflow:hidden;cursor:pointer;position:relative;aspect-ratio:4/3;background:var(--rose);}
+.galeri-item img{width:100%;height:100%;object-fit:cover;transition:transform .25s;}
 .galeri-item:hover img{transform:scale(1.05);}
-.galeri-item .badge{position:absolute;top:8px;right:8px;background:rgba(43,8,16,.7);color:var(--gold-400);font-size:10px;font-weight:800;padding:3px 8px;border-radius:8px;}
-.galeri-item .cap{position:absolute;bottom:0;left:0;right:0;padding:10px;background:linear-gradient(0deg,rgba(43,8,16,.85),transparent);color:#fff;font-size:11.5px;font-weight:600;}
-.lightbox{position:fixed;inset:0;background:rgba(43,8,16,.9);display:none;align-items:center;justify-content:center;padding:20px;z-index:100;}
+.galeri-item .badge{position:absolute;top:12px;right:12px;background:rgba(29,18,22,.75);color:var(--gold-l);font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;}
+.galeri-item .cap{position:absolute;bottom:0;left:0;right:0;padding:26px 16px 14px;background:linear-gradient(0deg,rgba(29,18,22,.85),transparent);color:#fff;font-size:14px;font-weight:600;}
+.lightbox{position:fixed;inset:0;background:rgba(29,18,22,.92);display:none;align-items:center;justify-content:center;padding:20px;z-index:200;}
 .lightbox.open{display:flex;}
-.lightbox img,.lightbox iframe{max-width:100%;max-height:85vh;border-radius:10px;}
-.lightbox-close{position:absolute;top:20px;right:24px;color:#fff;font-size:28px;background:none;border:none;cursor:pointer;}
+.lightbox img,.lightbox iframe{max-width:100%;max-height:85vh;border-radius:24px;}
+.lightbox-close{position:absolute;top:18px;right:20px;color:#fff;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.14);border:0;cursor:pointer;display:grid;place-items:center;}
+.lightbox-close .i{width:22px;height:22px;pointer-events:none;}
 </style>
 </head>
-<body>
+<body data-lay="page" data-lay-sel=".page-hero,section,footer">
+<script src="icons.js"></script>
 
 <nav class="navbar">
   <div class="navbar-inner">
     <a href="index.html" class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</a>
     <div class="nav-links" id="navLinks">
+      <a href="index.html">Beranda</a>
       <div class="nav-item">
-        <a href="profil.html" class="nav-top-link">Profil <span class="nav-caret">▾</span></a>
+        <a href="profil.html" class="nav-top-link">Profil <span class="nav-caret"><svg class="i"><use href="#i-caret"/></svg></span></a>
         <div class="dropdown-menu">
           <a href="profil.html#sejarah">Sejarah</a>
           <a href="profil.html#visimisi">Visi &amp; Misi</a>
@@ -66,7 +68,7 @@
         </div>
       </div>
       <div class="nav-item">
-        <a href="program.html" class="nav-top-link">Program <span class="nav-caret">▾</span></a>
+        <a href="program.html" class="nav-top-link">Program <span class="nav-caret"><svg class="i"><use href="#i-caret"/></svg></span></a>
         <div class="dropdown-menu program-dropdown"><a href="program.html">Memuat…</a></div>
       </div>
       <a href="berita.html">Berita</a>
@@ -75,8 +77,8 @@
       <a href="#kontak">Kontak</a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
-      <a href="ppdb.html" class="nav-cta">Daftar Sekarang</a>
-      <button class="nav-toggle" id="navToggle">☰</button>
+      <a href="ppdb.html" class="nav-cta">Daftar sekarang</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><svg class="i"><use href="#i-menu"/></svg></button>
     </div>
   </div>
 </nav>
@@ -87,28 +89,28 @@
   <p>Momen dan kegiatan santri PPTQ Al Azzaam.</p>
 </div>
 
-<section class="section wrap">
-  <div class="mode-tabs">
-    <button class="mode-tab active" id="modeBtnFoto" onclick="switchMode('foto')">📷 Foto &amp; Video</button>
-    <button class="mode-tab" id="modeBtnIg" onclick="switchMode('instagram')">📸 Instagram</button>
+<section class="section wrap" data-lay="wrap">
+  <div class="pill-tabs mode-tabs">
+    <button class="pill-tab mode-tab active" id="modeBtnFoto" onclick="switchMode('foto')"><svg class="i"><use href="#i-camera"/></svg> Foto &amp; Video</button>
+    <button class="pill-tab mode-tab" id="modeBtnIg" onclick="switchMode('instagram')"><svg class="i"><use href="#i-ig"/></svg> Instagram</button>
   </div>
 
   <!-- Tampilan FOLDER (default) -->
-  <div id="folderView">
+  <div id="folderView" data-dyn>
     <div class="folder-grid" id="folderGrid">
       <div class="empty-state">Memuat album…</div>
     </div>
   </div>
 
   <!-- Tampilan ISI FOLDER (muncul setelah klik salah satu album) -->
-  <div id="itemsView" style="display:none;">
-    <div class="back-link" onclick="backToFolders()">← Kembali ke semua album</div>
-    <h2 id="folderTitle" style="font-size:18px;color:var(--maroon-900);margin-bottom:16px;"></h2>
+  <div id="itemsView" style="display:none;" data-dyn>
+    <div class="back-link" onclick="backToFolders()"><svg class="i" style="transform:rotate(180deg)"><use href="#i-arrow"/></svg> Kembali ke semua album</div>
+    <h2 id="folderTitle" style="font-size:clamp(28px,3.4vw,40px);font-weight:800;margin-bottom:18px;"></h2>
     <div class="galeri-grid" id="galeriGrid"></div>
   </div>
 
   <!-- Tampilan INSTAGRAM (mode terpisah) -->
-  <div id="instagramView" style="display:none;">
+  <div id="instagramView" style="display:none;" data-dyn>
     <div class="ig-embed-grid" id="igGrid">
       <div class="empty-state">Memuat postingan Instagram…</div>
     </div>
@@ -118,9 +120,9 @@
 <footer id="kontak">
   <div class="footer-grid">
     <div>
-      <div class="footer-brand">PPTQ Al Azzaam</div>
-      <p style="font-size:12.5px;line-height:1.7;">Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
-      <div class="social-row" id="socialRow"></div>
+      <div class="footer-brand"><svg class="i"><use href="#i-star8"/></svg> PPTQ Al Azzaam</div>
+      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang.</p>
+      <div class="social-row" id="socialRow" data-dyn></div>
     </div>
     <div>
       <h4>Tautan</h4>
@@ -136,27 +138,28 @@
     </div>
     <div>
       <h4>Kontak</h4>
-      <ul id="kontakList">
+      <ul id="kontakList" data-dyn>
         <li>Memuat…</li>
       </ul>
     </div>
   </div>
-  <div class="footer-bottom">© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang.</div>
+  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang.</div>
 </footer>
 
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-  <button class="lightbox-close" onclick="closeLightbox(event)">✕</button>
+  <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button>
   <div id="lightboxContent"></div>
 </div>
 
 <div class="flyer-overlay" id="flyerOverlay" onclick="if(event.target.id==='flyerOverlay') closeFlyer()">
   <div class="flyer-box">
-    <button class="flyer-close" onclick="closeFlyer()">✕</button>
+    <button class="flyer-close" onclick="closeFlyer()" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button>
     <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
   </div>
 </div>
 
-<script src="shared.js?v=2"></script>
+<script src="shared.js?v=3"></script>
+<script src="layout.js?v=1"></script>
 <script>
 let allGaleri = [];
 let folderMap = {};
@@ -206,11 +209,11 @@ function renderFolders(){
     return `
       <div class="folder-card" onclick="openFolder('${nama.replace(/'/g,"\\'")}')">
         <div class="folder-thumb">
-          ${thumb ? `<img src="${thumb}" alt="${nama}" loading="lazy">` : '<div class="icon-empty">🖼️</div>'}
+          ${thumb ? `<img src="${thumb}" alt="${nama}" loading="lazy">` : '<div class="icon-empty">'+ic('image')+'</div>'}
           <div class="stack"></div>
         </div>
         <div class="folder-info">
-          <div class="fname">📁 ${nama}</div>
+          <div class="fname">${ic('folder')} ${nama}</div>
           <div class="fcount">${items.length} item</div>
         </div>
       </div>
@@ -221,7 +224,7 @@ function renderFolders(){
 function openFolder(nama){
   document.getElementById('folderView').style.display = 'none';
   document.getElementById('itemsView').style.display = 'block';
-  document.getElementById('folderTitle').textContent = '📁 ' + nama;
+  document.getElementById('folderTitle').textContent = nama;
   const list = folderMap[nama] || [];
   renderGaleri(list);
   const url = new URL(location.href);
@@ -246,7 +249,7 @@ function renderGaleri(list){
   grid.innerHTML = list.map((g,i)=>`
     <div class="galeri-item ${g.tipe==='youtube' ? 'yt-thumb-wrap' : ''}" onclick="openLightbox(${i})">
       <img src="${getItemThumb(g)}" alt="${g.judul||''}" loading="lazy">
-      ${g.tipe==='youtube' ? '<div class="yt-play-icon"></div><div class="badge">▶ YouTube</div>' : ''}
+      ${g.tipe==='youtube' ? '<div class="yt-play-icon"></div><div class="badge">YouTube</div>' : ''}
       ${g.judul ? `<div class="cap">${g.judul}</div>` : ''}
     </div>
   `).join('');
