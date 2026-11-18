@@ -18,7 +18,7 @@ const sb = supabase.createClient(SB_URL, SB_ANON);
 // ---------- Util: normalisasi link (auto tambah https:// kalau lupa) ----------
 function normalizeLink(link){
   if(!link) return '';
-  link = link.trim();
+  link = String(link).trim();
   if(/^https?:\/\//i.test(link)) return link;
   if(link.startsWith('/') || link.startsWith('#')) return link;
   if(/\.html(\?|#|$)/i.test(link)) return link;
@@ -144,7 +144,7 @@ function renderFooter(map){
     const row = (icon, inner) => `<li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--a);margin-top:2px;display:inline-flex;">${ic(icon)}</span><span>${inner}</span></li>`;
     let items = '';
     items += row('pin', map.alamat || 'Alamat belum diisi');
-    if(map.google_maps_url) items += row('globe', `<a href="${map.google_maps_url}" target="_blank" rel="noopener">Lihat di peta</a>`);
+    if(map.google_maps_url) items += row('globe', `<a href="${normalizeLink(map.google_maps_url)}" target="_blank" rel="noopener">Lihat di peta</a>`);
     if(map.no_wa) items += row('phone', `<a href="https://wa.me/${map.no_wa.replace(/[^0-9]/g,'').replace(/^0/,'62')}" target="_blank" rel="noopener">WA: ${map.no_wa}</a>`);
     if(map.email) items += row('mail', `<a href="mailto:${map.email}">${map.email}</a>`);
     list.innerHTML = items;
@@ -159,7 +159,7 @@ function renderFooter(map){
       {key:'tiktok', label:'tt', nama:'TikTok'},
     ];
     socialRow.innerHTML = socials.filter(s=>map[s.key])
-      .map(s=>`<a href="${map[s.key]}" target="_blank" rel="noopener" class="social-badge" title="${s.nama}" aria-label="${s.nama}">${ic(s.label)}</a>`).join('');
+      .map(s=>`<a href="${normalizeLink(map[s.key])}" target="_blank" rel="noopener" class="social-badge" title="${s.nama}" aria-label="${s.nama}">${ic(s.label)}</a>`).join('');
   }
 
   document.getElementById('yearNow').textContent = new Date().getFullYear();
