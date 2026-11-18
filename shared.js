@@ -126,9 +126,18 @@ async function applyHeroPhoto(){
 }
 
 // ---------- Footer (kontak + sosmed) ----------
+function _cget(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } }
+function _cset(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
 async function loadFooterData(){
+  // tampilkan data tersimpan lebih dulu (instan), lalu segarkan dari database
+  const cached = _cget('pptq_situs');
+  if(cached) renderFooter(cached);
   const {data} = await sb.from('pengaturan_situs').select('key,value');
   const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  if(data && data.length){ _cset('pptq_situs', map); }
+  renderFooter(map);
+}
+function renderFooter(map){
 
   const list = document.getElementById('kontakList');
   if(list){
@@ -161,6 +170,8 @@ async function loadTicker(){
   const wrap = document.getElementById('tickerWrap');
   if(!wrap) return;
   const track = document.getElementById('tickerTrack');
+  const tc = _cget('pptq_ticker');
+  if(tc && tc.items && tc.items.length){ track.textContent = tc.text; track.style.animationDuration = Math.max(tc.dur||20,4)+'s'; }
   const [{data: items}, {data: settings}] = await Promise.all([
     sb.from('running_text').select('teks').eq('status','published').order('urutan'),
     sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height','ticker_speed']),
@@ -171,6 +182,7 @@ async function loadTicker(){
   track.style.color = map.ticker_text_color || 'var(--pd)';
 
   if(!items || items.length===0){
+    _cset('pptq_ticker',null);
     wrap.style.display = 'none';
     return;
   }
@@ -184,6 +196,7 @@ async function loadTicker(){
     const distance = track.scrollWidth;
     const duration = Math.max(distance / speedPxPerSec, 4);
     track.style.animationDuration = duration + 's';
+    _cset('pptq_ticker',{items:[1],text:track.textContent,dur:duration});
   });
 }
 
