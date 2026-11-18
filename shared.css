@@ -122,9 +122,9 @@ footer a:hover{color:var(--a);}
 .flyer-close .i{width:18px;height:18px;}
 
 /* ---------- INSTAGRAM & VIDEO ---------- */
-.ig-embed-grid{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;}
-.ig-embed-item{flex:1 1 260px;max-width:330px;display:flex;justify-content:center;background:#fff;border:1px solid var(--line);border-radius:20px;padding:10px;overflow:hidden;}
-.ig-embed-item iframe{margin:0 auto!important;border-radius:12px!important;}
+.ig-embed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;align-items:start;}
+.ig-embed-item{width:100%;background:#fff;border:1px solid var(--line);border-radius:20px;padding:8px;overflow:hidden;box-shadow:0 22px 40px -34px var(--p);}
+.ig-embed-item iframe,.ig-embed-item .instagram-media{width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;border-radius:12px!important;}
 .yt-thumb-wrap{position:relative;}
 .yt-play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:rgba(20,8,12,.78);display:flex;align-items:center;justify-content:center;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.4);}
 .yt-play-icon::after{content:'';border-style:solid;border-width:7px 0 7px 12px;border-color:transparent transparent transparent #fff;margin-left:3px;}
