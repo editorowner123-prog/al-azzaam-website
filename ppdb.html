@@ -121,7 +121,7 @@ section.band{padding:70px 0;}
       <div class="qs rv">
         <h2>Ada yang ingin ditanyakan?</h2>
         <p>Hubungi panitia PPDB untuk info lebih lanjut atau bantuan pendaftaran.</p>
-        <div class="btn-row" id="waRow" data-dyn><a class="btn btn-a mg" href="index.html#kontak">Lihat kontak kami</a></div>
+        <div class="btn-row" id="waRow" data-dyn><a class="btn btn-a mg" href="#kontak">Lihat kontak kami</a></div>
       </div>
     </div>
   </section>
@@ -162,11 +162,16 @@ section.band{padding:70px 0;}
     <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
   </div>
 </div>
-<script src="shared.js?v=6"></script>
+<script src="shared.js?v=7"></script>
 <script src="layout.js?v=3"></script>
 <script>
 
 let STEPS = [], si = 0, WA = '', FORM = '';
+/* pengaman: halaman ini tidak bergantung pada fungsi bantu di shared.js */
+const _q = s=>Array.prototype.slice.call(document.querySelectorAll(s));
+const _e = t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const _ic = (n)=>'<svg class="i" aria-hidden="true"><use href="#i-'+n+'"/></svg>';
+const _nl = l=>{ l=String(l||'').trim(); if(!l) return ''; if(/^(https?:)?\/\//i.test(l)||/^[\/#]/.test(l)) return l; return 'https://'+l; };
 function lines(t){ return String(t||'').split('\n').map(s=>s.trim()).filter(Boolean); }
 function stepBody(s){
   if(s.type === 'list') return '<ul>' + lines(s.text).map(l=>`<li>${l}</li>`).join('') + '</ul>';
@@ -174,16 +179,23 @@ function stepBody(s){
 }
 function renderStep(){
   const sp = document.getElementById('sp');
-  $$('#sp button').forEach((b,i)=>{ b.classList.toggle('on', i===si); b.classList.toggle('dn', i<si); });
+  _q('#sp button').forEach((b,i)=>{ b.classList.toggle('on', i===si); b.classList.toggle('dn', i<si); });
   document.getElementById('pf').style.width = (si / (STEPS.length - 1)) * (100 - 100 / STEPS.length) + '%';
   const d = document.getElementById('sb'), s = STEPS[si];
   d.style.animation = 'none'; d.offsetHeight; d.style.animation = '';
-  d.innerHTML = `<h3>${ic(s.icon)} ${si+1}. ${s.title}</h3>${stepBody(s)}`;
+  d.innerHTML = `<h3>${_ic(s.icon)} ${si+1}. ${s.title}</h3>${stepBody(s)}`;
   document.getElementById('pv').disabled = si === 0;
   const nx = document.getElementById('nx');
   nx.innerHTML = si === STEPS.length - 1 ? 'Selesai ✓' : 'Lanjut →';
 }
 async function loadPpdb(){
+  try{ await _loadPpdb(); }catch(err){
+    console.error(err);
+    const a=document.getElementById('ppdbArea');
+    if(a) a.innerHTML='<div class="empty-state">Info pendaftaran belum bisa dimuat. Muat ulang halaman, atau hubungi panitia lewat tombol di bawah.</div>';
+  }
+}
+async function _loadPpdb(){
   const {data, error} = await sb.from('info_ppdb').select('*').eq('status','published').order('updated_at',{ascending:false}).limit(1);
   const area = document.getElementById('ppdbArea');
   if(error || !data || data.length===0){
@@ -191,12 +203,12 @@ async function loadPpdb(){
     return;
   }
   const p = data[0];
-  document.getElementById('tahunBadge').innerHTML = p.tahun_ajaran ? `<span class="tahun-badge">Tahun Ajaran ${esc(p.tahun_ajaran)}</span>` : '';
-  WA = (p.kontak_wa || '').replace(/[^0-9]/g,'').replace(/^0/,'62');
+  document.getElementById('tahunBadge').innerHTML = p.tahun_ajaran ? `<span class="tahun-badge">Tahun Ajaran ${_e(p.tahun_ajaran)}</span>` : '';
+  WA = String(p.kontak_wa || '').replace(/[^0-9]/g,'').replace(/^0/,'62');
   FORM = p.formulir_url || '';
   const links = `<div class="btn-row">
-      ${WA ? `<a href="https://wa.me/${WA}" target="_blank" rel="noopener" class="btn btn-m mg">${ic('chat')} Chat WhatsApp panitia</a>` : ''}
-      ${FORM ? `<a href="${esc(normalizeLink(FORM))}" target="_blank" rel="noopener" class="btn btn-a mg">Isi formulir ${ic('arrow')}</a>` : ''}</div>`;
+      ${WA ? `<a href="https://wa.me/${WA}" target="_blank" rel="noopener" class="btn btn-m mg">${_ic('chat')} Chat WhatsApp panitia</a>` : ''}
+      ${FORM ? `<a href="${_e(_nl(FORM))}" target="_blank" rel="noopener" class="btn btn-a mg">Isi formulir ${_ic('arrow')}</a>` : ''}</div>`;
   STEPS = [];
   if(p.syarat) STEPS.push({title:'Syarat pendaftaran', short:'Syarat', icon:'list', type:'list', text:p.syarat});
   if(p.jadwal) STEPS.push({title:'Jadwal pendaftaran', short:'Jadwal', icon:'calendar', type:'list', text:p.jadwal});
@@ -206,13 +218,13 @@ async function loadPpdb(){
     <div class="sp rv" id="sp"><div class="pf" id="pf"></div>${STEPS.map((s,i)=>`<button type="button"><i>${i+1}</i>${s.short}</button>`).join('')}</div>
     <div class="sb" id="sb"></div>
     <div class="nv"><button class="btn back" id="pv" type="button">← Kembali</button><button class="btn" id="nx" type="button">Lanjut →</button></div>`;
-  $$('#sp button').forEach((b,i)=>b.onclick=()=>{ si = i; renderStep(); });
+  _q('#sp button').forEach((b,i)=>b.onclick=()=>{ si = i; renderStep(); });
   document.getElementById('nx').onclick = ()=>{ si = Math.min(STEPS.length - 1, si + 1); renderStep(); };
   document.getElementById('pv').onclick = ()=>{ si = Math.max(0, si - 1); renderStep(); };
   renderStep();
   document.getElementById('sp').style.setProperty('--n', STEPS.length);
   renderStep();
-  document.getElementById('waRow').innerHTML = `${WA ? `<a href="https://wa.me/${WA}" target="_blank" rel="noopener" class="btn btn-a mg">${ic('chat')} Chat WhatsApp panitia</a>` : ''}${FORM ? `<a href="${esc(normalizeLink(FORM))}" target="_blank" rel="noopener" class="btn btn-o mg">Isi formulir ${ic('arrow')}</a>` : ''}` || '';
+  document.getElementById('waRow').innerHTML = `${WA ? `<a href="https://wa.me/${WA}" target="_blank" rel="noopener" class="btn btn-a mg">${_ic('chat')} Chat WhatsApp panitia</a>` : ''}${FORM ? `<a href="${_e(_nl(FORM))}" target="_blank" rel="noopener" class="btn btn-o mg">Isi formulir ${_ic('arrow')}</a>` : ''}` || '';
 }
 loadPpdb();
 
