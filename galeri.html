@@ -30,6 +30,15 @@
 
 :root{--hf:'Cormorant Garamond',Georgia,serif;}
 body.dark{--bg:color-mix(in srgb,var(--pd) 26%,#050102);--bg2:color-mix(in srgb,var(--pd) 42%,#050102);--ink:#f6ece8;--mu:#c3aeab;background:var(--bg);color:var(--ink);}
+/* ===== Ikon baru (SVG, bergaya neon) ===== */
+.gi{width:1em;height:1em;display:inline-block;vertical-align:-.14em;flex:none;}
+.md .x,.lb .x,.lb .nv,.pl{display:grid;place-items:center;background:rgba(4,0,2,.7)!important;color:var(--a)!important;border:1.5px solid var(--a)!important;box-shadow:0 0 14px color-mix(in srgb,var(--a) 65%,transparent),inset 0 0 8px color-mix(in srgb,var(--a) 30%,transparent);transition:.25s;}
+.md .x:hover,.lb .x:hover,.lb .nv:hover{background:var(--a)!important;color:var(--pd)!important;box-shadow:0 0 26px var(--a);}
+.md .x .gi,.lb .x .gi{width:22px;height:22px}.lb .nv .gi{width:26px;height:26px}
+.vc .pb .gi,.pl .gi{width:28px;height:28px;margin-left:3px;filter:drop-shadow(0 0 6px var(--pd));}
+.vc .pb{box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 35%,transparent),0 0 26px var(--a);}
+#albX{display:inline-flex;align-items:center;gap:8px;}
+.btn .gi{width:15px;height:15px;margin-right:4px}
 /* ===== Navbar neon (selalu terbaca, apa pun warna foto/logo di belakangnya) ===== */
 body.dark .navbar,body.dark[data-nav="over"] .navbar,body.dark[data-nav="over"] .navbar.s{background:linear-gradient(180deg,rgba(4,0,2,.82),rgba(4,0,2,.55));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid color-mix(in srgb,var(--a) 70%,transparent);box-shadow:0 1px 0 color-mix(in srgb,var(--a) 40%,transparent),0 10px 34px -12px color-mix(in srgb,var(--a) 65%,transparent);}
 body.dark[data-nav="over"] .navbar:not(.s) .nav-brand,body.dark .nav-brand{color:#fff;text-shadow:0 0 6px var(--a),0 0 16px var(--a),0 0 32px color-mix(in srgb,var(--a) 70%,transparent);}
@@ -59,7 +68,7 @@ body[data-nav="over"] .ticker-wrap{position:absolute;top:72px;left:0;right:0;z-i
 h2.t{font-size:clamp(40px,5.6vw,76px);font-weight:700;margin:8px 0 12px;color:#fff;}
 section.band{padding:84px 0;}
 /* ===== Hero slideshow ===== */
-.hero{position:relative;height:100vh;min-height:600px;overflow:hidden;background:linear-gradient(150deg,var(--pd),color-mix(in srgb,var(--p) 55%,#000));}
+.hero{position:relative;height:calc(100vh - 114px);min-height:560px;overflow:hidden;background:linear-gradient(150deg,var(--pd),color-mix(in srgb,var(--p) 55%,#000));}
 .sl{position:absolute;inset:0;opacity:0;transition:opacity 1.2s;}
 .sl.on{opacity:1;}
 .sl img{width:100%;height:100%;object-fit:cover;transform:scale(1.02);}
@@ -173,7 +182,7 @@ section.band{padding:84px 0;}
 
 </style>
 </head>
-<body data-nav="over">
+<body>
 <div id="bar"></div>
 <script src="icons.js"></script>
 <nav class="navbar">
@@ -213,7 +222,7 @@ section.band{padding:84px 0;}
       <span class="tag" id="htag">GALERI KEGIATAN</span>
       <h1 id="ht">Momen santri, tersimpan indah</h1>
       <p id="hp">Foto dan video kegiatan PPTQ Al Azzaam — dari halaqoh pagi hingga wisuda.</p>
-      <div class="btn-row"><button class="btn btn-a mg" id="hb" type="button">▶ Tonton cerita</button><a class="btn btn-o mg" href="#album">Jelajahi album</a></div>
+      <div class="btn-row"><button class="btn btn-a mg" id="hb" type="button"><svg class="gi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg> Tonton cerita</button><a class="btn btn-o mg" href="#album">Jelajahi album</a></div>
     </div></div>
     <div class="sg" id="sg"></div>
   </header>
@@ -246,10 +255,10 @@ section.band{padding:84px 0;}
 
 </main>
 
-<div class="md" id="smd"><button class="x" id="sx" aria-label="Tutup">✕</button><div class="sv" id="sv"><div class="sb" id="ssb"></div><img id="sim" alt=""><div class="cap"><b id="sct"></b><span id="scs"></span></div><button class="pl" id="spl" type="button" aria-label="Putar video">▶</button><div class="z l" id="szl"></div><div class="z r" id="szr"></div></div></div>
-<div class="md" id="vmd"><button class="x" id="vx" aria-label="Tutup">✕</button><div class="pv" id="vbox"></div></div>
-<div class="alb" id="alb"><div class="top"><div class="w"><h2 id="albT"></h2><button id="albX" type="button">← Semua album</button></div></div><div class="wrap"><div class="mas" id="mas"></div></div></div>
-<div class="lb" id="lb"><button class="x" id="lx" aria-label="Tutup">✕</button><button class="nv p" id="lp" aria-label="Sebelumnya">‹</button><div id="lbm"></div><div class="cp" id="lcp"></div><button class="nv n" id="ln" aria-label="Berikutnya">›</button></div>
+<div class="md" id="smd"><button class="x" id="sx" aria-label="Tutup"><svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button><div class="sv" id="sv"><div class="sb" id="ssb"></div><img id="sim" alt=""><div class="cap"><b id="sct"></b><span id="scs"></span></div><button class="pl" id="spl" type="button" aria-label="Putar video"><svg class="gi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></button><div class="z l" id="szl"></div><div class="z r" id="szr"></div></div></div>
+<div class="md" id="vmd"><button class="x" id="vx" aria-label="Tutup"><svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button><div class="pv" id="vbox"></div></div>
+<div class="alb" id="alb"><div class="top"><div class="w"><h2 id="albT"></h2><button id="albX" type="button"><svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Semua album</button></div></div><div class="wrap"><div class="mas" id="mas"></div></div></div>
+<div class="lb" id="lb"><button class="x" id="lx" aria-label="Tutup"><svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button><button class="nv p" id="lp" aria-label="Sebelumnya"><svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><div id="lbm"></div><div class="cp" id="lcp"></div><button class="nv n" id="ln" aria-label="Berikutnya"><svg class="gi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div>
 
 <footer id="kontak">
   <div class="footer-grid">
@@ -285,7 +294,7 @@ section.band{padding:84px 0;}
     <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
   </div>
 </div>
-<script src="shared.js?v=5"></script>
+<script src="shared.js?v=6"></script>
 <script src="layout.js?v=3"></script>
 <script>
 
@@ -373,7 +382,7 @@ function renderVideos(){
   const v = IT.filter(x=>x.video && x.yt);
   const sec = $('#vd'); if(!v.length){ sec.style.display = 'none'; return; }
   sec.style.display = '';
-  $('#vg').innerHTML = v.map((x,i)=>`<div class="vc" data-i="${i}"><img src="${esc(x.src)}" alt="" loading="lazy"><span class="pb">▶</span><b>${esc(x.t || x.kat)}</b></div>`).join('');
+  $('#vg').innerHTML = v.map((x,i)=>`<div class="vc" data-i="${i}"><img src="${esc(x.src)}" alt="" loading="lazy"><span class="pb"><svg class="gi" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></span><b>${esc(x.t || x.kat)}</b></div>`).join('');
   $$('.vc').forEach(c=>c.onclick = ()=>playVideo(v[+c.dataset.i]));
 }
 function playVideo(x){
