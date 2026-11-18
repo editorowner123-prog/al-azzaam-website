@@ -25,12 +25,31 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link rel="stylesheet" href="shared.css?v=6">
+<link rel="stylesheet" href="shared.css?v=7">
 <style>
 
 :root{--hf:'Cormorant Garamond',Georgia,serif;}
 body.dark{--bg:color-mix(in srgb,var(--pd) 26%,#050102);--bg2:color-mix(in srgb,var(--pd) 42%,#050102);--ink:#f6ece8;--mu:#c3aeab;background:var(--bg);color:var(--ink);}
-body.dark .nav-brand{color:var(--a);}
+/* ===== Navbar neon (selalu terbaca, apa pun warna foto/logo di belakangnya) ===== */
+body.dark .navbar,body.dark[data-nav="over"] .navbar,body.dark[data-nav="over"] .navbar.s{background:linear-gradient(180deg,rgba(4,0,2,.82),rgba(4,0,2,.55));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid color-mix(in srgb,var(--a) 70%,transparent);box-shadow:0 1px 0 color-mix(in srgb,var(--a) 40%,transparent),0 10px 34px -12px color-mix(in srgb,var(--a) 65%,transparent);}
+body.dark[data-nav="over"] .navbar:not(.s) .nav-brand,body.dark .nav-brand{color:#fff;text-shadow:0 0 6px var(--a),0 0 16px var(--a),0 0 32px color-mix(in srgb,var(--a) 70%,transparent);}
+body.dark .nav-brand .ring{background:#fff;color:var(--pd);box-shadow:0 0 0 2px var(--a),0 0 14px 2px var(--a),0 0 34px 4px color-mix(in srgb,var(--a) 70%,transparent);animation:neon 3.2s ease-in-out infinite;}
+body.dark .nav-brand>img{background:rgba(255,255,255,.94);padding:5px 14px;border-radius:14px;box-shadow:0 0 0 1.5px var(--a),0 0 18px 2px var(--a),0 0 40px color-mix(in srgb,var(--a) 60%,transparent);animation:neon 3.2s ease-in-out infinite;}
+@keyframes neon{50%{filter:brightness(1.12) drop-shadow(0 0 8px var(--a));}}
+body.dark[data-nav="over"] .navbar:not(.s) .nav-links>a,body.dark[data-nav="over"] .navbar:not(.s) .nav-top-link,body.dark .nav-links>a,body.dark .nav-top-link{color:#fff;text-shadow:0 0 8px color-mix(in srgb,var(--a) 80%,transparent),0 0 20px color-mix(in srgb,var(--a) 55%,transparent);}
+body.dark .nav-links>a::after,body.dark .nav-top-link::after{height:3px;border-radius:3px;box-shadow:0 0 10px var(--a),0 0 22px var(--a);}
+body.dark .nav-links>a:hover,body.dark .nav-top-link:hover,body.dark .nav-links>a.active,body.dark .nav-top-link.active{color:var(--a)!important;text-shadow:0 0 6px var(--a),0 0 18px var(--a),0 0 36px var(--a);}
+body.dark .nav-cta{background:var(--a);color:var(--pd);box-shadow:0 0 0 1px var(--a),0 0 18px var(--a),0 0 40px color-mix(in srgb,var(--a) 55%,transparent);}
+body.dark .nav-toggle,body.dark[data-nav="over"] .navbar:not(.s) .nav-toggle{color:var(--a);border-color:var(--a);box-shadow:0 0 12px color-mix(in srgb,var(--a) 70%,transparent),inset 0 0 8px color-mix(in srgb,var(--a) 40%,transparent);}
+body.dark .dropdown-menu{background:rgba(4,0,2,.94);border-color:var(--a);box-shadow:0 0 22px -4px color-mix(in srgb,var(--a) 70%,transparent);}
+body.dark .dropdown-menu a{color:#fff;text-shadow:0 0 8px color-mix(in srgb,var(--a) 60%,transparent);}
+body.dark .dropdown-menu a:hover{background:color-mix(in srgb,var(--a) 18%,transparent);color:var(--a);}
+@media(max-width:1020px){
+  body.dark .nav-links{background:rgba(4,0,2,.96);border-bottom:1px solid var(--a);box-shadow:0 18px 40px -14px color-mix(in srgb,var(--a) 60%,transparent);}
+  body.dark[data-nav="over"] .navbar:not(.s) .nav-links.open>a,body.dark[data-nav="over"] .navbar:not(.s) .nav-links.open .nav-top-link{color:#fff;}
+  body.dark .nav-links>a,body.dark .nav-top-link{border-color:color-mix(in srgb,var(--a) 28%,transparent);}
+  body.dark .dropdown-menu{background:none;box-shadow:none;border:0;}
+}
 body.dark .nav-links>a:hover,body.dark .nav-top-link:hover,body.dark .nav-links>a.active,body.dark .nav-top-link.active{color:var(--a);}
 body.dark .nav-brand .ring{box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--a);}
 body.dark .ticker-wrap{background:var(--a);}
@@ -115,17 +134,17 @@ section.band{padding:84px 0;}
 .pv{width:min(900px,94vw);}
 .pv iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:14px;background:#000;}
 /* ===== Album ===== */
-.ag{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:30px;}
-.ac{cursor:pointer;position:relative;display:block;}
-.ac .ph{position:relative;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--bg2);}
-.ac .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s;}
+.ag{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;margin-top:30px;}
+.ac{cursor:pointer;position:relative;display:block;aspect-ratio:4/3;border-radius:18px;overflow:hidden;background:var(--bg2);border:1px solid color-mix(in srgb,var(--a) 35%,transparent);transition:transform .35s,box-shadow .35s,border-color .35s;isolation:isolate;}
+.ac .ph{position:absolute;inset:0;}
+.ac .ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s;}
 .ac:hover .ph img{transform:scale(1.1);}
-.ac .st{position:absolute;inset:8px -8px -8px 8px;z-index:-1;border-radius:10px;background:var(--bg2);border:1px solid rgba(255,255,255,.12);transition:.4s;}
-.ac:hover .st{transform:translate(6px,6px) rotate(2deg);}
-.ac .nn{position:absolute;right:10px;top:10px;z-index:2;background:rgba(0,0,0,.65);color:#fff;font-size:12px;font-weight:800;padding:4px 10px;border-radius:99px;}
-.ac h3{font-size:28px;margin-top:14px;color:#fff;}
+.ac::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,0,2,.92) 0,rgba(4,0,2,.35) 46%,transparent 72%);z-index:1;}
+.ac:hover{transform:translateY(-6px);border-color:var(--a);box-shadow:0 0 0 1px var(--a),0 0 22px color-mix(in srgb,var(--a) 65%,transparent),0 22px 40px -16px #000;}
+.ac .nn{position:absolute;right:12px;top:12px;z-index:2;background:rgba(4,0,2,.75);color:var(--a);border:1px solid var(--a);font-size:12px;font-weight:800;padding:4px 11px;border-radius:99px;text-shadow:0 0 8px var(--a);}
+.ac h3{position:absolute;z-index:2;left:18px;right:18px;bottom:14px;font-size:26px;margin:0;color:#fff;line-height:1.1;text-shadow:0 2px 10px #000;}
 .ac:hover h3{color:var(--a);}
-@media(max-width:1000px){.ag{grid-template-columns:repeat(3,1fr);}}@media(max-width:700px){.ag{grid-template-columns:1fr 1fr;gap:18px;}.ac h3{font-size:22px;}}
+@media(max-width:560px){.ag{grid-template-columns:1fr 1fr;gap:14px;}.ac h3{font-size:19px;left:12px;right:12px;bottom:10px;}.ac .nn{font-size:11px;padding:3px 9px;}}
 .alb{position:fixed;inset:0;z-index:350;background:var(--bg);overflow-y:auto;display:none;}
 .alb.on{display:block;animation:fi .35s;}
 .alb .top{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);padding:14px 0;border-bottom:1px solid rgba(255,255,255,.1);}
@@ -147,7 +166,9 @@ section.band{padding:84px 0;}
 .lb .nv{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:22px;cursor:pointer;}
 .lb .nv.p{left:16px;}.lb .nv.n{right:16px;}
 .lb .x{position:absolute;top:18px;right:20px;width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:20px;cursor:pointer;}
-.ig-embed-item{background:#fff;}
+#ig .ig-embed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;align-items:start;justify-content:stretch;}
+#ig .ig-embed-item{max-width:none;width:100%;flex:none;background:#fff;border:1px solid var(--a);border-radius:20px;padding:8px;box-shadow:0 0 18px -4px color-mix(in srgb,var(--a) 55%,transparent);}
+#ig .ig-embed-item iframe,#ig .ig-embed-item .instagram-media{width:100%!important;min-width:0!important;max-width:100%!important;margin:0!important;}
 .kosong{text-align:center;color:var(--mu);padding:20px;}
 
 </style>
@@ -368,7 +389,7 @@ function renderFolders(){
   const names = Object.keys(FOLD);
   $('#folderGrid').innerHTML = names.map(n=>{
     const cover = FOLD[n].find(x=>!x.video) || FOLD[n][0];
-    return `<div class="ac rv" data-k="${esc(n)}"><div class="st"></div><div class="ph"><img src="${esc(cover.src)}" alt="" loading="lazy"><span class="nn">${FOLD[n].length} item</span></div><h3>${esc(n)}</h3></div>`;
+    return `<div class="ac rv" data-k="${esc(n)}"><div class="ph"><img src="${esc(cover.src)}" alt="" loading="lazy"></div><span class="nn">${FOLD[n].length} item</span><h3>${esc(n)}</h3></div>`;
   }).join('');
   $$('.ac').forEach(a=>a.onclick = ()=>openAlbum(a.dataset.k, true));
 }
