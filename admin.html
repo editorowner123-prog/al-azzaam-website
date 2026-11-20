@@ -1,251 +1,1361 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-no-tema>
 <head>
-
 <meta charset="UTF-8">
 <link id="faviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2730%27 fill=%27%232b0810%27/%3E%3Ctext x=%2732%27 y=%2743%27 font-family=%27Georgia,serif%27 font-size=%2732%27 font-weight=%27700%27 fill=%27%23d4af37%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
-<title>SMP Tahfidz & MA Tahfidz Semarang — PPTQ Al Azzaam</title>
-<meta name="description" content="Program SMP Tahfidz dan MA Tahfidz di Semarang — PPTQ Al Azzaam memadukan hafalan Al-Qur'an dengan pendidikan formal berkualitas di Gunungpati, Jawa Tengah.">
-<link rel="canonical" href="https://pesantrenalazzaam.org/program.html">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://pesantrenalazzaam.org/program.html">
-<meta property="og:site_name" content="PPTQ Al Azzaam">
-<meta property="og:locale" content="id_ID">
-<meta property="og:title" content="SMP Tahfidz & MA Tahfidz Semarang — PPTQ Al Azzaam">
-<meta property="og:description" content="Program SMP Tahfidz dan MA Tahfidz di Semarang — PPTQ Al Azzaam memadukan hafalan Al-Qur'an dengan pendidikan formal berkualitas di Gunungpati, Jawa Tengah.">
-<meta property="og:image" content="https://pesantrenalazzaam.org/og-image.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="SMP Tahfidz & MA Tahfidz Semarang — PPTQ Al Azzaam">
-<meta name="twitter:description" content="Program SMP Tahfidz dan MA Tahfidz di Semarang — PPTQ Al Azzaam memadukan hafalan Al-Qur'an dengan pendidikan formal berkualitas di Gunungpati, Jawa Tengah.">
-<meta name="twitter:image" content="https://pesantrenalazzaam.org/og-image.jpg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="tema.js?v=1"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<title>Panel Admin — PPTQ Al Azzaam</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link rel="stylesheet" href="shared.css?v=9">
 <style>
+:root{
+  --maroon-950:#2b0810; --maroon-900:#3d0c14; --maroon-800:#5c1120; --maroon-700:#7a0f1f;
+  --maroon-600:#9b1c2e; --maroon-500:#c22638;
+  --gold-300:#f7e7ab; --gold-400:#e8c766; --gold-500:#d4af37; --gold-600:#b8892b;
+  --gold-shine:linear-gradient(120deg, var(--gold-300) 0%, var(--gold-500) 35%, var(--gold-600) 60%, var(--gold-400) 100%);
+  --cream-50:#fff8f3; --cream-100:#fdf1e8; --ink-900:#241012; --ink-600:#6b4750;
+  --line:#f0d9c9; --surface:#fff; --shadow:0 10px 28px -12px rgba(61,12,20,.18); --radius:16px;
+  --ok:#2f9e44; --bad:#d1364a;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--cream-50);color:var(--ink-900);min-height:100vh;}
+h1,h2,h3{font-family:'Outfit',sans-serif;margin:0;}
+button{font-family:inherit;cursor:pointer;}
+input,textarea,select{font-family:inherit;width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:13.5px;background:#fff;color:var(--ink-900);}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--gold-500);}
+label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-bottom:5px;}
+.field{margin-bottom:14px;}
+.btn{border:none;font-weight:800;font-size:13px;padding:10px 18px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;}
+.btn-gold{background:var(--gold-shine);color:var(--maroon-950);}
+.btn-outline{background:#fff;border:1.5px solid var(--line);color:var(--ink-900);}
+.btn-danger{background:#fdecec;color:var(--bad);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
 
-:root{--hf:'Fraunces',Georgia,serif;}
-.fx-hero{padding:84px 0 90px;}
-.fx-hero .ar{font:700 26px 'Amiri',serif;color:var(--al);}
-.fx-hero h1{font-size:clamp(40px,6vw,78px);font-weight:800;margin:8px 0 14px;}
-.fx-hero h1 em{font-style:normal;color:var(--a);}
-.fx-hero p{max-width:58ch;opacity:.9;font-size:17px;margin:0;}
-section.band{padding:80px 0;}
-section.band.alt{background:var(--bg2);}
-/* kartu miring + sorot */
-.tilts{perspective:1100px;}
-.tc{position:relative;border-radius:28px;padding:32px 30px;background:var(--bg2);border:1px solid var(--line);transform-style:preserve-3d;transition:transform .15s,box-shadow .3s;overflow:hidden;display:flex;flex-direction:column;gap:10px;}
-.tc::before{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%),color-mix(in srgb,var(--a) 50%,transparent),transparent 60%);opacity:0;transition:.3s;pointer-events:none;}
-.tc:hover::before{opacity:1;}
-.tc:hover{box-shadow:0 36px 50px -32px var(--pd);}
-.tc>*{position:relative;}
-/* kartu balik */
-.fl{display:grid;gap:20px;margin-top:34px;}
-.fc{perspective:900px;cursor:pointer;}
-.fi{display:grid;}
-.ff,.fb{grid-area:1/1;border-radius:28px;padding:32px;display:flex;flex-direction:column;justify-content:center;transition:transform .7s cubic-bezier(.3,.7,.2,1),opacity 0s linear .35s;min-height:260px;}
-.ff{background:linear-gradient(160deg,var(--p),var(--pd));color:var(--on);align-items:center;text-align:center;}
-.ff .ar{font:700 34px 'Amiri',serif;line-height:1.7;color:var(--al);}
-.ff h3{font-size:44px;}
-.ff small{opacity:.75;margin-top:12px;font-weight:700;letter-spacing:.06em;}
-.fb{background:var(--a);color:var(--pd);transform:rotateY(-180deg);opacity:0;}
-.fc.fp .ff{transform:rotateY(180deg);opacity:0;}
-.fc.fp .fb{transform:rotateY(0);opacity:1;}
-.fb h3{font-size:28px;margin-bottom:10px;}
-.fb p{margin:0;font-size:15.5px;line-height:1.65;}
-.fb ol{margin:0;padding-left:20px;font-size:15.5px;line-height:1.6;}
-.fb li{margin-bottom:6px;}
-.cta{background:linear-gradient(150deg,var(--pd),var(--p));color:var(--on);border-radius:40px;padding:56px;text-align:center;position:relative;overflow:hidden;}
-.cta h2{font-size:clamp(30px,4vw,52px);font-weight:800;}
-.cta p{opacity:.88;max-width:48ch;margin:12px auto 26px;}
-@media(max-width:700px){.cta{padding:40px 24px;}}
+/* ---------- LOGIN ---------- */
+#loginScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(1000px 500px at 20% -10%, rgba(212,175,55,.15), transparent 60%), var(--maroon-950);padding:20px;}
+.login-card{background:#fff;border-radius:20px;padding:36px 30px;max-width:360px;width:100%;box-shadow:0 30px 60px -20px rgba(0,0,0,.5);text-align:center;}
+.login-ring{width:60px;height:60px;border-radius:50%;background:var(--maroon-950);margin:0 auto 16px;box-shadow:0 0 0 3px #fff,0 0 0 5px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-family:'Playfair Display',serif;font-size:24px;font-weight:700;}
+.login-card h1{font-family:'Playfair Display',serif;font-size:20px;color:var(--maroon-900);margin-bottom:4px;}
+.login-card p{font-size:12.5px;color:var(--ink-600);margin-bottom:22px;}
+#loginError{color:var(--bad);font-size:12px;margin-top:10px;display:none;}
 
-.pg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:30px;}
-.pg .tc{min-height:300px;}
-.pg .tc:nth-child(4n+1){background:linear-gradient(160deg,var(--p),var(--pd));color:var(--on);border-color:transparent;}
-.pg .tc:nth-child(4n+1) h3{color:var(--on);} .pg .tc:nth-child(4n+1) p{color:color-mix(in srgb,var(--on) 82%,transparent);}
-.pg .tc:nth-child(4n+1) .ic{background:var(--a);color:var(--pd);} .pg .tc:nth-child(4n+1) .jt{background:color-mix(in srgb,var(--on) 18%,transparent);color:var(--on);}
-.pg .tc:nth-child(4n+1) .btn-outline-mini{color:var(--a);border-color:var(--a);}
-.pg .tc:nth-child(4n+1) .btn-outline-mini:hover{background:var(--a);color:var(--pd);}
-.tc .ic{width:62px;height:62px;border-radius:20px;background:var(--p);color:var(--on);display:grid;place-items:center;font-size:30px;}
-.tc .ic .i{width:30px;height:30px;}
-.tc .jt{align-self:flex-start;font-size:12px;font-weight:800;letter-spacing:.08em;padding:4px 12px;border-radius:99px;background:var(--al);color:var(--p);}
-.tc h3{font-size:28px;color:var(--pd);font-weight:800;}
-.tc p{color:var(--mu);margin:0;font-size:15px;white-space:pre-line;}
-.tc .btn-outline-mini{margin-top:auto;align-self:flex-start;}
-@media(max-width:960px){.pg{grid-template-columns:repeat(2,minmax(0,1fr));}}
-@media(max-width:620px){.pg{grid-template-columns:1fr;}.pg .tc{min-height:0;}}
-.pg .gh{grid-column:1/-1;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:2px solid var(--a);padding-bottom:10px;margin-top:18px;}
-.pg .gh:first-child{margin-top:0}.pg .gh h2{font-size:clamp(24px,3vw,34px);color:var(--pd);margin:0;font-weight:800;}.pg .gh span{color:var(--mu);font-size:14px;}
-.fl.three{grid-template-columns:repeat(3,minmax(0,1fr));}
-@media(max-width:860px){.fl.three{grid-template-columns:1fr;}}
+/* ---------- APP SHELL ---------- */
+#app{display:none;}
+.topbar{background:var(--maroon-950);color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.topbar-brand{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px;}
+.topbar-brand .ring{width:30px;height:30px;border-radius:50%;background:var(--maroon-900);box-shadow:0 0 0 2px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-size:12px;}
+.tabs{display:flex;gap:4px;overflow-x:auto;background:#fff;border-bottom:1px solid var(--line);padding:0 16px;}
+.tab-btn{background:none;border:none;padding:14px 16px;font-weight:700;font-size:13px;color:var(--ink-600);border-bottom:3px solid transparent;white-space:nowrap;}
+.tab-btn.active{color:var(--maroon-700);border-color:var(--gold-500);}
+.content{max-width:900px;margin:0 auto;padding:22px 16px 60px;}
+.content-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.content-head h2{font-size:18px;color:var(--maroon-900);}
 
+/* ---------- LIST ---------- */
+.item-card{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.item-main{flex:1;min-width:180px;}
+.item-title{font-weight:700;font-size:14px;color:var(--ink-900);}
+.item-meta{font-size:11.5px;color:var(--ink-600);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap;}
+.pill{font-size:10px;font-weight:800;padding:3px 9px;border-radius:10px;background:var(--cream-100);color:var(--gold-600);text-transform:uppercase;}
+.pill.published{background:#e6f6ea;color:var(--ok);}
+.multi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;margin:6px 0 10px;}
+.mg-i{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--cream-100);}
+.mg-i img{width:100%;height:100%;object-fit:cover;}
+.mg-i button{position:absolute;right:3px;top:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:11px;cursor:pointer;}
+.pill.menunggu{background:#fff3cd;color:#8a5a00;}
+.pill.draft{background:#fdf1e8;color:var(--ink-600);}
+.item-actions{display:flex;gap:6px;flex:none;}
+.empty{text-align:center;padding:40px 20px;color:var(--ink-600);font-size:13px;border:1.5px dashed var(--line);border-radius:var(--radius);}
+
+/* ---------- MODAL FORM ---------- */
+.modal-overlay{position:fixed;inset:0;background:rgba(43,8,16,.55);display:none;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto;z-index:100;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:18px;max-width:520px;width:100%;padding:26px 24px;margin-top:20px;}
+.modal h3{font-size:16px;color:var(--maroon-900);margin-bottom:18px;}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px;}
+.img-preview{width:100%;height:140px;object-fit:cover;border-radius:10px;margin-bottom:8px;background:var(--cream-100);}
+.upload-status{font-size:11.5px;color:var(--ink-600);margin-top:4px;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--maroon-950);color:#fff;padding:12px 20px;border-radius:24px;font-size:13px;font-weight:600;z-index:200;display:none;}
+
+/* ---------- PREVIEW & LIVE (editor halaman) ---------- */
+.tab-sep{width:1px;background:var(--line);margin:10px 8px;flex:none;}
+.tab-btn.special{color:var(--maroon-700);}
+.siteview{display:none;padding:16px 16px 40px;max-width:1500px;margin:0 auto;}
+.sv-top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px;}
+.sv-title{font-size:18px;color:var(--maroon-900);font-family:'Outfit',sans-serif;font-weight:800;}
+.sv-title small{display:block;font-size:12px;color:var(--ink-600);font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;}
+.sv-pages{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.sv-pill{border:1.5px solid var(--line);background:#fff;border-radius:20px;padding:8px 14px;font-weight:700;font-size:12.5px;color:var(--ink-600);cursor:pointer;display:inline-flex;gap:7px;align-items:center;font-family:inherit;}
+.sv-pill.active{background:var(--maroon-950);color:#fff;border-color:var(--maroon-950);}
+.sv-dot{width:8px;height:8px;border-radius:50%;background:#cfc3bb;}
+.sv-dot.draft{background:#e08a1e;} .sv-dot.live{background:var(--ok);}
+.sv-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 12px;box-shadow:var(--shadow);margin-bottom:12px;}
+.sv-bar .grow{flex:1;min-width:120px;}
+.sv-status{font-size:12px;font-weight:700;color:var(--ink-600);}
+.sv-status.dirty{color:#c4620a;}
+.sv-devs{display:inline-flex;background:var(--cream-100);border-radius:20px;padding:3px;}
+.sv-dev{border:0;background:none;border-radius:16px;padding:6px 12px;font-weight:700;font-size:12px;color:var(--ink-600);cursor:pointer;font-family:inherit;}
+.sv-dev.active{background:#fff;color:var(--maroon-800);box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.sv-help{font-size:12px;color:var(--ink-600);background:#fff8e6;border:1px solid #f0dca0;border-radius:12px;padding:9px 12px;margin-bottom:12px;line-height:1.6;}
+.sv-theme{display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:14px;padding:10px 14px;box-shadow:var(--shadow);margin-bottom:12px;}
+.sv-theme>b{font-size:13px;color:var(--maroon-900);}
+.sv-sws{display:flex;gap:8px;align-items:center;}
+.sv-sw{width:34px;height:34px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px #cdbfc3;cursor:pointer;transition:.2s;padding:0;font:800 16px 'Plus Jakarta Sans',sans-serif;color:#fff;}
+.sv-sw:hover{transform:scale(1.14);}
+.sv-sw.on{box-shadow:0 0 0 3px var(--maroon-950);transform:scale(1.1);}
+.sv-sw.cus{background:conic-gradient(#e0455a,#e9b949,#2f9e7a,#2f6fd0,#8a3fb0,#e0455a);}
+.sv-cc{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ink-600);}
+.sv-cc input{width:36px;height:30px;padding:0;border:1.5px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;}
+.sv-tn{font-size:12.5px;font-weight:700;color:var(--ink-900);} .sv-tn small{display:block;font-weight:500;color:var(--ink-600);font-size:11.5px;}
+.sv-frame-wrap{background:#d9d3d5;border-radius:16px;padding:12px;display:flex;justify-content:center;overflow:auto;}
+.sv-frame{border:0;background:#f1eff0;border-radius:10px;box-shadow:0 10px 30px -10px rgba(0,0,0,.4);width:100%;height:calc(100vh - 300px);min-height:560px;transition:width .2s;}
+.btn[disabled]{opacity:.45;pointer-events:none;}
 </style>
 </head>
 <body>
-<div id="bar"></div>
-<script>
-/* icons.js — ikon buatan sendiri PPTQ Al Azzaam. Dibuat otomatis dari desain-sampel/_src/sprite.svg
-   Pakai: <svg class="i"><use href="#i-nama"/></svg>  atau di JS: ic('nama') */
-(function(){
-  var S = "<svg xmlns=\"http://www.w3.org/2000/svg\" style=\"display:none\" aria-hidden=\"true\">\n<!-- Ikon buatan sendiri PPTQ Al Azzaam. Grid 24px, garis 1.5, ujung bulat. Warna aksen diatur lewat variabel CSS ic2. -->\n<defs>\n  <style>\n    .ic-s{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}\n    .ic-a{fill:var(--ic2,currentColor);fill-opacity:.22;stroke:none}\n    .ic-f{fill:var(--ic2,currentColor);stroke:none}\n  </style>\n</defs>\n\n<symbol id=\"i-quran\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M12 9.5C10 8 7 7.6 3.5 8v11c3.5-.4 6.5 0 8.5 1.5 2-1.5 5-1.9 8.5-1.5V8C17 7.6 14 8 12 9.5z\"/>\n  <path class=\"ic-s\" d=\"M12 9.5C10 8 7 7.6 3.5 8v11c3.5-.4 6.5 0 8.5 1.5 2-1.5 5-1.9 8.5-1.5V8C17 7.6 14 8 12 9.5zM12 9.5v11\"/>\n  <path class=\"ic-f\" d=\"M12 2.2l.8 1.7 1.7.8-1.7.8-.8 1.7-.8-1.7-1.7-.8 1.7-.8z\"/>\n</symbol>\n\n<symbol id=\"i-dome\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M5 20v-6c0-3.9 3.1-7 7-7s7 3.1 7 7v6z\"/>\n  <path class=\"ic-s\" d=\"M5 20v-6c0-3.9 3.1-7 7-7s7 3.1 7 7v6M3 20h18M12 7V5M10 20v-3a2 2 0 0 1 4 0v3\"/>\n  <circle class=\"ic-f\" cx=\"12\" cy=\"3.7\" r=\"1.1\"/>\n</symbol>\n\n<symbol id=\"i-star8\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M6.2 6.2h11.6v11.6H6.2z\"/>\n  <path class=\"ic-s\" d=\"M6.2 6.2h11.6v11.6H6.2zM12 3.8l8.2 8.2-8.2 8.2L3.8 12z\"/>\n  <circle class=\"ic-f\" cx=\"12\" cy=\"12\" r=\"1.7\"/>\n</symbol>\n\n<symbol id=\"i-cap\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M2.5 9.5L12 5l9.5 4.5L12 14z\"/>\n  <path class=\"ic-s\" d=\"M2.5 9.5L12 5l9.5 4.5L12 14zM6.5 11.8V16c0 1.2 2.5 2.6 5.5 2.6s5.5-1.400 5.5-2.600v-4.200M21.5 9.5v5.200\"/>\n</symbol>\n\n<symbol id=\"i-users\" viewBox=\"0 0 24 24\">\n  <circle class=\"ic-a\" cx=\"9\" cy=\"8.5\" r=\"3\"/>\n  <circle class=\"ic-s\" cx=\"9\" cy=\"8.5\" r=\"3\"/>\n  <path class=\"ic-s\" d=\"M3.500 19c0-3 2.500-5 5.500-5s5.500 2 5.500 5M16.500 6.600a2.500 2.500 0 0 1 0 4.800M17 14.300c2.200.5 3.700 2.200 3.700 4.700\"/>\n</symbol>\n\n<symbol id=\"i-calendar\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M3.500 8.500a3 3 0 0 1 3-3.500h11a3 3 0 0 1 3 3.500V10h-17z\"/>\n  <rect class=\"ic-s\" x=\"3.500\" y=\"5\" width=\"17\" height=\"15.500\" rx=\"3\"/>\n  <path class=\"ic-s\" d=\"M3.500 10h17M8 3v3.500M16 3v3.500\"/>\n  <circle class=\"ic-f\" cx=\"8\" cy=\"14.500\" r=\".9\"/><circle class=\"ic-f\" cx=\"12\" cy=\"14.500\" r=\".9\"/><circle class=\"ic-f\" cx=\"16\" cy=\"14.500\" r=\".9\"/><circle class=\"ic-f\" cx=\"8\" cy=\"17.500\" r=\".9\"/><circle class=\"ic-f\" cx=\"12\" cy=\"17.500\" r=\".9\"/>\n</symbol>\n\n<symbol id=\"i-pin\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M12 21s6.500-5.600 6.500-11a6.500 6.500 0 0 0-13 0c0 5.400 6.500 11 6.500 11z\"/>\n  <path class=\"ic-s\" d=\"M12 21s6.500-5.600 6.500-11a6.500 6.500 0 0 0-13 0c0 5.400 6.500 11 6.500 11z\"/>\n  <circle class=\"ic-s\" cx=\"12\" cy=\"10\" r=\"2.400\"/>\n</symbol>\n\n<symbol id=\"i-phone\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M6.500 3.500h3l1.300 4-2 1.300a10 10 0 0 0 4.400 4.400l1.300-2 4 1.300v3a2 2 0 0 1-2.200 2A15 15 0 0 1 4.500 5.700a2 2 0 0 1 2-2.200z\"/>\n  <path class=\"ic-s\" d=\"M6.500 3.500h3l1.300 4-2 1.300a10 10 0 0 0 4.400 4.400l1.300-2 4 1.300v3a2 2 0 0 1-2.200 2A15 15 0 0 1 4.500 5.700a2 2 0 0 1 2-2.200z\"/>\n</symbol>\n\n<symbol id=\"i-chat\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M4 5.500h16a1 1 0 0 1 1 1V16a1 1 0 0 1-1 1h-9l-4.500 3.500V17H4a1 1 0 0 1-1-1V6.500a1 1 0 0 1 1-1z\"/>\n  <path class=\"ic-s\" d=\"M4 5.500h16a1 1 0 0 1 1 1V16a1 1 0 0 1-1 1h-9l-4.500 3.500V17H4a1 1 0 0 1-1-1V6.500a1 1 0 0 1 1-1zM7.500 9.500h9M7.500 12.800H13\"/>\n</symbol>\n\n<symbol id=\"i-play\" viewBox=\"0 0 24 24\">\n  <circle class=\"ic-a\" cx=\"12\" cy=\"12\" r=\"9\"/>\n  <circle class=\"ic-s\" cx=\"12\" cy=\"12\" r=\"9\"/>\n  <path class=\"ic-f\" d=\"M10 8.500v7l6-3.500z\"/>\n</symbol>\n\n<symbol id=\"i-pause\" viewBox=\"0 0 24 24\">\n  <circle class=\"ic-a\" cx=\"12\" cy=\"12\" r=\"9\"/>\n  <circle class=\"ic-s\" cx=\"12\" cy=\"12\" r=\"9\"/>\n  <path class=\"ic-s\" d=\"M10 8.800v6.400M14 8.800v6.400\"/>\n</symbol>\n\n<symbol id=\"i-arrow\" viewBox=\"0 0 24 24\"><path class=\"ic-s\" d=\"M4.500 12h15M13.500 6l6 6-6 6\"/></symbol>\n<symbol id=\"i-menu\" viewBox=\"0 0 24 24\"><path class=\"ic-s\" d=\"M4 7h16M4 12h10M4 17h16\"/></symbol>\n<symbol id=\"i-close\" viewBox=\"0 0 24 24\"><path class=\"ic-s\" d=\"M6 6l12 12M18 6L6 18\"/></symbol>\n\n<symbol id=\"i-donate\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M12 13.500s-4.500-2.700-4.500-6.100A2.600 2.600 0 0 1 12 5.800a2.600 2.600 0 0 1 4.500 1.600c0 3.400-4.500 6.100-4.500 6.100z\"/>\n  <path class=\"ic-s\" d=\"M12 13.500s-4.500-2.700-4.500-6.100A2.600 2.600 0 0 1 12 5.800a2.600 2.600 0 0 1 4.500 1.600c0 3.400-4.500 6.100-4.500 6.100zM3 16.500c2.500 0 3.800 1.500 6 1.500h5a1.300 1.300 0 0 1 0 2.600h-4M14.500 19.200l5-2.300a1.300 1.300 0 0 1 1.200 2.300L14 22H9\"/>\n</symbol>\n\n<symbol id=\"i-trophy\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M7.500 4h9v5a4.500 4.500 0 0 1-9 0z\"/>\n  <path class=\"ic-s\" d=\"M7.500 4h9v5a4.500 4.500 0 0 1-9 0zM7.500 6H4.500v1a3 3 0 0 0 3 3M16.500 6h3v1a3 3 0 0 1-3 3M12 13.500V17M8.500 20h7M9.500 17h5\"/>\n</symbol>\n\n<symbol id=\"i-school\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M5.500 20.500V10L12 5.500l6.500 4.500v10.500z\"/>\n  <path class=\"ic-s\" d=\"M3.500 20.500h17M5.500 20.500V10L12 5.500l6.500 4.500v10.500M10 20.500V16h4v4.500\"/>\n  <circle class=\"ic-s\" cx=\"12\" cy=\"10.800\" r=\"1.500\"/>\n</symbol>\n\n<symbol id=\"i-news\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M4 5.500A1.500 1.500 0 0 1 5.500 4h10A1.500 1.500 0 0 1 17 5.500V20H5.500A1.500 1.500 0 0 1 4 18.500z\"/>\n  <path class=\"ic-s\" d=\"M4 5.500A1.500 1.500 0 0 1 5.500 4h10A1.500 1.500 0 0 1 17 5.500V20H5.500A1.500 1.500 0 0 1 4 18.500zM17 9h2.500a.5.5 0 0 1 .5.5v9a1.500 1.500 0 0 1-3 0M7 8h7M7 11.500h7M7 15h4\"/>\n</symbol>\n\n<symbol id=\"i-image\" viewBox=\"0 0 24 24\">\n  <rect class=\"ic-a\" x=\"3.500\" y=\"5\" width=\"17\" height=\"14\" rx=\"3\"/>\n  <rect class=\"ic-s\" x=\"3.500\" y=\"5\" width=\"17\" height=\"14\" rx=\"3\"/>\n  <circle class=\"ic-f\" cx=\"9\" cy=\"10\" r=\"1.600\"/>\n  <path class=\"ic-s\" d=\"M4 17l4.500-4.500 3.500 3.500 3-3 5 4.500\"/>\n</symbol>\n\n<symbol id=\"i-check\" viewBox=\"0 0 24 24\">\n  <circle class=\"ic-a\" cx=\"12\" cy=\"12\" r=\"9\"/>\n  <circle class=\"ic-s\" cx=\"12\" cy=\"12\" r=\"9\"/>\n  <path class=\"ic-s\" d=\"M8 12.300l2.800 2.800 5.500-5.600\"/>\n</symbol>\n\n<symbol id=\"i-quote\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-f\" d=\"M9.500 7C6.500 7.500 5 9.500 5 12.500V17h4.500v-4.500H7c0-2 1-3 2.500-3.300zM18.500 7c-3 .5-4.500 2.500-4.500 5.500V17h4.500v-4.500H16c0-2 1-3 2.500-3.300z\"/>\n</symbol>\n\n<symbol id=\"i-moon\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M19.500 14.500A8 8 0 0 1 9.500 4.500a8 8 0 1 0 10 10z\"/>\n  <path class=\"ic-s\" d=\"M19.500 14.500A8 8 0 0 1 9.500 4.500a8 8 0 1 0 10 10z\"/>\n  <path class=\"ic-f\" d=\"M17.500 4l.6 1.300 1.300.6-1.300.6-.6 1.300-.6-1.300-1.300-.6 1.300-.6z\"/>\n</symbol>\n\n<symbol id=\"i-dawn\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M7 17a5 5 0 0 1 10 0z\"/>\n  <path class=\"ic-s\" d=\"M3 17h18M7 17a5 5 0 0 1 10 0M12 5.500V8M5.200 9.200l1.700 1.700M18.800 9.200l-1.700 1.700M2.500 13.500H4.500M19.500 13.500h2M9 20.500h6\"/>\n</symbol>\n\n<symbol id=\"i-wave\" viewBox=\"0 0 24 24\"><path class=\"ic-s\" d=\"M4.500 10v4M8.200 7v10M12 3.800v16.400M15.800 7.500v9M19.500 10.200v3.600\"/></symbol>\n\n<symbol id=\"i-lantern\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M8.500 8h7l1 3.500c0 3.400-1.700 6-4.500 7.500-2.800-1.500-4.500-4.100-4.500-7.500z\"/>\n  <path class=\"ic-s\" d=\"M12 2.500V5M9.500 5h5M8.500 8h7l1 3.500c0 3.400-1.700 6-4.500 7.500-2.800-1.500-4.500-4.100-4.500-7.500zM12 8v11M10 21.500h4\"/>\n</symbol>\n\n<symbol id=\"i-shield\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M12 3l7 2.800v5.400c0 4.400-3 8-7 9.800-4-1.800-7-5.400-7-9.800V5.800z\"/>\n  <path class=\"ic-s\" d=\"M12 3l7 2.800v5.400c0 4.400-3 8-7 9.800-4-1.800-7-5.400-7-9.800V5.800zM8.800 12l2.200 2.200 4.200-4.400\"/>\n</symbol>\n\n<symbol id=\"i-bed\" viewBox=\"0 0 24 24\">\n  <circle class=\"ic-a\" cx=\"7.500\" cy=\"12\" r=\"2\"/>\n  <path class=\"ic-s\" d=\"M3.500 18.500v-12M3.500 15h17v3.500M20.500 15v-3a2.500 2.500 0 0 0-2.500-2.500H11V15\"/>\n  <circle class=\"ic-s\" cx=\"7.500\" cy=\"12\" r=\"2\"/>\n</symbol>\n\n<symbol id=\"i-bowl\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M3.500 11h17a8.500 7 0 0 1-17 0z\"/>\n  <path class=\"ic-s\" d=\"M3.500 11h17a8.500 7 0 0 1-17 0zM9 4.500c-1 1 1 2 0 3.200M13 4c-1 1 1 2 0 3.200M17 4.500c-1 1 1 2 0 3.200\"/>\n</symbol>\n\n<symbol id=\"i-clock\" viewBox=\"0 0 24 24\">\n  <circle class=\"ic-a\" cx=\"12\" cy=\"12\" r=\"9\"/>\n  <circle class=\"ic-s\" cx=\"12\" cy=\"12\" r=\"9\"/>\n  <path class=\"ic-s\" d=\"M12 7v5.200l3.300 2\"/>\n</symbol>\n\n<symbol id=\"i-globe\" viewBox=\"0 0 24 24\">\n  <circle class=\"ic-a\" cx=\"12\" cy=\"12\" r=\"9\"/>\n  <circle class=\"ic-s\" cx=\"12\" cy=\"12\" r=\"9\"/>\n  <path class=\"ic-s\" d=\"M3 12h18M12 3c3 2.700 3 15.300 0 18M12 3c-3 2.700-3 15.300 0 18\"/>\n</symbol>\n\n<symbol id=\"i-pen\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M4 20l1-4.200L16.500 4.300a2 2 0 0 1 2.800 0l.4.4a2 2 0 0 1 0 2.800L8.200 19z\"/>\n  <path class=\"ic-s\" d=\"M4 20l1-4.200L16.500 4.300a2 2 0 0 1 2.800 0l.4.4a2 2 0 0 1 0 2.800L8.200 19zM14.500 6.300l3.200 3.200\"/>\n</symbol>\n\n<symbol id=\"i-ig\" viewBox=\"0 0 24 24\">\n  <rect class=\"ic-s\" x=\"3.500\" y=\"3.500\" width=\"17\" height=\"17\" rx=\"5.500\"/>\n  <circle class=\"ic-s\" cx=\"12\" cy=\"12\" r=\"4\"/>\n  <circle class=\"ic-f\" cx=\"17\" cy=\"7\" r=\"1.100\"/>\n</symbol>\n\n<symbol id=\"i-yt\" viewBox=\"0 0 24 24\">\n  <rect class=\"ic-a\" x=\"2.500\" y=\"6\" width=\"19\" height=\"12\" rx=\"4\"/>\n  <rect class=\"ic-s\" x=\"2.500\" y=\"6\" width=\"19\" height=\"12\" rx=\"4\"/>\n  <path class=\"ic-f\" d=\"M10.300 9.600v4.800l4.200-2.400z\"/>\n</symbol>\n\n<symbol id=\"i-mail\" viewBox=\"0 0 24 24\">\n  <rect class=\"ic-a\" x=\"3\" y=\"5.500\" width=\"18\" height=\"13\" rx=\"3\"/>\n  <rect class=\"ic-s\" x=\"3\" y=\"5.500\" width=\"18\" height=\"13\" rx=\"3\"/>\n  <path class=\"ic-s\" d=\"M4 8l8 5.500L20 8\"/>\n</symbol>\n\n<symbol id=\"i-sparkle\" viewBox=\"0 0 24 24\">\n  <path class=\"ic-a\" d=\"M12 3.500l2 5.500 5.500 2-5.500 2-2 5.500-2-5.500L4.500 11l5.500-2z\"/>\n  <path class=\"ic-s\" d=\"M12 3.500l2 5.500 5.500 2-5.500 2-2 5.500-2-5.500L4.500 11l5.500-2z\"/>\n</symbol>\n\n<symbol id=\"i-caret\" viewBox=\"0 0 24 24\"><path class=\"ic-s\" d=\"M6 9.5l6 6 6-6\"/></symbol>\n<symbol id=\"i-target\" viewBox=\"0 0 24 24\"><circle class=\"ic-a\" cx=\"12\" cy=\"12\" r=\"8\"/><circle class=\"ic-s\" cx=\"12\" cy=\"12\" r=\"8.5\"/><circle class=\"ic-s\" cx=\"12\" cy=\"12\" r=\"4.5\"/><circle class=\"ic-f\" cx=\"12\" cy=\"12\" r=\"1.6\"/></symbol>\n<symbol id=\"i-compass\" viewBox=\"0 0 24 24\"><circle class=\"ic-s\" cx=\"12\" cy=\"12\" r=\"9\"/><path class=\"ic-a\" d=\"M15.8 8.2l-2 5.6-5.6 2 2-5.6z\"/><path class=\"ic-s\" d=\"M15.8 8.2l-2 5.6-5.6 2 2-5.6z\"/></symbol>\n<symbol id=\"i-list\" viewBox=\"0 0 24 24\"><rect class=\"ic-a\" x=\"5\" y=\"4\" width=\"14\" height=\"17\" rx=\"2.5\"/><rect class=\"ic-s\" x=\"5\" y=\"4\" width=\"14\" height=\"17\" rx=\"2.5\"/><path class=\"ic-s\" d=\"M9 4V3h6v1M8.5 10h7M8.5 13.5h7M8.5 17h4\"/></symbol>\n<symbol id=\"i-wallet\" viewBox=\"0 0 24 24\"><rect class=\"ic-a\" x=\"3\" y=\"6\" width=\"18\" height=\"13\" rx=\"3\"/><path class=\"ic-s\" d=\"M4 8.5V7a2 2 0 0 1 2-2h11M3 9a2 2 0 0 1 2-2h13a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 13.5h2.5\"/></symbol>\n<symbol id=\"i-folder\" viewBox=\"0 0 24 24\"><path class=\"ic-a\" d=\"M3.5 7a2 2 0 0 1 2-2H9l2 2.5h7.500a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z\"/><path class=\"ic-s\" d=\"M3.5 7a2 2 0 0 1 2-2H9l2 2.5h7.500a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z\"/></symbol>\n<symbol id=\"i-camera\" viewBox=\"0 0 24 24\"><rect class=\"ic-a\" x=\"3\" y=\"7\" width=\"18\" height=\"12\" rx=\"3\"/><path class=\"ic-s\" d=\"M8 7l1.200-2h5.600L16 7M5.500 7H18.500a2.500 2.500 0 0 1 2.500 2.500v7A2.500 2.500 0 0 1 18.500 19h-13A2.500 2.500 0 0 1 3 16.500v-7A2.500 2.500 0 0 1 5.500 7z\"/><circle class=\"ic-s\" cx=\"12\" cy=\"13\" r=\"3.2\"/></symbol>\n<symbol id=\"i-fb\" viewBox=\"0 0 24 24\"><path class=\"ic-s\" d=\"M14 8.500h2.500V5.200H14a3.500 3.500 0 0 0-3.500 3.500V11H8v3.200h2.500V21h3.300v-6.800h2.500l.5-3.200h-3V8.800c0-.2.100-.3.200-.3z\"/></symbol>\n<symbol id=\"i-tt\" viewBox=\"0 0 24 24\"><path class=\"ic-s\" d=\"M14 4v10.200a3.300 3.300 0 1 1-3.300-3.300M14 4c.4 2.300 1.900 3.800 4.200 4v2.800c-1.600 0-3-.5-4.200-1.400\"/></symbol>\n<symbol id=\"i-link\" viewBox=\"0 0 24 24\"><path class=\"ic-s\" d=\"M10 14a4 4 0 0 0 5.700 0l3-3A4 4 0 0 0 13 5.300l-1 1M14 10a4 4 0 0 0-5.700 0l-3 3A4 4 0 0 0 11 18.700l1-1\"/></symbol>\n<symbol id=\"i-hand\" viewBox=\"0 0 24 24\"><path class=\"ic-a\" d=\"M3 12.500l4.500-3.500 4 1.500 4-1.500L21 12.500l-5 5.500h-4l-2-1.500z\"/><path class=\"ic-s\" d=\"M3 12.500l4.500-3.500 4 1.500 4-1.500L21 12.500l-5 5.500h-4.500L8 15.500M3 12.500l3 3M21 12.500l-3 3\"/></symbol>\n<symbol id=\"i-wa\" viewBox=\"0 0 24 24\"><path class=\"ic-a\" d=\"M12 3.500a8.500 8.500 0 0 0-7.300 12.800L3.500 20.500l4.300-1.100A8.500 8.500 0 1 0 12 3.500z\"/><path class=\"ic-s\" d=\"M12 3.500a8.500 8.500 0 0 0-7.300 12.800L3.500 20.500l4.300-1.100A8.500 8.500 0 1 0 12 3.500zM9 8.500c.3 2.800 2.700 5.300 5.800 6.300l1.200-1.300-1.800-1-.9.800c-.9-.4-1.700-1.200-2.100-2.100l.8-.9-1-1.800z\"/></symbol>\n</svg>\n";
-  function mount(){ if(document.getElementById('spriteIkon')) return; var d=document.createElement('div'); d.id='spriteIkon'; d.setAttribute('aria-hidden','true'); d.style.display='none'; d.innerHTML=S; document.body.insertBefore(d, document.body.firstChild); }
-  if(document.body) mount(); else document.addEventListener('DOMContentLoaded', mount);
-  window.ic = function(n, cls){ return '<svg class="i'+(cls?' '+cls:'')+'" aria-hidden="true"><use href="#i-'+n+'"/></svg>'; };
-})();
 
-</script>
-<nav class="navbar">
-  <div class="navbar-inner">
-    <a href="index.html" class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</a>
-    <div class="nav-links" id="navLinks">
-      <a href="index.html">Beranda</a>
-      <div class="nav-item">
-        <a href="profil.html" class="nav-top-link">Profil <span class="nav-caret"><svg class="i"><use href="#i-caret"/></svg></span></a>
-        <div class="dropdown-menu">
-          <a href="profil.html#sejarah">Sejarah</a>
-          <a href="profil.html#visimisi">Visi &amp; Misi</a>
-          <a href="profil.html#struktur">Struktur Pengurus</a>
-        </div>
-      </div>
-      <div class="nav-item">
-        <a href="program.html" class="nav-top-link active">Program <span class="nav-caret"><svg class="i"><use href="#i-caret"/></svg></span></a>
-        <div class="dropdown-menu program-dropdown"><a href="program.html">Memuat…</a></div>
-      </div>
-      <a href="berita.html">Berita</a>
-      <a href="galeri.html">Galeri</a>
-      <a href="ppdb.html" class="nav-cta-m">Daftar Santri Baru</a>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <a href="ppdb.html" class="nav-cta mg">Daftar Santri Baru</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><svg class="i"><use href="#i-menu"/></svg></button>
-    </div>
-  </div>
-</nav>
-<div class="ticker-wrap" id="tickerWrap"><div class="ticker-track" id="tickerTrack">Memuat info terkini…</div></div>
-<main data-lay="main">
-
-  <header class="fx-hero">
-    <div class="wrap">
-      <div class="ar">وَرَتِّلِ الْقُرْآنَ تَرْتِيْلًا</div>
-      <h1>Program <em>pendidikan</em></h1>
-      <p>SMP Tahfidz dan MA Tahfidz di Semarang — program pendidikan yang berjalan beriringan di PPTQ Al Azzaam.</p>
-    </div>
-  </header>
-  <section class="band" id="daftarProgram">
-    <div class="wrap">
-      <div class="chips rv" id="jenisTabs"><button class="chip jenis-tab active" data-jenis="Semua" type="button">Semua Program</button><button class="chip jenis-tab" data-jenis="Formal" type="button">Formal</button><button class="chip jenis-tab" data-jenis="Non-Formal" type="button">Non-Formal</button></div>
-      <div class="chips rv" id="jenjangTabs" data-dyn style="margin-top:10px"></div>
-      <div class="pg tilts" id="programGrid" data-dyn><div class="empty-state">Memuat program…</div></div>
-    </div>
-  </section>
-  <section class="band alt" id="ayat">
-    <div class="wrap">
-      <div class="eb rv">Ayat pilihan</div>
-      <h2 class="sec-t rv">Ketuk kartu untuk membaliknya</h2>
-      <div class="fl three">
-        <div class="fc rv"><div class="fi"><div class="ff"><div class="ar">اِقْرَأْ بِاسْمِ رَبِّكَ</div><small>Al‑'Alaq · 1</small></div><div class="fb"><h3>Bacalah!</h3><p>"Bacalah dengan (menyebut) nama Tuhanmu." Perintah pertama: belajar dimulai dengan iqra'.</p></div></div></div>
-        <div class="fc rv"><div class="fi"><div class="ff"><div class="ar">وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا</div><small>Al‑Muzzammil · 4</small></div><div class="fb"><h3>Tartil</h3><p>"Dan bacalah Al‑Qur'an itu dengan perlahan‑lahan." Dasar tahsin dan adab membaca.</p></div></div></div>
-        <div class="fc rv"><div class="fi"><div class="ff"><div class="ar">وَلَقَدْ يَسَّرْنَا الْقُرْآنَ لِلذِّكْرِ</div><small>Al‑Qamar · 17</small></div><div class="fb"><h3>Dimudahkan</h3><p>"Sungguh, telah Kami mudahkan Al‑Qur'an untuk peringatan." Penyemangat para penghafal.</p></div></div></div>
-      </div>
-    </div>
-  </section>
-  <section class="band">
-    <div class="wrap"><div class="cta rv"><h2>Temukan program yang tepat</h2><p>Klik tombol ini — ada kejutan kecil 🎉</p><a class="btn btn-a mg" href="ppdb.html" id="cb">Daftar Sekarang →</a></div></div>
-  </section>
-
-</main>
-
-<footer id="kontak">
-  <div class="footer-grid">
-    <div>
-      <div class="footer-brand"><svg class="i"><use href="#i-star8"/></svg> PPTQ Al Azzaam</div>
-      <p>Pondok Pesantren Tahfidz Al-Qur'an — Gunungpati, Semarang, Jawa Tengah.</p>
-      <div class="social-row" id="socialRow" data-dyn></div>
-    </div>
-    <div>
-      <h4>Tautan</h4>
-      <ul>
-        <li><a href="index.html">Beranda</a></li>
-        <li><a href="profil.html">Profil</a></li>
-        <li><a href="program.html">Program</a></li>
-        <li><a href="berita.html">Berita</a></li>
-        <li><a href="galeri.html">Galeri</a></li>
-        <li><a href="ppdb.html">Pendaftaran</a></li>
-        <li><a href="https://tahfidzalazzaam.com">Portal Wali Santri</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Kontak</h4>
-      <ul id="kontakList" data-dyn>
-        <li>Memuat…</li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom" data-dyn>© <span id="yearNow"></span> PPTQ Al Azzaam Gunungpati, Semarang. Seluruh hak cipta dilindungi.</div>
-</footer>
-<div class="flyer-overlay" id="flyerOverlay" onclick="if(event.target.id==='flyerOverlay') closeFlyer()">
-  <div class="flyer-box">
-    <button class="flyer-close" onclick="closeFlyer()" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button>
-    <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
+<!-- ================= LOGIN ================= -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-ring">A</div>
+    <h1>Panel Admin</h1>
+    <p>PPTQ Al Azzaam — Website Informasi</p>
+    <div class="field" style="text-align:left"><label>Email</label><input type="email" id="loginEmail" placeholder="admin@email.com"></div>
+    <div class="field" style="text-align:left"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••"></div>
+    <button class="btn btn-gold" style="width:100%;justify-content:center" onclick="doLogin()">Masuk</button>
+    <div id="loginError"></div>
   </div>
 </div>
-<script src="shared.js?v=9"></script>
-<script src="layout.js?v=3"></script>
-<script>
 
-let allProgram = [], fJenis = 'Semua', fJenjang = 'Semua';
-$$('.fc').forEach(f=>f.onclick=()=>f.classList.toggle('fp'));
-// konfeti, lalu lanjut ke halaman pendaftaran
-document.getElementById('cb').addEventListener('click', e=>{ e.preventDefault(); const h = e.currentTarget.href; confetti(e.clientX, e.clientY); setTimeout(()=>location.href = h, 900); });
-const jenisOf = p => p.jenis === 'Non-Formal' ? 'Non-Formal' : 'Formal';
-async function loadProgram(){
-  const {data, error} = await sb.from('program').select('*').order('urutan');
-  const grid = document.getElementById('programGrid');
-  if(error || !data || data.length===0){ grid.innerHTML = '<div class="empty-state">Belum ada data program. Tambahkan lewat panel admin.</div>'; return; }
-  allProgram = data;
-  $$('.jenis-tab').forEach(t=>t.onclick=()=>{ fJenis = t.dataset.jenis; fJenjang = 'Semua'; refresh(); });
-  const q = new URLSearchParams(location.search), j = q.get('jenjang'), k = q.get('jenis');
-  if(k === 'Formal' || k === 'Non-Formal') fJenis = k;
-  if(j){ const hit = data.find(p=>p.jenjang === j); if(hit){ fJenjang = j; fJenis = jenisOf(hit); } }
-  refresh();
+<!-- ================= APP ================= -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-brand"><span class="ring">A</span> Panel Admin</div>
+    <button class="btn btn-outline btn-sm" onclick="doLogout()">Keluar</button>
+  </div>
+  <div class="tabs" id="tabBar"></div>
+  <div class="content">
+    <div class="content-head">
+      <h2 id="contentTitle">—</h2>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline btn-sm" id="bulkBtn" style="display:none;" onclick="openBulkForm()">⚡ Tambah Massal</button>
+        <button class="btn btn-gold btn-sm" id="addBtn" onclick="openForm()">+ Tambah</button>
+      </div>
+    </div>
+    <div id="listArea"></div>
+  </div>
+
+  <div class="siteview" id="siteViewArea"></div>
+</div>
+
+<div class="modal-overlay" id="bulkModalOverlay">
+  <div class="modal">
+    <h3 id="bulkModalTitle">Tambah Massal</h3>
+    <div id="bulkFormArea"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeBulkForm()">Batal</button>
+      <button class="btn btn-gold" onclick="submitBulk()">Tambahkan Semua</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3 id="modalTitle">Tambah Data</h3>
+    <div id="formArea"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeForm()">Batal</button>
+      <button class="btn btn-gold" onclick="saveRecord()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SB_URL = "https://ttpkztaxfpjhkwtnbpec.supabase.co";
+const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR0cGt6dGF4ZnBqaGt3dG5icGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MDExOTUsImV4cCI6MjEwMjk3NzE5NX0.yfeSSewI_CDw64WxYU4qUVeEbVLsHXVqpDpeCGDT5PI";
+const sb = supabase.createClient(SB_URL, SB_ANON);
+
+// ---------- Konfigurasi tabel (generik, biar 1 mesin CRUD dipakai semua) ----------
+const TABLES = {
+  berita: {
+    label: 'Berita', pk: 'id', orderBy: 'created_at', ascending: false,
+    titleField: 'judul',
+    meta: r => [r.kategori, `<span class="pill ${r.status}">${r.status}</span>`, r.tanggal_publish ? new Date(r.tanggal_publish).toLocaleDateString('id-ID') : ''],
+    fields: [
+      {key:'judul', label:'Judul', type:'text', required:true},
+      {key:'slug', label:'Slug (URL, huruf kecil tanpa spasi)', type:'text', required:true},
+      {key:'ringkasan', label:'Ringkasan Singkat', type:'textarea'},
+      {key:'isi', label:'Isi Berita', type:'textarea-lg', required:true, allowInlineImage:true, imageFolder:'berita-inline'},
+      {key:'foto_url', label:'Foto Sampul (tampil di kartu & bagian atas artikel)', type:'image', folder:'berita'},
+      {key:'kategori', label:'Kategori', type:'select', options:['Prestasi','Kegiatan','Pengumuman']},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
+      {key:'tanggal_publish', label:'Tanggal Publish', type:'date'},
+    ]
+  },
+  program: {
+    label: 'Program', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'nama',
+    meta: r => [r.jenis||'Formal', r.jenjang, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'nama', label:'Nama Program', type:'text', required:true},
+      {key:'jenis', label:'Jenis Program', type:'select', options:['Formal','Non-Formal']},
+      {key:'jenjang', label:'Kategori/Jenjang (bebas isi apa saja)', type:'text'},
+      {key:'deskripsi', label:'Deskripsi', type:'textarea'},
+      {key:'icon', label:'Ikon (emoji, misal 📿)', type:'text'},
+      {key:'urutan', label:'Urutan Tampil (angka, kecil = di depan)', type:'number'},
+      {key:'tombol_label', label:'Teks Tombol Tambahan (kosongkan jika tidak perlu)', type:'text'},
+      {key:'tombol_link', label:'Link Tombol Tambahan', type:'text'},
+    ]
+  },
+  galeri: {
+    label: 'Galeri', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'judul',
+    meta: r => [r.tipe, r.kategori, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'judul', label:'Judul', type:'text'},
+      {key:'tipe', label:'Tipe', type:'select', options:['foto','youtube']},
+      {key:'media_url', label:'Upload Foto (khusus tipe Foto — kosongkan kalau tipe YouTube)', type:'image', folder:'galeri'},
+      {key:'youtube_url', label:'Link YouTube (khusus tipe YouTube — tempel link videonya, thumbnail otomatis)', type:'text'},
+      {key:'kategori', label:'Nama Album/Folder (misal: Fasilitas, Wisuda 2027) — item dengan nama folder sama akan dikelompokkan bersama', type:'text'},
+      {key:'urutan', label:'Urutan Tampil', type:'number'},
+    ]
+  },
+  info_ppdb: {
+    label: 'Info PPDB', pk: 'id', orderBy: 'updated_at', ascending: false,
+    titleField: 'tahun_ajaran',
+    meta: r => [`<span class="pill ${r.status}">${r.status}</span>`],
+    fields: [
+      {key:'tahun_ajaran', label:'Tahun Ajaran (misal 2027/2028)', type:'text', required:true},
+      {key:'syarat', label:'Syarat Pendaftaran', type:'textarea'},
+      {key:'jadwal', label:'Jadwal Pendaftaran', type:'textarea'},
+      {key:'biaya', label:'Rincian Biaya', type:'textarea'},
+      {key:'kontak_wa', label:'Nomor WA Panitia', type:'text'},
+      {key:'formulir_url', label:'Link Formulir (Google Form / PDF)', type:'text'},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
+    ]
+  },
+  struktur_pengurus: {
+    label: 'Struktur Pengurus', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'nama',
+    meta: r => [r.jabatan, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'nama', label:'Nama', type:'text', required:true},
+      {key:'jabatan', label:'Jabatan', type:'text'},
+      {key:'foto_url', label:'Foto', type:'image', folder:'pengurus'},
+      {key:'parent_id', label:'Atasan Langsung (kosongkan jika paling atas)', type:'dynamic-select-pengurus'},
+      {key:'urutan', label:'Urutan Tampil', type:'number'},
+    ]
+  },
+  flyer_popup: {
+    label: 'Flyer Pop-up', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'judul_internal',
+    meta: r => [r.ukuran, `<span class="pill ${r.status}">${r.status}</span>`, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'judul_internal', label:'Label Internal (hanya untuk kamu, tidak tampil di website)', type:'text', required:true},
+      {key:'gambar_url', label:'Gambar Flyer (disarankan landscape 1200×500)', type:'image', folder:'flyer'},
+      {key:'link_url', label:'Link Tujuan (saat gambar diklik)', type:'text'},
+      {key:'ukuran', label:'Ukuran Tampil', type:'select', options:['kecil','sedang','besar']},
+      {key:'urutan', label:'Urutan Kemunculan (kalau lebih dari 1 aktif)', type:'number'},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
+    ]
+  },
+  instagram_embed: {
+    label: 'Instagram', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'keterangan',
+    meta: r => [`<span class="pill ${r.status}">${r.status}</span>`, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'keterangan', label:'Keterangan Internal (hanya untuk kamu, misal: "Reels Wisuda Tahfidz")', type:'text'},
+      {key:'embed_code', label:'Kode Sematkan Instagram — buka postingan/Reels di Instagram → titik tiga (⋮) → "Sematkan"/"Embed" → copy semua kode, tempel di sini', type:'textarea-lg'},
+      {key:'urutan', label:'Urutan Tampil', type:'number'},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
+    ]
+  },
+  testimoni: {
+    label: 'Testimoni', pk: 'id', orderBy: 'created_at', ascending: false,
+    titleField: 'nama',
+    meta: r => ['★'.repeat(r.bintang||5), `<span class="pill ${r.status}">${r.status === 'menunggu' ? 'MENUNGGU PERSETUJUAN' : r.status}</span>`, r.media_url ? `<a href="${r.media_url}" target="_blank" rel="noopener">Lihat ${r.media_tipe||'media'}</a>` : '', `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'nama', label:'Nama Pemberi Ulasan', type:'text', required:true},
+      {key:'peran', label:'Peran (misal: Wali santri, Alumni)', type:'text'},
+      {key:'bintang', label:'Bintang (1–5)', type:'number'},
+      {key:'isi', label:'Isi Ulasan', type:'textarea'},
+      {key:'waktu', label:'Waktu (misal: 2 bulan lalu — boleh kosong)', type:'text'},
+      {key:'foto_url', label:'Foto Profil (opsional)', type:'image', folder:'testimoni'},
+      {key:'media_url', label:'Foto/Video kiriman pengunjung (link otomatis — hapus isinya jika tidak ingin ditampilkan)', type:'text'},
+      {key:'media_tipe', label:'Jenis media kiriman', type:'select', options:['','foto','video']},
+      {key:'link_url', label:'Link Ulasan di Google Maps (opsional)', type:'text'},
+      {key:'urutan', label:'Urutan Tampil', type:'number'},
+      {key:'status', label:'Status — ubah ke "published" untuk MENYETUJUI & menampilkan', type:'select', options:['menunggu','draft','published']},
+    ]
+  },
+  kegiatan_santri: {
+    label: 'Jadwal Kegiatan', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'judul',
+    meta: r => [`${r.jam_mulai||''}${r.jam_selesai?' – '+r.jam_selesai:''}`, r.hari||'', `${(r.foto_urls||[]).length} foto`, `<span class="pill ${r.status}">${r.status}</span>`, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'judul', label:'Nama Kegiatan', type:'text', required:true},
+      {key:'jam_mulai', label:'Jam Mulai (misal 04.30)', type:'text'},
+      {key:'jam_selesai', label:'Jam Selesai (boleh kosong)', type:'text'},
+      {key:'hari', label:'Hari (misal: Setiap hari, Jumat, Senin–Kamis)', type:'text'},
+      {key:'deskripsi', label:'Keterangan Kegiatan', type:'textarea'},
+      {key:'foto_urls', label:'Foto-foto Kegiatan (bisa pilih banyak sekaligus)', type:'images', folder:'kegiatan'},
+      {key:'urutan', label:'Urutan Tampil (dari yang paling pagi)', type:'number'},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
+    ]
+  },
+  sejarah_pondok: {
+    label: 'Sejarah Pondok', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'judul',
+    meta: r => [r.tahun||'', `<span class="pill ${r.status}">${r.status}</span>`, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'tahun', label:'Tahun / Waktu (misal: 2015)', type:'text'},
+      {key:'judul', label:'Judul Tonggak (misal: Pondok Didirikan)', type:'text', required:true},
+      {key:'isi', label:'Cerita Singkat', type:'textarea-lg'},
+      {key:'foto_url', label:'Foto (opsional)', type:'image', folder:'sejarah'},
+      {key:'urutan', label:'Urutan Slide (dari yang paling awal)', type:'number'},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
+    ]
+  },
+  running_text: {
+    label: 'Running Text', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'teks',
+    meta: r => [`<span class="pill ${r.status}">${r.status}</span>`, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'teks', label:'Isi Teks Berjalan', type:'textarea'},
+      {key:'urutan', label:'Urutan Tampil', type:'number'},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
+    ]
+  },
+  pengaturan_situs: {
+    label: 'Pengaturan Situs', pk: 'key', orderBy: 'key', ascending: true,
+    titleField: 'key', keyIsFixed: true,
+    meta: r => [r.value ? r.value.slice(0,60) : ''],
+    fields: [
+      {key:'key', label:'Key (misal: alamat, no_wa, email, jumlah_santri)', type:'text', required:true},
+      {key:'value', label:'Value', type:'textarea'},
+    ]
+  }
+};
+
+let currentTab = 'berita';
+let currentRecord = null; // null = tambah baru, object = sedang edit
+
+// ---------- AUTH ----------
+async function doLogin(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const errBox = document.getElementById('loginError');
+  errBox.style.display = 'none';
+  const {error} = await sb.auth.signInWithPassword({email, password});
+  if(error){
+    errBox.textContent = 'Login gagal: ' + error.message;
+    errBox.style.display = 'block';
+    return;
+  }
+  showApp();
 }
-function refresh(){
-  $$('.jenis-tab').forEach(t=>t.classList.toggle('active', t.dataset.jenis===fJenis));
-  // chip jenjang menyesuaikan jenis yang dipilih (bebas diisi lewat admin)
-  const base = fJenis==='Semua' ? allProgram : allProgram.filter(p=>jenisOf(p)===fJenis);
-  const set = [...new Set(base.map(p=>p.jenjang).filter(Boolean))];
-  if(fJenjang !== 'Semua' && !set.includes(fJenjang)) fJenjang = 'Semua';
-  const tabs = document.getElementById('jenjangTabs');
-  tabs.style.display = set.length > 1 ? '' : 'none';
-  tabs.innerHTML = ['Semua'].concat(set).map(x=>`<button type="button" class="chip jenjang-tab ${x===fJenjang?'active':''}" data-jenjang="${esc(x)}">${esc(x)}</button>`).join('');
-  $$('.jenjang-tab').forEach(t=>t.onclick=()=>{ fJenjang = t.dataset.jenjang; refresh(); });
-  renderProgram(fJenjang==='Semua' ? base : base.filter(p=>p.jenjang===fJenjang));
+async function doLogout(){
+  await sb.auth.signOut();
+  location.reload();
 }
-function card(p){ return `
-    <div class="tc rv">
-      <div class="ic">${p.icon || ic('quran')}</div>
-      ${p.jenjang ? `<span class="jt">${esc(p.jenjang)}</span>` : ''}
-      <h3>${esc(p.nama)}</h3>
-      <p>${esc(p.deskripsi || '')}</p>
-      ${p.tombol_label ? `<a href="${esc(normalizeLink(p.tombol_link))}" class="btn-outline-mini" target="_blank" rel="noopener">${esc(p.tombol_label)} ${ic('arrow')}</a>` : ''}
-    </div>`; }
-function renderProgram(list){
-  const grid = document.getElementById('programGrid');
-  if(list.length===0){ grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Belum ada program untuk pilihan ini.</div>'; return; }
-  const groups = [['Formal','Pendidikan Formal','Jenjang sekolah resmi yang berjalan di pondok.'],['Non-Formal','Pendidikan Non-Formal','Program pembinaan di luar sekolah formal.']];
-  const hasBoth = fJenis==='Semua' && groups.every(g=>list.some(p=>jenisOf(p)===g[0]));
-  if(!hasBoth){ grid.innerHTML = list.map(card).join(''); return; }
-  grid.innerHTML = groups.map(g=>{
-    const items = list.filter(p=>jenisOf(p)===g[0]);
-    return items.length ? `<div class="gh rv"><h2>${g[1]}</h2><span>${g[2]}</span></div>` + items.map(card).join('') : '';
+async function checkSession(){
+  const {data} = await sb.auth.getSession();
+  if(data.session) showApp();
+}
+function showApp(){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  renderTabs();
+  switchTab('berita');
+}
+
+// ---------- TABS ----------
+function renderTabs(){
+  const bar = document.getElementById('tabBar');
+  bar.innerHTML = Object.keys(TABLES).map(k =>
+    `<button class="tab-btn" id="tab-${k}" onclick="switchTab('${k}')">${TABLES[k].label}</button>`
+  ).join('') +
+    `<span class="tab-sep"></span>` +
+    `<button class="tab-btn special" id="tab-__preview" onclick="switchTab('__preview')">Preview</button>` +
+    `<button class="tab-btn special" id="tab-__live" onclick="switchTab('__live')">Live</button>`;
+}
+function switchTab(key){
+  if(key !== '__preview' && key !== '__live' && svDirty() && !confirm('Ada perubahan di Preview yang belum disimpan. Tetap pindah menu?')) return;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+key).classList.add('active');
+  if(key === '__preview' || key === '__live'){
+    document.querySelector('.content').style.display = 'none';
+    document.getElementById('siteViewArea').style.display = 'block';
+    svMode = key === '__preview' ? 'preview' : 'live';
+    openSiteView();
+    return;
+  }
+  document.querySelector('.content').style.display = '';
+  document.getElementById('siteViewArea').style.display = 'none';
+  svFrameUnload();
+  currentTab = key;
+  document.getElementById('contentTitle').textContent = TABLES[key].label;
+  document.getElementById('bulkBtn').style.display = (key === 'galeri' || key === 'instagram_embed') ? 'inline-flex' : 'none';
+  loadList();
+}
+
+// ---------- TAMBAH MASSAL (YouTube di Galeri, atau Instagram) ----------
+function openBulkForm(){
+  const area = document.getElementById('bulkFormArea');
+  if(currentTab === 'galeri'){
+    document.getElementById('bulkModalTitle').textContent = 'Tambah Massal Video YouTube';
+    area.innerHTML = `
+      <div class="field"><label>Nama Album/Folder (berlaku untuk semua video ini)</label><input id="bulkFolder" placeholder="misal: Video Kegiatan"></div>
+      <div class="field"><label>Tempel Link YouTube (satu link per baris)</label><textarea id="bulkLinks" rows="8" placeholder="https://youtu.be/xxxxxxxxxxx&#10;https://youtu.be/yyyyyyyyyyy&#10;https://youtu.be/zzzzzzzzzzz"></textarea></div>
+      <div style="font-size:11px;color:var(--ink-600);">Otomatis muncul terurut dari yang paling baru ditambahkan, tidak perlu isi Urutan manual.</div>
+    `;
+  } else if(currentTab === 'instagram_embed'){
+    document.getElementById('bulkModalTitle').textContent = 'Tambah Massal Instagram';
+    area.innerHTML = `
+      <div class="field"><label>Tempel Banyak Kode Sematkan Instagram Sekaligus</label><textarea id="bulkLinks" rows="10" placeholder="Tempel beberapa kode 'Sematkan' dari Instagram berurutan (langsung copy-paste semuanya, sistem otomatis memisahkan tiap postingan)"></textarea></div>
+      <div style="font-size:11px;color:var(--ink-600);">Semua langsung berstatus "published" dan otomatis terurut dari yang paling baru ditambahkan.</div>
+    `;
+  } else {
+    return;
+  }
+  document.getElementById('bulkModalOverlay').classList.add('open');
+}
+function closeBulkForm(){
+  document.getElementById('bulkModalOverlay').classList.remove('open');
+}
+async function submitBulk(){
+  if(currentTab === 'galeri'){
+    const folder = document.getElementById('bulkFolder').value.trim();
+    const links = document.getElementById('bulkLinks').value.split('\n').map(s=>s.trim()).filter(Boolean);
+    if(links.length===0){ alert('Tempel minimal 1 link YouTube dulu.'); return; }
+    const rows = links.map(url => ({tipe:'youtube', youtube_url:url, kategori: folder || null, urutan: 0}));
+    const {error} = await sb.from('galeri').insert(rows);
+    if(error){ alert('Gagal menambahkan: ' + error.message); return; }
+    showToast(`${rows.length} video berhasil ditambahkan ✓`);
+  } else if(currentTab === 'instagram_embed'){
+    const raw = document.getElementById('bulkLinks').value;
+    const matches = raw.match(/<blockquote[^>]*class="instagram-media"[\s\S]*?<\/blockquote>/g);
+    if(!matches || matches.length===0){ alert('Tidak ditemukan kode sematkan Instagram yang valid. Pastikan kode disalin lengkap dari tombol "Sematkan" di Instagram.'); return; }
+    const rows = matches.map(code => ({embed_code: code, urutan: 0, status: 'published'}));
+    const {error} = await sb.from('instagram_embed').insert(rows);
+    if(error){ alert('Gagal menambahkan: ' + error.message); return; }
+    showToast(`${rows.length} postingan Instagram berhasil ditambahkan ✓`);
+  }
+  closeBulkForm();
+  loadList();
+}
+
+// ---------- LIST ----------
+async function loadList(){
+  const cfg = TABLES[currentTab];
+  const area = document.getElementById('listArea');
+  area.innerHTML = '<div class="empty">Memuat data…</div>';
+
+  let logoHtml = '';
+  if(currentTab === 'pengaturan_situs'){
+    const maintenanceHtml = await renderMaintenanceCard();
+    const profilHtml = await renderProfilCard();
+    const kontakHtml = await renderKontakSosmedCard();
+    const heroPhotoHtml = await renderHeroPhotoCard();
+    const tickerStyleHtml = await renderTickerStyleCard();
+    logoHtml = maintenanceHtml + profilHtml + kontakHtml + heroPhotoHtml + tickerStyleHtml + await renderLogoCard();
+  }
+
+  const {data, error} = await sb.from(currentTab).select('*').order(cfg.orderBy, {ascending: cfg.ascending});
+  if(error){
+    area.innerHTML = logoHtml + `<div class="empty">Gagal memuat: ${error.message}</div>`;
+    if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); }
+    return;
+  }
+  if(!data || data.length===0){
+    area.innerHTML = logoHtml + `<div class="empty">Belum ada data ${cfg.label.toLowerCase()}. Klik "+ Tambah" untuk mulai.</div>`;
+    if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); }
+    return;
+  }
+  area.innerHTML = logoHtml + data.map(r => `
+    <div class="item-card">
+      <div class="item-main">
+        <div class="item-title">${r[cfg.titleField] || '(tanpa judul)'}</div>
+        <div class="item-meta">${cfg.meta(r).filter(Boolean).join(' &bull; ')}</div>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-outline btn-sm" onclick='openForm(${JSON.stringify(r).replace(/'/g,"&apos;")})'>Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteRecord('${r[cfg.pk]}')">Hapus</button>
+      </div>
+    </div>
+  `).join('');
+  if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); }
+}
+
+// ---------- FORM ----------
+function openForm(record){
+  isUploading = false;
+  currentRecord = record || null;
+  const cfg = TABLES[currentTab];
+  document.getElementById('modalTitle').textContent = record ? `Edit ${cfg.label}` : `Tambah ${cfg.label}`;
+  const area = document.getElementById('formArea');
+  area.innerHTML = cfg.fields.map(f => renderField(f, record ? record[f.key] : '')).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  cfg.fields.filter(f=>f.type==='images').forEach(f=>mgPaint('f_'+f.key));
+
+  if(cfg.fields.some(f => f.type === 'dynamic-select-pengurus')){
+    populateParentDropdown(record);
+  }
+
+  // auto-generate slug dari judul untuk berita baru
+  const judulInput = document.getElementById('f_judul');
+  const slugInput = document.getElementById('f_slug');
+  if(judulInput && slugInput && !record){
+    judulInput.addEventListener('blur', ()=>{
+      if(!slugInput.value){
+        slugInput.value = judulInput.value.toLowerCase().trim()
+          .replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-');
+      }
+    });
+  }
+}
+function closeForm(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentRecord = null;
+}
+async function populateParentDropdown(record){
+  const {data} = await sb.from('struktur_pengurus').select('id,nama');
+  const selectEl = document.getElementById('f_parent_id');
+  if(!selectEl) return;
+  const currentVal = selectEl.dataset.current || '';
+  const selfId = record ? record.id : null;
+  const options = (data||[]).filter(p => p.id !== selfId);
+  selectEl.innerHTML = '<option value="">(Tidak ada / Paling Atas)</option>' +
+    options.map(p => `<option value="${p.id}" ${p.id===currentVal?'selected':''}>${p.nama}</option>`).join('');
+}
+function renderField(f, value){
+  value = value ?? '';
+  const id = 'f_' + f.key;
+  if(f.type==='textarea' || f.type==='textarea-lg'){
+    const rows = f.type==='textarea-lg' ? 7 : 3;
+    let extra = '';
+    if(f.allowInlineImage){
+      extra = `<div style="margin-top:6px;padding:10px;background:var(--cream-100);border-radius:8px;">
+        <label style="display:block;margin-bottom:6px;">🖼️ Sisipkan gambar ke dalam teks</label>
+        <input type="file" accept="image/*" onchange="insertInlineImage(this,'${id}','${f.imageFolder||'inline'}')">
+        <div style="font-size:10.5px;color:var(--ink-600);margin-top:6px;line-height:1.5;">Klik dulu di posisi teks tempat kamu mau taruh gambarnya, baru pilih file. Kodenya <code>[[gambar:...]]</code> otomatis muncul di situ — jangan dihapus/diubah manual, itu yang membuat gambar tampil di tempat itu saat dipublikasikan.</div>
+        <div class="upload-status" id="${id}_inlinestatus"></div>
+      </div>`;
+    }
+    return `<div class="field"><label>${f.label}</label><textarea id="${id}" rows="${rows}">${value}</textarea>${extra}</div>`;
+  }
+  if(f.type==='select'){
+    return `<div class="field"><label>${f.label}</label><select id="${id}">
+      ${f.options.map(o=>`<option value="${o}" ${o===value?'selected':''}>${o}</option>`).join('')}
+    </select></div>`;
+  }
+  if(f.type==='number'){
+    return `<div class="field"><label>${f.label}</label><input type="number" id="${id}" value="${value}"></div>`;
+  }
+  if(f.type==='date'){
+    const d = value ? new Date(value).toISOString().slice(0,10) : '';
+    return `<div class="field"><label>${f.label}</label><input type="date" id="${id}" value="${d}"></div>`;
+  }
+  if(f.type==='dynamic-select-pengurus'){
+    return `<div class="field"><label>${f.label}</label>
+      <select id="${id}" data-current="${value||''}"><option value="">Memuat…</option></select>
+    </div>`;
+  }
+  if(f.type==='images'){
+    const arr = Array.isArray(value) ? value : [];
+    return `<div class="field"><label>${f.label}</label>
+      <input type="hidden" id="${id}" value='${JSON.stringify(arr).replace(/'/g,'&#39;')}'>
+      <div class="multi-grid" id="${id}_grid"></div>
+      <input type="file" accept="image/*" multiple onchange="uploadImages(this,'${id}','${f.folder}')">
+      <div class="upload-status" id="${id}_status">Foto dikecilkan otomatis. Klik ✕ pada foto untuk menghapusnya dari kegiatan.</div>
+    </div>`;
+  }
+  if(f.type==='image'){
+    return `<div class="field"><label>${f.label}</label>
+      ${value ? `<img src="${value}" class="img-preview">` : ''}
+      <input type="hidden" id="${id}" value="${value}">
+      <input type="file" accept="image/*" onchange="uploadImage(this,'${id}','${f.folder}')">
+      <div class="upload-status" id="${id}_status"></div>
+    </div>`;
+  }
+  return `<div class="field"><label>${f.label}</label><input type="text" id="${id}" value="${value}"></div>`;
+}
+
+let isUploading = false;
+function mgRead(id){ try{ return JSON.parse(document.getElementById(id).value||'[]'); }catch(e){ return []; } }
+function mgPaint(id){
+  const g = document.getElementById(id+'_grid'); if(!g) return;
+  g.innerHTML = mgRead(id).map((u,i)=>`<div class="mg-i"><img src="${u}" alt=""><button type="button" onclick="mgDel('${id}',${i})" title="Hapus foto">✕</button></div>`).join('') || '<div style="font-size:12px;color:var(--ink-600)">Belum ada foto.</div>';
+}
+function mgDel(id,i){ const arr = mgRead(id); arr.splice(i,1); document.getElementById(id).value = JSON.stringify(arr); mgPaint(id); }
+async function uploadImages(input, targetId, folder){
+  const files = [...input.files]; if(!files.length) return;
+  isUploading = true;
+  const st = document.getElementById(targetId+'_status'), arr = mgRead(targetId);
+  for(let k=0;k<files.length;k++){
+    st.textContent = `Mengunggah foto ${k+1} dari ${files.length}…`;
+    const c = await compressImage(files[k], 1600, 0.82);
+    const path = `${folder}/${Date.now()}-${k}-${files[k].name.replace(/\s+/g,'-')}`;
+    const {error} = await sb.storage.from('media-website').upload(path, c);
+    if(error){ st.textContent = 'Gagal unggah: ' + error.message; continue; }
+    arr.push(sb.storage.from('media-website').getPublicUrl(path).data.publicUrl);
+    document.getElementById(targetId).value = JSON.stringify(arr); mgPaint(targetId);
+  }
+  st.textContent = 'Selesai ✓ — jangan lupa klik Simpan.'; input.value = ''; isUploading = false;
+}
+
+// Mengecilkan gambar sebelum upload (dimensi maksimal + kompresi kualitas)
+// supaya website tidak lemot karena file foto asli kamera yang besar (bisa 3-5MB).
+// PNG tetap PNG (jaga transparansi, misal untuk logo), format lain jadi JPEG.
+function compressImage(file, maxDim, quality){
+  return new Promise((resolve) => {
+    if(!file.type.startsWith('image/') || file.type === 'image/gif' || file.size < 300*1024){
+      resolve(file); // sudah kecil atau bukan format yang perlu dikompres, lewati
+      return;
+    }
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      let {width, height} = img;
+      if(width > maxDim || height > maxDim){
+        const ratio = Math.min(maxDim/width, maxDim/height);
+        width = Math.round(width*ratio);
+        height = Math.round(height*ratio);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      const outType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+      canvas.toBlob((blob) => {
+        URL.revokeObjectURL(objectUrl);
+        if(!blob || blob.size >= file.size){ resolve(file); return; }
+        const newName = file.name.replace(/\.(png|jpe?g|webp)$/i,'') + (outType==='image/png' ? '.png' : '.jpg');
+        resolve(new File([blob], newName, {type: outType}));
+      }, outType, quality);
+    };
+    img.onerror = () => { URL.revokeObjectURL(objectUrl); resolve(file); };
+    img.src = objectUrl;
+  });
+}
+
+async function uploadImage(input, targetId, folder){
+  const file = input.files[0];
+  if(!file) return;
+  isUploading = true;
+  const statusEl = document.getElementById(targetId+'_status');
+  statusEl.textContent = 'Memproses gambar…';
+  const compressed = await compressImage(file, 1600, 0.82);
+  statusEl.textContent = 'Mengunggah…';
+  const path = `${folder}/${Date.now()}-${file.name.replace(/\s+/g,'-')}`;
+  const {error} = await sb.storage.from('media-website').upload(path, compressed);
+  if(error){
+    statusEl.textContent = 'Gagal unggah: ' + error.message;
+    isUploading = false;
+    return;
+  }
+  const {data} = sb.storage.from('media-website').getPublicUrl(path);
+  document.getElementById(targetId).value = data.publicUrl;
+  statusEl.textContent = 'Berhasil diunggah ✓';
+  isUploading = false;
+}
+
+async function insertInlineImage(input, textareaId, folder){
+  const file = input.files[0];
+  if(!file) return;
+  const statusEl = document.getElementById(textareaId+'_inlinestatus');
+  statusEl.textContent = 'Memproses gambar…';
+  const compressed = await compressImage(file, 1600, 0.82);
+  statusEl.textContent = 'Mengunggah…';
+  const path = `${folder}/${Date.now()}-${file.name.replace(/\s+/g,'-')}`;
+  const {error} = await sb.storage.from('media-website').upload(path, compressed);
+  if(error){
+    statusEl.textContent = 'Gagal unggah: ' + error.message;
+    return;
+  }
+  const {data} = sb.storage.from('media-website').getPublicUrl(path);
+  const textarea = document.getElementById(textareaId);
+  const token = `\n[[gambar:${data.publicUrl}]]\n`;
+  const start = textarea.selectionStart ?? textarea.value.length;
+  const end = textarea.selectionEnd ?? textarea.value.length;
+  textarea.value = textarea.value.slice(0, start) + token + textarea.value.slice(end);
+  textarea.focus();
+  textarea.selectionStart = textarea.selectionEnd = start + token.length;
+  input.value = '';
+  statusEl.textContent = 'Gambar disisipkan ke teks ✓';
+}
+
+// ---------- KONTEN PROFIL (Sejarah/Visi/Misi, perlakuan khusus) ----------
+async function renderProfilCard(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['profil_sejarah','profil_visi','profil_misi','ringkasan_tentang']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  return `
+    <div class="item-card" style="flex-direction:column;align-items:stretch;">
+      <div class="item-title" style="margin-bottom:10px;">📖 Konten Profil (Sejarah, Visi, Misi)</div>
+      <div class="field"><label>Ringkasan Singkat (tampil di card "Tentang Pondok" Beranda, 2-3 kalimat)</label><textarea id="ringkasanTentang" rows="3">${map.ringkasan_tentang||''}</textarea></div>
+      <div class="field"><label>Sejarah (halaman Profil lengkap)</label><textarea id="profilSejarah" rows="4">${map.profil_sejarah||''}</textarea></div>
+      <div class="field"><label>Visi (1 poin per baris, akan otomatis diberi nomor)</label><textarea id="profilVisi" rows="2">${map.profil_visi||''}</textarea></div>
+      <div class="field" style="margin-bottom:10px;"><label>Misi (1 poin per baris, akan otomatis diberi nomor)</label><textarea id="profilMisi" rows="4">${map.profil_misi||''}</textarea></div>
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start" onclick="saveProfilKonten()">Simpan Konten Profil</button>
+      <div class="upload-status" id="profilStatus"></div>
+    </div>
+  `;
+}
+async function saveProfilKonten(){
+  const rows = [
+    {key:'ringkasan_tentang', value: document.getElementById('ringkasanTentang').value},
+    {key:'profil_sejarah', value: document.getElementById('profilSejarah').value},
+    {key:'profil_visi', value: document.getElementById('profilVisi').value},
+    {key:'profil_misi', value: document.getElementById('profilMisi').value},
+  ];
+  const statusEl = document.getElementById('profilStatus');
+  statusEl.textContent = 'Menyimpan…';
+  const {error} = await sb.from('pengaturan_situs').upsert(rows);
+  if(error){ statusEl.textContent = 'Gagal simpan: ' + error.message; return; }
+  statusEl.textContent = 'Tersimpan ✓';
+  showToast('Konten Profil tersimpan ✓');
+}
+
+
+
+async function renderKontakSosmedCard(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',
+    ['alamat','no_wa','email','instagram','facebook','youtube','tiktok','google_maps_url']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  const f = (id,label,ph='') => `<div class="field"><label>${label}</label><input id="${id}" value="${(map[id]||'').replace(/"/g,'&quot;')}" placeholder="${ph}"></div>`;
+  return `
+    <div class="item-card" style="flex-direction:column;align-items:stretch;">
+      <div class="item-title" style="margin-bottom:10px;">📍 Kontak & Media Sosial</div>
+      ${f('alamat','Alamat Lengkap')}
+      ${f('no_wa','Nomor WhatsApp','contoh: 085888848424')}
+      ${f('email','Email','contoh: info@alazzaam.id')}
+      ${f('google_maps_url','Link Google Maps','https://maps.app.goo.gl/...')}
+      <div style="height:6px"></div>
+      ${f('instagram','Instagram (link penuh)','https://instagram.com/al.azzaam.id')}
+      ${f('facebook','Facebook (link penuh)','https://facebook.com/al.azzaam.id')}
+      ${f('youtube','YouTube (link penuh)','https://youtube.com/@AlAzzaamTV')}
+      ${f('tiktok','TikTok (link penuh)','https://tiktok.com/@al.azzaam.id')}
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:6px;" onclick="saveKontakSosmed()">Simpan Kontak & Sosmed</button>
+      <div class="upload-status" id="kontakSosmedStatus"></div>
+    </div>
+  `;
+}
+async function saveKontakSosmed(){
+  const keys = ['alamat','no_wa','email','google_maps_url','instagram','facebook','youtube','tiktok'];
+  const rows = keys.map(k => ({key:k, value: document.getElementById(k).value}));
+  const statusEl = document.getElementById('kontakSosmedStatus');
+  statusEl.textContent = 'Menyimpan…';
+  const {error} = await sb.from('pengaturan_situs').upsert(rows);
+  if(error){ statusEl.textContent = 'Gagal simpan: ' + error.message; return; }
+  statusEl.textContent = 'Tersimpan ✓';
+  showToast('Kontak & Sosmed tersimpan ✓');
+}
+
+let pendingLogoFile = null;
+let pendingLogoObjectUrl = null;
+
+// ---------- FOTO LATAR SPANDUK (Hero Beranda) ----------
+let pendingHeroFile = null;
+let pendingHeroObjectUrl = null;
+
+async function renderHeroPhotoCard(){
+  const {data} = await sb.from('pengaturan_situs').select('value').eq('key','hero_photo_url').maybeSingle();
+  const currentUrl = data ? data.value : '';
+  pendingHeroFile = null;
+  pendingHeroObjectUrl = null;
+  return `
+    <div class="item-card" style="flex-direction:column;align-items:stretch;">
+      <div class="item-title" style="margin-bottom:10px;">🖼️ Foto Latar Spanduk (Hero Beranda)</div>
+      <div class="field"><label>Pilih Foto (otomatis diberi filter warna tema maroon-emas)</label>
+        <input type="file" id="heroFileInput" accept="image/*" onchange="onHeroFileChosen(this)">
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:8px 0 6px;">PRATINJAU</div>
+      <div id="heroPreviewBox" style="border-radius:12px;overflow:hidden;min-height:110px;background:linear-gradient(160deg,var(--maroon-950),var(--maroon-900));background-size:cover;background-position:center;display:flex;align-items:center;padding:18px;">
+        <div style="color:#fff;font-family:'Playfair Display',serif;font-size:15px;max-width:70%;">Pendidikan Al-Qur'an untuk Generasi Masa Depan</div>
+      </div>
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyHeroPhotoFinal()">Terapkan ke Website</button>
+      <div class="upload-status" id="heroPhotoStatus"></div>
+    </div>
+  `;
+}
+function onHeroFileChosen(input){
+  const file = input.files[0];
+  if(!file) return;
+  pendingHeroFile = file;
+  if(pendingHeroObjectUrl) URL.revokeObjectURL(pendingHeroObjectUrl);
+  pendingHeroObjectUrl = URL.createObjectURL(file);
+  const box = document.getElementById('heroPreviewBox');
+  box.style.backgroundImage = `linear-gradient(160deg, rgba(43,8,16,.82), rgba(61,12,20,.75)), url('${pendingHeroObjectUrl}')`;
+}
+async function applyHeroPhotoFinal(){
+  const statusEl = document.getElementById('heroPhotoStatus');
+  if(!pendingHeroFile){ statusEl.textContent = 'Pilih foto dulu sebelum menerapkan.'; return; }
+  statusEl.textContent = 'Memproses gambar…';
+  const compressed = await compressImage(pendingHeroFile, 1920, 0.8);
+  statusEl.textContent = 'Mengunggah…';
+  const path = `hero/${Date.now()}-${pendingHeroFile.name.replace(/\s+/g,'-')}`;
+  const {error} = await sb.storage.from('media-website').upload(path, compressed);
+  if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
+  const url = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
+  const {error: upsertErr} = await sb.from('pengaturan_situs').upsert({key:'hero_photo_url', value:url});
+  if(upsertErr){ statusEl.textContent = 'Gagal simpan: ' + upsertErr.message; return; }
+  statusEl.textContent = 'Foto spanduk diterapkan ✓';
+  showToast('Foto spanduk diterapkan ✓');
+  loadList();
+}
+
+// ---------- TAMPILAN RUNNING TEXT (warna & ukuran, dengan preview) ----------
+// ---------- Mode Istirahat / Pemeliharaan (hanya admin yang bisa menyalakan; pengunjung melihat halaman error 503) ----------
+const MAINT_DEFAULT_TITLE = 'Website sedang istirahat';
+const MAINT_DEFAULT_MSG = 'Server kami sedang muroja\'ah sebentar supaya hafalannya makin kuat. Silakan kembali beberapa saat lagi.';
+function escAttr(v){ return String(v ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+async function renderMaintenanceCard(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['maintenance_mode','maintenance_title','maintenance_message','maintenance_eta']);
+  const m = {}; (data||[]).forEach(r=>m[r.key]=r.value);
+  const isOn = m.maintenance_mode === 'on';
+  return `
+    <div class="item-card" style="flex-direction:column;align-items:stretch;border:2px solid ${isOn ? '#c22638' : 'var(--line)'};background:${isOn ? '#fff5f5' : '#fff'};">
+      <div class="item-title" style="margin-bottom:6px;">🚧 Mode Istirahat (Pemeliharaan)</div>
+      <div style="font-size:12.5px;color:var(--ink-600);margin-bottom:14px;line-height:1.55;">
+        Saat dinyalakan, pengunjung melihat halaman error "503 — Website sedang istirahat" dengan pesan di bawah ini.
+        <b>Hanya admin yang sudah login</b> yang bisa menyalakan dan mematikannya. Selama kamu login di browser yang sama,
+        kamu tetap melihat website seperti biasa dengan pita peringatan merah di atas, lengkap dengan tombol "Matikan".
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <label class="maintenance-switch">
+          <input type="checkbox" id="maintenanceToggle" ${isOn ? 'checked' : ''} onchange="toggleMaintenanceMode(this.checked)">
+          <span class="maintenance-slider"></span>
+        </label>
+        <span id="maintenanceStatusLabel" style="font-weight:700;font-size:13.5px;color:${isOn ? '#c22638' : 'var(--ink-600)'};">
+          ${isOn ? 'AKTIF — pengunjung melihat halaman istirahat' : 'Nonaktif — website tampil normal'}
+        </span>
+      </div>
+      <div class="upload-status" id="maintenanceStatus"></div>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);">
+        <div class="field"><label>Judul error</label><input type="text" id="maintTitle" value="${escAttr(m.maintenance_title || MAINT_DEFAULT_TITLE)}"></div>
+        <div class="field"><label>Pesan untuk pengunjung</label><textarea id="maintMessage" rows="3">${escAttr(m.maintenance_message || MAINT_DEFAULT_MSG)}</textarea></div>
+        <div class="field"><label>Perkiraan kembali (boleh dikosongkan)</label><input type="text" id="maintEta" placeholder="Contoh: Senin, 13 Oktober 2026, pukul 06.00 WIB" value="${escAttr(m.maintenance_eta || '')}"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-gold btn-sm" onclick="saveMaintenanceMessage()">Simpan Pesan</button>
+          <a class="btn btn-outline btn-sm" href="maintenance.html?preview=1" target="_blank" rel="noopener">Lihat tampilan</a>
+          <span class="upload-status" id="maintenanceMsgStatus"></span>
+        </div>
+      </div>
+      <style>
+        .maintenance-switch{position:relative;display:inline-block;width:52px;height:28px;flex-shrink:0;}
+        .maintenance-switch input{opacity:0;width:0;height:0;position:absolute;}
+        .maintenance-switch .maintenance-slider{position:absolute;cursor:pointer;inset:0;background:#ccc;transition:.2s;border-radius:999px;}
+        .maintenance-switch .maintenance-slider::before{content:"";position:absolute;height:22px;width:22px;left:3px;top:3px;background:#fff;transition:.2s;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.3);}
+        .maintenance-switch input:checked + .maintenance-slider{background:#c22638;}
+        .maintenance-switch input:checked + .maintenance-slider::before{transform:translateX(24px);}
+      </style>
+    </div>
+  `;
+}
+async function toggleMaintenanceMode(isOn){
+  const statusEl = document.getElementById('maintenanceStatus');
+  const label = document.getElementById('maintenanceStatusLabel');
+  statusEl.textContent = 'Menyimpan…';
+  // Hanya user yang login (admin) yang lolos aturan database (RLS); orang lain akan ditolak di sini
+  const {error} = await sb.from('pengaturan_situs').upsert({key:'maintenance_mode', value: isOn ? 'on' : 'off'});
+  if(error){
+    statusEl.textContent = 'Gagal simpan: ' + error.message;
+    document.getElementById('maintenanceToggle').checked = !isOn;
+    return;
+  }
+  statusEl.textContent = 'Tersimpan ✓';
+  label.textContent = isOn ? 'AKTIF — pengunjung melihat halaman istirahat' : 'Nonaktif — website tampil normal';
+  label.style.color = isOn ? '#c22638' : 'var(--ink-600)';
+  showToast(isOn ? 'Mode istirahat diaktifkan — pengunjung melihat halaman error 503 ✓' : 'Mode istirahat dimatikan, website normal kembali ✓');
+}
+async function saveMaintenanceMessage(){
+  const st = document.getElementById('maintenanceMsgStatus');
+  st.textContent = 'Menyimpan…';
+  const rows = [
+    {key:'maintenance_title', value: document.getElementById('maintTitle').value.trim() || MAINT_DEFAULT_TITLE},
+    {key:'maintenance_message', value: document.getElementById('maintMessage').value.trim() || MAINT_DEFAULT_MSG},
+    {key:'maintenance_eta', value: document.getElementById('maintEta').value.trim()},
+  ];
+  const {error} = await sb.from('pengaturan_situs').upsert(rows);
+  if(error){ st.textContent = 'Gagal simpan: ' + error.message; return; }
+  st.textContent = 'Tersimpan ✓';
+  showToast('Pesan halaman istirahat disimpan ✓');
+}
+
+async function renderTickerStyleCard(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height','ticker_speed']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  const bg = map.ticker_bg || '#2b0810';
+  const textColor = map.ticker_text_color || '#e8c766';
+  const height = map.ticker_height || '38';
+  const speed = map.ticker_speed || '80';
+  return `
+    <div class="item-card" style="flex-direction:column;align-items:stretch;">
+      <div class="item-title" style="margin-bottom:10px;">📢 Tampilan Running Text</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <div class="field" style="flex:1;min-width:120px;"><label>Warna Latar</label><input type="color" id="tickerBg" value="${bg}" oninput="updateTickerPreview()" style="height:40px;padding:4px;"></div>
+        <div class="field" style="flex:1;min-width:120px;"><label>Warna Teks</label><input type="color" id="tickerTextColor" value="${textColor}" oninput="updateTickerPreview()" style="height:40px;padding:4px;"></div>
+        <div class="field" style="flex:1;min-width:140px;"><label>Tinggi Kotak (px)</label><input type="number" id="tickerHeight" value="${height}" min="24" max="80" oninput="updateTickerPreview()"></div>
+      </div>
+      <div class="field">
+        <label>Kecepatan: <span id="tickerSpeedLabel">${speed}</span> piksel/detik (makin besar angka = makin cepat, tapi kecepatannya tetap sama walau teksnya pendek atau panjang)</label>
+        <input type="range" id="tickerSpeed" value="${speed}" min="20" max="200" step="5" oninput="document.getElementById('tickerSpeedLabel').textContent=this.value; updateTickerPreview()" style="width:100%;">
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:6px 0 6px;">PRATINJAU (coba lihat kecepatannya berjalan)</div>
+      <div id="tickerPreviewBox" style="border-radius:8px;overflow:hidden;display:flex;align-items:center;white-space:nowrap;">
+        <div id="tickerPreviewText" style="padding-left:100%;font-size:12px;font-weight:700;display:inline-block;"></div>
+      </div>
+      <div style="font-size:10.5px;color:var(--ink-600);margin-top:6px;">Isi teksnya diatur lewat tab <b>Running Text</b> di menu atas.</div>
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyTickerStyle()">Terapkan ke Website</button>
+      <div class="upload-status" id="tickerStyleStatus"></div>
+    </div>
+  `;
+}
+function updateTickerPreview(){
+  const bg = document.getElementById('tickerBg').value;
+  const textColor = document.getElementById('tickerTextColor').value;
+  const height = document.getElementById('tickerHeight').value;
+  const speedPxPerSec = Number(document.getElementById('tickerSpeed').value) || 80;
+  const box = document.getElementById('tickerPreviewBox');
+  box.style.background = bg;
+  box.style.height = height + 'px';
+  const textEl = document.getElementById('tickerPreviewText');
+  textEl.style.color = textColor;
+  textEl.style.lineHeight = height + 'px';
+  textEl.style.animation = 'none';
+  textEl.textContent = 'Contoh: Pendaftaran Santri Baru Tahun Ajaran 2027/2028 telah dibuka  •  Info lebih lanjut hubungi panitia PPDB';
+  // ukur lebar teks asli, baru tentukan durasi -> kecepatan (px/detik) selalu konsisten
+  requestAnimationFrame(()=>{
+    const distance = textEl.scrollWidth;
+    const duration = Math.max(distance / speedPxPerSec, 2);
+    textEl.style.animation = `ticker-scroll ${duration}s linear infinite`;
+  });
+}
+async function applyTickerStyle(){
+  const statusEl = document.getElementById('tickerStyleStatus');
+  statusEl.textContent = 'Menyimpan…';
+  const rows = [
+    {key:'ticker_bg', value: document.getElementById('tickerBg').value},
+    {key:'ticker_text_color', value: document.getElementById('tickerTextColor').value},
+    {key:'ticker_height', value: document.getElementById('tickerHeight').value},
+    {key:'ticker_speed', value: document.getElementById('tickerSpeed').value},
+  ];
+  const {error} = await sb.from('pengaturan_situs').upsert(rows);
+  if(error){ statusEl.textContent = 'Gagal simpan: ' + error.message; return; }
+  statusEl.textContent = 'Tersimpan ✓';
+  showToast('Tampilan Running Text diterapkan ✓');
+}
+
+async function renderLogoCard(){
+  const {data} = await sb.from('pengaturan_situs').select('key,value').in('key',['logo_url','logo_type','favicon_url']);
+  const map = {}; (data||[]).forEach(r=>map[r.key]=r.value);
+  const currentUrl = map.logo_url || '';
+  const currentType = map.logo_type || 'icon';
+  const currentFavicon = map.favicon_url || '';
+  pendingLogoFile = null;
+  pendingLogoObjectUrl = null;
+  pendingFaviconFile = null;
+
+  return `
+    <div class="item-card" style="flex-direction:column;align-items:stretch;">
+      <div class="item-title" style="margin-bottom:10px;">🖼️ Logo Website</div>
+
+      <div class="field">
+        <label>Tipe Logo</label>
+        <select id="logoType" onchange="updateLogoPreview()">
+          <option value="icon" ${currentType==='icon'?'selected':''}>Ikon saja (ditampilkan bulat + tulisan "PPTQ Al Azzaam")</option>
+          <option value="full" ${currentType==='full'?'selected':''}>Logo lengkap (sudah ada tulisan nama di gambar)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Pilih Gambar Logo</label>
+        <input type="file" id="logoFileInput" accept="image/*" onchange="onLogoFileChosen(this)">
+      </div>
+
+      <div style="font-size:11px;font-weight:700;color:var(--ink-600);margin:10px 0 6px;">PRATINJAU (belum tersimpan sebelum kamu klik Terapkan)</div>
+      <div style="border:1.5px dashed var(--line);border-radius:12px;overflow:hidden;">
+        <div id="previewNavbar" style="background:#fff;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);"></div>
+        <div id="previewHero" style="background:linear-gradient(160deg,var(--maroon-950),var(--maroon-900));padding:24px;display:flex;align-items:center;justify-content:center;min-height:100px;"></div>
+      </div>
+
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyLogoFinal()">Terapkan ke Website</button>
+      <div class="upload-status" id="logoStatus"></div>
+
+      <div style="border-top:1px solid var(--line);margin:18px 0 14px;"></div>
+
+      <div class="item-title" style="margin-bottom:10px;font-size:14px;">🔖 Favicon (ikon kecil di tab browser)</div>
+      <p style="font-size:11px;color:var(--ink-600);margin:0 0 10px;">Boleh beda dari Logo Website di atas — misal versi lebih sederhana yang tetap jelas walau ditampilkan sangat kecil. Kalau tidak diisi, otomatis pakai monogram "A" bawaan.</p>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div id="faviconPreviewBox" style="width:40px;height:40px;border-radius:8px;background:${currentFavicon ? `#fff url('${currentFavicon}') center/contain no-repeat` : 'var(--cream-100)'};border:1.5px solid var(--line);flex:none;"></div>
+        <div style="flex:1;">
+          <input type="file" id="faviconFileInput" accept="image/*" onchange="onFaviconFileChosen(this)">
+        </div>
+      </div>
+      <button class="btn btn-gold btn-sm" style="align-self:flex-start;margin-top:12px;" onclick="applyFaviconFinal()">Terapkan Favicon</button>
+      <div class="upload-status" id="faviconStatus"></div>
+    </div>
+  `;
+}
+
+function renderLogoPreviewInto(url, type){
+  const brand = document.getElementById('previewNavbar');
+  const emblem = document.getElementById('previewHero');
+  if(!brand || !emblem) return;
+
+  if(!url){
+    brand.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-weight:700;font-size:13px;color:var(--maroon-900);">
+      <span style="width:26px;height:26px;border-radius:50%;background:var(--maroon-950);box-shadow:0 0 0 2px #fff,0 0 0 3px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-size:11px;">A</span> PPTQ Al Azzaam</div>
+      <div style="background:var(--gold-shine);color:var(--maroon-950);font-size:9.5px;font-weight:800;padding:5px 12px;border-radius:14px;">Daftar</div>`;
+    emblem.innerHTML = `<div style="width:70px;height:70px;border-radius:50%;background:var(--maroon-950);box-shadow:0 0 0 2px rgba(255,255,255,.2),0 0 0 4px var(--gold-500);display:flex;align-items:center;justify-content:center;color:var(--gold-400);font-family:'Playfair Display',serif;font-size:26px;">ا</div>`;
+    return;
+  }
+
+  if(type === 'full'){
+    brand.innerHTML = `<img src="${url}" style="height:28px;max-width:170px;object-fit:contain;display:block;">
+      <div style="background:var(--gold-shine);color:var(--maroon-950);font-size:9.5px;font-weight:800;padding:5px 12px;border-radius:14px;">Daftar</div>`;
+    emblem.innerHTML = `<div style="background:#fff;padding:14px 20px;border-radius:16px;box-shadow:0 0 0 3px var(--gold-500);display:inline-flex;"><img src="${url}" style="max-height:56px;max-width:220px;object-fit:contain;"></div>`;
+  } else {
+    brand.innerHTML = `<div style="display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-weight:700;font-size:13px;color:var(--maroon-900);">
+      <span style="width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--gold-500);overflow:hidden;display:inline-flex;align-items:center;justify-content:center;"><img src="${url}" style="width:100%;height:100%;object-fit:contain;"></span> PPTQ Al Azzaam</div>
+      <div style="background:var(--gold-shine);color:var(--maroon-950);font-size:9.5px;font-weight:800;padding:5px 12px;border-radius:14px;">Daftar</div>`;
+    emblem.innerHTML = `<div style="width:70px;height:70px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.2),0 0 0 4px var(--gold-500);display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box;"><img src="${url}" style="max-width:100%;max-height:100%;object-fit:contain;"></div>`;
+  }
+}
+
+async function updateLogoPreview(){
+  const type = document.getElementById('logoType').value;
+  if(pendingLogoObjectUrl){
+    renderLogoPreviewInto(pendingLogoObjectUrl, type);
+  } else {
+    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','logo_url').maybeSingle();
+    renderLogoPreviewInto(data ? data.value : '', type);
+  }
+}
+
+function onLogoFileChosen(input){
+  const file = input.files[0];
+  if(!file) return;
+  pendingLogoFile = file;
+  if(pendingLogoObjectUrl) URL.revokeObjectURL(pendingLogoObjectUrl);
+  pendingLogoObjectUrl = URL.createObjectURL(file);
+  const type = document.getElementById('logoType').value;
+  renderLogoPreviewInto(pendingLogoObjectUrl, type);
+}
+
+async function applyLogoFinal(){
+  const statusEl = document.getElementById('logoStatus');
+  const type = document.getElementById('logoType').value;
+  let finalUrl = null;
+
+  if(pendingLogoFile){
+    statusEl.textContent = 'Memproses gambar…';
+    const compressed = await compressImage(pendingLogoFile, 800, 0.85);
+    statusEl.textContent = 'Mengunggah…';
+    const path = `logo/${Date.now()}-${pendingLogoFile.name.replace(/\s+/g,'-')}`;
+    const {error} = await sb.storage.from('media-website').upload(path, compressed);
+    if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
+    finalUrl = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
+  } else {
+    const {data} = await sb.from('pengaturan_situs').select('value').eq('key','logo_url').maybeSingle();
+    finalUrl = data ? data.value : null;
+  }
+
+  if(!finalUrl){
+    statusEl.textContent = 'Pilih gambar logo dulu sebelum menerapkan.';
+    return;
+  }
+
+  statusEl.textContent = 'Menyimpan…';
+  const {error: upsertErr} = await sb.from('pengaturan_situs').upsert([
+    {key:'logo_url', value: finalUrl},
+    {key:'logo_type', value: type},
+  ]);
+  if(upsertErr){ statusEl.textContent = 'Gagal simpan: ' + upsertErr.message; return; }
+
+  statusEl.textContent = 'Logo diterapkan ke website ✓';
+  showToast('Logo diterapkan ke website ✓');
+  loadList();
+}
+
+let pendingFaviconFile = null;
+
+function onFaviconFileChosen(input){
+  const file = input.files[0];
+  if(!file) return;
+  pendingFaviconFile = file;
+  const objectUrl = URL.createObjectURL(file);
+  document.getElementById('faviconPreviewBox').style.cssText += `background:#fff url('${objectUrl}') center/contain no-repeat;`;
+}
+
+async function applyFaviconFinal(){
+  const statusEl = document.getElementById('faviconStatus');
+  if(!pendingFaviconFile){
+    statusEl.textContent = 'Pilih gambar favicon dulu sebelum menerapkan.';
+    return;
+  }
+  statusEl.textContent = 'Memproses gambar…';
+  const compressed = await compressImage(pendingFaviconFile, 256, 0.9);
+  statusEl.textContent = 'Mengunggah…';
+  const path = `favicon/${Date.now()}-${pendingFaviconFile.name.replace(/\s+/g,'-')}`;
+  const {error} = await sb.storage.from('media-website').upload(path, compressed);
+  if(error){ statusEl.textContent = 'Gagal unggah: ' + error.message; return; }
+  const url = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
+  const {error: upsertErr} = await sb.from('pengaturan_situs').upsert({key:'favicon_url', value:url});
+  if(upsertErr){ statusEl.textContent = 'Gagal simpan: ' + upsertErr.message; return; }
+  statusEl.textContent = 'Favicon diterapkan ✓';
+  showToast('Favicon diterapkan ✓');
+  loadList();
+}
+
+
+async function saveRecord(){
+  if(isUploading){
+    alert('Tunggu sebentar, gambar masih dalam proses unggah. Coba klik Simpan lagi setelah muncul tulisan "Berhasil diunggah ✓".');
+    return;
+  }
+  const cfg = TABLES[currentTab];
+  const payload = {};
+  cfg.fields.forEach(f => {
+    const el = document.getElementById('f_'+f.key);
+    let v = el.value;
+    if(f.type==='images'){ try{ v = JSON.parse(v||'[]'); }catch(e){ v = []; } payload[f.key] = v; return; }
+    if(f.type==='number') v = v === '' ? null : Number(v);
+    payload[f.key] = v === '' ? null : v;
+  });
+
+  let error;
+  if(currentRecord){
+    // update berdasarkan primary key
+    const pkVal = currentRecord[cfg.pk];
+    ({error} = await sb.from(currentTab).update(payload).eq(cfg.pk, pkVal));
+  } else {
+    ({error} = await sb.from(currentTab).insert(payload));
+  }
+  if(error){
+    showToast('Gagal menyimpan: ' + error.message);
+    return;
+  }
+  closeForm();
+  showToast('Tersimpan ✓');
+  loadList();
+}
+
+async function deleteRecord(pkVal){
+  if(!confirm('Hapus data ini? Tindakan tidak bisa dibatalkan.')) return;
+  const cfg = TABLES[currentTab];
+  const {error} = await sb.from(currentTab).delete().eq(cfg.pk, pkVal);
+  if(error){
+    showToast('Gagal menghapus: ' + error.message);
+    return;
+  }
+  showToast('Data dihapus');
+  loadList();
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(()=> t.style.display='none', 2500);
+}
+
+// ================= PREVIEW & LIVE =================
+const SITE_PAGES = [
+  {k:'index', n:'Beranda'}, {k:'profil', n:'Profil'}, {k:'program', n:'Program'},
+  {k:'berita', n:'Berita'}, {k:'galeri', n:'Galeri'}, {k:'ppdb', n:'Pendaftaran'}
+];
+const SV_WIDTH = {desktop:'100%', tablet:'820px', phone:'390px'};
+let svMode = 'preview', svPage = 'index', svDevice = 'desktop', svRows = {}, svTableError = null;
+
+function svApi(){
+  const f = document.getElementById('svFrame');
+  try{ return f && f.contentWindow && f.contentWindow.PPTQLayout && f.contentWindow.PPTQLayout.isEditor ? f.contentWindow.PPTQLayout : null; }catch(e){ return null; }
+}
+function svDirty(){
+  if(svMode !== 'preview' || document.getElementById('siteViewArea').style.display === 'none') return false;
+  const a = svApi(); return !!(a && a.isDirty());
+}
+function svFrameUnload(){ const f = document.getElementById('svFrame'); if(f) f.src = 'about:blank'; }
+
+async function loadLayoutRows(){
+  const {data, error} = await sb.from('layout_halaman').select('halaman,status,data,updated_at');
+  svRows = {}; svTableError = error ? error.message : null;
+  (data||[]).forEach(r=>{ (svRows[r.halaman] = svRows[r.halaman] || {})[r.status] = r; });
+}
+function svNorm(r){ return r && r.data ? JSON.stringify(r.data) : '{}'; }
+function svIsEmpty(r){ const d = (r && r.data) || {}; return !r || (!Object.keys(d.order||{}).length && !Object.keys(d.size||{}).length && !Object.keys(d.text||{}).length); }
+function pageState(k){
+  const r = svRows[k] || {};
+  if(r.draft && svNorm(r.draft) !== svNorm(r.live) && !(svIsEmpty(r.draft) && svIsEmpty(r.live))) return 'draft';
+  if(!svIsEmpty(r.live)) return 'live';
+  return 'asli';
+}
+const SV_STATE_LABEL = {draft:'Draf belum online', live:'Sudah online (diedit)', asli:'Desain awal'};
+
+async function openSiteView(){
+  await loadLayoutRows();
+  renderSiteView();
+}
+function renderSiteView(){
+  const area = document.getElementById('siteViewArea');
+  const isPrev = svMode === 'preview';
+  const pills = SITE_PAGES.map(p=>{
+    const st = pageState(p.k);
+    return `<button class="sv-pill ${p.k===svPage?'active':''}" onclick="svChoosePage('${p.k}')" title="${SV_STATE_LABEL[st]}"><span class="sv-dot ${st}"></span>${p.n}</button>`;
   }).join('');
+  const devs = [['desktop','Desktop'],['tablet','Tablet'],['phone','HP']].map(([k,n])=>
+    `<button class="sv-dev ${k===svDevice?'active':''}" onclick="svSetDevice('${k}')">${n}</button>`).join('');
+  const missing = svTableError ? `<div class="sv-help" style="background:#fdecec;border-color:#f3bcbc;">Tabel <b>layout_halaman</b> belum ada. Jalankan file <b>013_layout_halaman.sql</b> di Supabase SQL Editor dulu supaya simpan draf dan publikasi bisa dipakai. (${svTableError})</div>` : '';
+  area.innerHTML = `
+    <div class="sv-top">
+      <div class="sv-title">${isPrev ? 'Preview — halaman yang belum online' : 'Live — halaman yang sedang online'}
+        <small>${isPrev ? 'Atur susunan dan tulisan di sini. Pengunjung baru melihatnya setelah kamu klik Publikasikan.' : 'Ini persis tampilan yang dilihat pengunjung website sekarang.'}</small></div>
+      <div class="sv-devs">${devs}</div>
+    </div>
+    ${missing}
+    <div class="sv-pages">${pills}</div>
+    ${isPrev ? `
+    <div class="sv-bar">
+      <button class="btn btn-outline btn-sm" id="svUndo" onclick="svUndo()" disabled>Urungkan</button>
+      <button class="btn btn-outline btn-sm" id="svRedo" onclick="svRedo()" disabled>Ulangi</button>
+      <span class="sv-status grow" id="svStatus">Memuat…</span>
+      <button class="btn btn-outline btn-sm" onclick="svResetDesign()">Kembalikan desain awal</button>
+      <button class="btn btn-outline btn-sm" onclick="svDiscard()">Buang draf</button>
+      <button class="btn btn-outline btn-sm" id="svSaveBtn" onclick="svSave(false)">Simpan draf</button>
+      <button class="btn btn-gold btn-sm" id="svPubBtn" onclick="svSave(true)">Publikasikan</button>
+    </div>
+    <div class="sv-theme" id="svTheme">
+      <b>🎨 Warna situs</b>
+      <div class="sv-sws" id="svSw"></div>
+      <div class="sv-tn" id="svTn">Memuat…</div>
+      <span class="sv-cc">Utama <input type="color" id="thP" oninput="svThemeLive()" onchange="svThemeCommit()"></span>
+      <span class="sv-cc">Aksen <input type="color" id="thA" oninput="svThemeLive()" onchange="svThemeCommit()"></span>
+      <span class="sv-cc">Latar <input type="color" id="thB" oninput="svThemeLive()" onchange="svThemeCommit()"></span>
+      <button class="btn btn-outline btn-sm" onclick="svThemePick('maroon')">Warna asli pondok</button>
+    </div>
+    <div class="sv-help"><b>Cara pakai:</b> klik sebuah blok untuk memilihnya. <b>Seret ikon panah</b> di sudut kiri atas untuk memindahkan. <b>Tarik tepi kanan, bawah, atau sudut</b> untuk membesarkan atau mengecilkan (tampilan Desktop). <b>Klik 2x pada tulisan</b> untuk mengeditnya, lalu klik di luar untuk selesai. Editan ini hanya mengubah tampilan, <b>tidak mengubah data berita, program, galeri, dan lainnya</b>. Tulisan yang berasal dari data (isi berita, nama program, dsb) tetap diubah lewat menu biasa.</div>
+    ` : `
+    <div class="sv-bar">
+      <span class="sv-status grow">Halaman: ${SITE_PAGES.find(p=>p.k===svPage).n} · ${SV_STATE_LABEL[pageState(svPage)] === 'Desain awal' ? 'memakai desain awal' : 'memakai tata letak hasil publikasi'}</span>
+      <a class="btn btn-outline btn-sm" href="${svPage}.html" target="_blank" rel="noopener">Buka di tab baru</a>
+      <button class="btn btn-outline btn-sm" onclick="svReloadFrame()">Muat ulang</button>
+      <button class="btn btn-danger btn-sm" onclick="svUnpublish()">Cabut tata letak live</button>
+    </div>`}
+    <div class="sv-frame-wrap"><iframe id="svFrame" class="sv-frame" title="Tampilan halaman" style="width:${SV_WIDTH[svDevice]}"></iframe></div>`;
+  svReloadFrame();
 }
-loadProgram();
+function svReloadFrame(){
+  const f = document.getElementById('svFrame'); if(!f) return;
+  const q = (svMode === 'preview' ? '?editor=1&' : '?') + '_=' + Date.now();
+  f.onload = svFrameLoaded;
+  f.src = svPage + '.html' + q;
+}
+async function svFrameLoaded(){
+  if(svMode !== 'preview') return;
+  const a = svApi(); if(!a) { const st = document.getElementById('svStatus'); if(st) st.textContent = 'Editor tidak aktif (pastikan masih login).'; return; }
+  await a.ready;
+  a.onChange(svUpdateBar);
+  svUpdateBar();
+  svThemeRender();
+}
+function svUpdateBar(){
+  const a = svApi(); if(!a) return;
+  const st = document.getElementById('svStatus');
+  const dirty = a.isDirty();
+  if(st){
+    st.textContent = dirty ? 'Ada perubahan yang belum disimpan' : (SV_STATE_LABEL[pageState(svPage)] || '');
+    st.classList.toggle('dirty', dirty);
+  }
+  const u = document.getElementById('svUndo'), r = document.getElementById('svRedo');
+  if(u) u.disabled = !a.canUndo(); if(r) r.disabled = !a.canRedo();
+  svThemeRender();
+}
+// ---- Warna situs (berlaku untuk semua halaman; disimpan bersama draf / publikasi) ----
+let svThemePrev = null;
+function svTema(){ const f = document.getElementById('svFrame'); try{ return f.contentWindow.PPTQTema || null; }catch(e){ return null; } }
+function svThemeRender(){
+  const T = svTema(), a = svApi(), box = document.getElementById('svTheme'); if(!T || !a || !box) return;
+  const cur = a.getTheme() || {pal:'maroon'};
+  const c = T.resolve(cur) || T.PALS.maroon;
+  document.getElementById('svSw').innerHTML = Object.keys(T.PALS).map(k=>
+    `<button type="button" class="sv-sw ${cur.pal===k?'on':''}" title="${T.PALS[k].n} — ${T.PALS[k].d}" style="background:linear-gradient(135deg,${T.PALS[k].p} 50%,${T.PALS[k].a} 50%)" onclick="svThemePick('${k}')"></button>`).join('')
+    + `<button type="button" class="sv-sw cus ${cur.pal==='custom'?'on':''}" title="Warna kustom: pilih sendiri di kotak sebelah" onclick="svThemeCustom()">+</button>`;
+  document.getElementById('svTn').innerHTML = cur.pal === 'custom' ? 'Kustom<small>Warna pilihan sendiri</small>' : `${T.PALS[cur.pal].n}<small>${T.PALS[cur.pal].d}</small>`;
+  document.getElementById('thP').value = c.p; document.getElementById('thA').value = c.a; document.getElementById('thB').value = c.bg;
+}
+function svThemePick(k){ const a = svApi(); if(!a) return; a.setTheme({pal:k}); }
+function svThemeCustom(){ const a = svApi(); if(!a) return; const T = svTema(), cur = T.resolve(a.getTheme() || {pal:'maroon'}) || T.PALS.maroon; a.setTheme({pal:'custom', p:cur.p, a:cur.a, bg:cur.bg}); }
+function svThemeLive(){
+  const a = svApi(); if(!a) return;
+  if(!svThemePrev) svThemePrev = a.getState();
+  a.previewTheme({pal:'custom', p:document.getElementById('thP').value, a:document.getElementById('thA').value, bg:document.getElementById('thB').value});
+}
+function svThemeCommit(){
+  const a = svApi(); if(!a || !svThemePrev) return;
+  const t = {pal:'custom', p:document.getElementById('thP').value, a:document.getElementById('thA').value, bg:document.getElementById('thB').value};
+  const prev = svThemePrev; svThemePrev = null;
+  a.finishPreview(prev, Object.assign({}, prev, {theme:t}));
+}
+function svChoosePage(k){
+  if(k === svPage) return;
+  if(svDirty() && !confirm('Ada perubahan yang belum disimpan di halaman ini. Tetap pindah halaman?')) return;
+  svPage = k; renderSiteView();
+}
+function svSetDevice(d){
+  svDevice = d;
+  document.querySelectorAll('.sv-dev').forEach(b=>b.classList.toggle('active', b.textContent === {desktop:'Desktop',tablet:'Tablet',phone:'HP'}[d]));
+  const f = document.getElementById('svFrame'); if(f) f.style.width = SV_WIDTH[d];
+  setTimeout(()=>{ const a = svApi(); if(a && window.frames[0] && 0){} }, 100);
+}
+function svUndo(){ const a = svApi(); if(a) a.undo(); }
+function svRedo(){ const a = svApi(); if(a) a.redo(); }
+function svResetDesign(){
+  const a = svApi(); if(!a) return;
+  if(!confirm('Kembalikan halaman ini ke desain awal (semua susunan, ukuran, dan tulisan hasil edit dihapus dari draf)? Kamu masih bisa menekan Urungkan.')) return;
+  a.clearAll();
+}
+async function svSave(publish){
+  const a = svApi(); if(!a) return;
+  if(publish && !confirm('Publikasikan ke website? Pengunjung akan langsung melihat tampilan ini.')) return;
+  const st = a.getState(), theme = st.theme; delete st.theme;
+  const data = Object.assign({v:2}, st), now = new Date().toISOString();
+  const rows = [{halaman:svPage, status:'draft', data, updated_at:now}];
+  if(publish) rows.push({halaman:svPage, status:'live', data, updated_at:now});
+  // warna situs: baris terpisah '_tema' (berlaku untuk semua halaman)
+  if(theme){
+    const td = Object.assign({v:2}, theme);
+    rows.push({halaman:'_tema', status:'draft', data:td, updated_at:now});
+    if(publish) rows.push({halaman:'_tema', status:'live', data:td, updated_at:now});
+  }
+  const {error} = await sb.from('layout_halaman').upsert(rows);
+  if(error){ showToast('Gagal menyimpan: ' + error.message); return; }
+  a.markSaved();
+  await loadLayoutRows();
+  document.querySelectorAll('.sv-pill').forEach((el,i)=>{
+    const k = SITE_PAGES[i].k, s2 = pageState(k);
+    el.querySelector('.sv-dot').className = 'sv-dot ' + s2; el.title = SV_STATE_LABEL[s2];
+  });
+  svUpdateBar();
+  showToast(publish ? 'Dipublikasikan. Website sudah memakai tampilan ini.' : 'Draf tersimpan (belum online).');
+}
+async function svDiscard(){
+  if(!confirm('Buang draf halaman ini? Preview kembali ke tampilan yang sedang online.')) return;
+  const {error} = await sb.from('layout_halaman').delete().eq('halaman', svPage).eq('status','draft');
+  if(error){ showToast('Gagal: ' + error.message); return; }
+  await loadLayoutRows(); renderSiteView(); showToast('Draf dibuang.');
+}
+async function svUnpublish(){
+  if(!confirm('Cabut tata letak live? Halaman ini di website kembali memakai desain awal. Drafmu tidak ikut terhapus.')) return;
+  const {error} = await sb.from('layout_halaman').delete().eq('halaman', svPage).eq('status','live');
+  if(error){ showToast('Gagal: ' + error.message); return; }
+  try{ localStorage.removeItem('lay_' + svPage); }catch(e){}
+  await loadLayoutRows(); renderSiteView(); showToast('Tata letak live dicabut.');
+}
+window.addEventListener('beforeunload', e=>{ if(svDirty()){ e.preventDefault(); e.returnValue = ''; } });
+
+checkSession();
 
 </script>
 </body>
