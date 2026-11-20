@@ -42,7 +42,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link rel="stylesheet" href="shared.css?v=9">
+<link rel="stylesheet" href="shared.css?v=11">
 <style>
 
 :root{--hf:'DM Serif Display',Georgia,serif;}
@@ -153,7 +153,8 @@ section.band.alt{background:var(--bg2);}
 .tst-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px;}
 .tst{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:12px;box-shadow:0 22px 40px -34px var(--p);transition:transform .3s,box-shadow .3s;}
 .tst:hover{transform:translateY(-4px);}
-.tst p{margin:0;color:var(--ink);line-height:1.65;font-size:15px;display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden;}
+.tst p{margin:0;color:var(--ink);line-height:1.65;font-size:15px;max-height:11.6em;overflow-y:auto;padding-right:6px;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--a) transparent;white-space:pre-line;}
+.tst p::-webkit-scrollbar{width:5px}.tst p::-webkit-scrollbar-thumb{background:var(--a);border-radius:5px}
 .tst .who{display:flex;align-items:center;gap:11px;margin-top:auto;}
 .tst .av{width:42px;height:42px;border-radius:50%;background:var(--p);color:var(--on);display:grid;place-items:center;font-weight:800;overflow:hidden;flex:none;}
 .tst .av img{width:100%;height:100%;object-fit:cover;}
@@ -208,9 +209,19 @@ section.band.alt{background:var(--bg2);}
 
 .tst.tl{text-decoration:none;align-items:flex-start;gap:8px;border-style:dashed;border-color:var(--a);}
 .tst.tl .gm{width:44px;height:44px;border-radius:14px;background:var(--p);color:var(--on);display:grid;place-items:center;margin-bottom:4px}.tst.tl .gm .i{width:22px;height:22px}
-.tst.tl b{color:var(--pd);font-size:17px}.tst.tl p{-webkit-line-clamp:3}
+.tst.tl b{color:var(--pd);font-size:17px}.tst.tl p{max-height:none;overflow:visible}
 .tst.tl .go{margin-top:auto;font-weight:800;font-size:13.5px;color:var(--p);display:inline-flex;gap:6px;align-items:center}
 .tst.tl:hover{border-color:var(--p)}
+
+.tst-g.slide{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px 4px 26px;margin:0 -4px;scrollbar-width:none;}
+.tst-g.slide::-webkit-scrollbar{display:none}
+.tst-g.slide .tst{flex:0 0 min(340px,84vw);scroll-snap-align:start;}
+.tst-nav{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:4px 0 0;}
+.tst-nav .d{display:flex;gap:7px}.tst-nav .d button{width:9px;height:9px;border-radius:99px;border:0;padding:0;background:color-mix(in srgb,var(--p) 25%,transparent);cursor:pointer;transition:.3s}.tst-nav .d button.on{width:26px;background:var(--p)}
+.tst-nav .c{display:flex;gap:8px}.tst-nav .c button{width:44px;height:44px;border-radius:50%;border:2px solid var(--p);background:none;color:var(--p);display:grid;place-items:center;cursor:pointer;transition:.25s}
+.tst-nav .c button:hover{background:var(--p);color:var(--on)}.tst-nav .c button:disabled{opacity:.3;cursor:default;background:none;color:var(--p)}
+.tst-nav .c button:first-child .i{transform:rotate(180deg)}
+
 
 </style>
 </head>
@@ -230,6 +241,11 @@ section.band.alt{background:var(--bg2);}
 <nav class="navbar">
   <div class="navbar-inner">
     <a href="index.html" class="nav-brand"><span class="ring">A</span> PPTQ Al Azzaam</a>
+    <div class="nav-search" id="navSearch" role="search">
+      <svg class="si" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" id="navQ" placeholder="Cari berita, program, galeri…" autocomplete="off" aria-label="Cari di website">
+      <div class="sres" id="navRes" hidden></div>
+    </div>
     <div class="nav-links" id="navLinks">
       <a href="index.html" class="active">Beranda</a>
       <div class="nav-item">
@@ -249,6 +265,7 @@ section.band.alt{background:var(--bg2);}
       <a href="ppdb.html" class="nav-cta-m">Daftar Santri Baru</a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
+      <button class="nav-sbtn" id="navSBtn" type="button" aria-label="Cari"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" style="width:22px;height:22px"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
       <a href="ppdb.html" class="nav-cta mg">Daftar Santri Baru</a>
       <button class="nav-toggle" id="navToggle" aria-label="Buka menu"><svg class="i"><use href="#i-menu"/></svg></button>
     </div>
@@ -366,6 +383,7 @@ section.band.alt{background:var(--bg2);}
       <h2 class="sec-t rv">Testimoni Wali &amp; Alumni</h2>
       <div class="tst-sum rv" id="tstSum" data-dyn></div>
       <div class="tst-g" id="tstGrid" data-dyn></div>
+      <div class="tst-nav" id="tstNav" style="display:none"><div class="d" id="tstDots"></div><div class="c"><button type="button" id="tstP" aria-label="Sebelumnya"><svg class="i"><use href="#i-arrow"/></svg></button><button type="button" id="tstN" aria-label="Berikutnya"><svg class="i"><use href="#i-arrow"/></svg></button></div></div>
       <div class="tst-foot" id="tstFoot" data-dyn></div>
       <div class="tst-cta rv"><div><b>Pernah bersama kami?</b><span>Bagikan pengalaman Anda — boleh dengan foto atau video. Ulasan tampil setelah disetujui admin.</span></div><button type="button" class="btn btn-a mg" id="tstOpen">Tulis ulasan</button></div>
     </div>
@@ -435,7 +453,7 @@ section.band.alt{background:var(--bg2);}
     <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
   </div>
 </div>
-<script src="shared.js?v=9"></script>
+<script src="shared.js?v=10"></script>
 <script src="layout.js?v=3"></script>
 <script>
 
@@ -571,6 +589,23 @@ async function loadBerita(){
     </a>`).join('');
 }
 function _stars(n){ n=Math.max(0,Math.min(5,Math.round(n))); return '<span class="stars" aria-label="'+n+' dari 5">'+'★'.repeat(n)+'<i>'+'★'.repeat(5-n)+'</i></span>'; }
+
+function tstSlider(n){
+  const G = document.getElementById('tstGrid'), nav = document.getElementById('tstNav');
+  const on = n > 3;
+  G.classList.toggle('slide', on); nav.style.display = on ? '' : 'none';
+  if(!on) return;
+  const C = [...G.children], D = document.getElementById('tstDots'), P = document.getElementById('tstP'), N = document.getElementById('tstN');
+  D.innerHTML = C.map((_,i)=>`<button type="button" aria-label="Ulasan ${i+1}"></button>`).join('');
+  const step = ()=> C[0].offsetWidth + 20;
+  const upd = ()=>{ const i = Math.min(C.length-1, Math.round(G.scrollLeft/step())), end = G.scrollLeft + G.clientWidth >= G.scrollWidth - 4;
+    P.disabled = G.scrollLeft < 4; N.disabled = end; [...D.children].forEach((b,k)=>b.classList.toggle('on', end ? k===C.length-1 : k===i)); };
+  P.onclick = ()=>G.scrollBy({left:-step()}); N.onclick = ()=>G.scrollBy({left:step()});
+  [...D.children].forEach((b,i)=>b.onclick = ()=>G.scrollTo({left:i*step()}));
+  G.onscroll = upd; upd();
+  G.querySelectorAll('.rv').forEach(e=>e.classList.add('on'));
+}
+
 async function loadTestimoni(){
   const sec = document.getElementById('testimoni'); if(!sec) return;
   let rev = [], sum = null, peta = '';
@@ -590,6 +625,7 @@ async function loadTestimoni(){
     const mdh = v.media ? `<div class="md">${v.mtipe==='video'?`<video src="${esc(v.media)}" controls preload="metadata" playsinline></video>`:`<img src="${esc(v.media)}" alt="Foto dari ${esc(v.nama)}" loading="lazy">`}</div>` : '';
     return `<article class="tst rv">${mdh}${_stars(v.bintang||5)}<p>${esc(v.teks)}</p><div class="who"><div class="av">${v.foto?`<img src="${esc(v.foto)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:ini}</div><div><b>${nm}</b><span>${esc([v.peran,v.waktu].filter(Boolean).join(' · '))}</span></div></div></article>`;
   }).join('');
+  tstSlider(rev.length);
   document.getElementById('tstFoot').innerHTML = (peta?`<a class="btn btn-line mg" href="${esc(normalizeLink(peta))}" target="_blank" rel="noopener">Lihat ulasan di Google Maps ${ic('arrow')}</a>`:'');
 }
 /* ---------- Kirim ulasan oleh pengunjung (menunggu persetujuan admin) ---------- */
