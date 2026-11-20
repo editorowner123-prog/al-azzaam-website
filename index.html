@@ -206,6 +206,12 @@ section.band.alt{background:var(--bg2);}
 .lay-s .lay-card .go{padding-top:2px;font-size:12.5px;margin-top:0;}
 .lay-s .lay-card .go .i{width:14px;height:14px}
 
+.tst.tl{text-decoration:none;align-items:flex-start;gap:8px;border-style:dashed;border-color:var(--a);}
+.tst.tl .gm{width:44px;height:44px;border-radius:14px;background:var(--p);color:var(--on);display:grid;place-items:center;margin-bottom:4px}.tst.tl .gm .i{width:22px;height:22px}
+.tst.tl b{color:var(--pd);font-size:17px}.tst.tl p{-webkit-line-clamp:3}
+.tst.tl .go{margin-top:auto;font-weight:800;font-size:13.5px;color:var(--p);display:inline-flex;gap:6px;align-items:center}
+.tst.tl:hover{border-color:var(--p)}
+
 </style>
 </head>
 <body>
@@ -570,11 +576,15 @@ async function loadTestimoni(){
   let rev = [], sum = null, peta = '';
   const google = false;
   const {data} = await sb.from('testimoni').select('*').eq('status','published').order('urutan');
-  rev = (data||[]).map(v=>({nama:v.nama, foto:v.foto_url, bintang:v.bintang, teks:v.isi, waktu:v.waktu, tautan:v.link_url, media:v.media_url, mtipe:v.media_tipe, peran:v.peran}));
-  if(rev.length){ const avg = rev.reduce((a,b)=>a+(b.bintang||5),0)/rev.length; sum = {rating:Math.round(avg*10)/10, jumlah:rev.length}; }
+  rev = (data||[]).filter(v=>v.isi||v.link_url).map(v=>({nama:v.nama, foto:v.foto_url, bintang:v.bintang, teks:v.isi, waktu:v.waktu, tautan:v.link_url, media:v.media_url, mtipe:v.media_tipe, peran:v.peran}));
+  if(rev.length){ const rt = rev.filter(x=>x.bintang); if(rt.length){ const avg = rt.reduce((a,b)=>a+b.bintang,0)/rt.length; sum = {rating:Math.round(avg*10)/10, jumlah:rev.length}; } }
   if(!peta){ try{ const {data} = await sb.from('pengaturan_situs').select('value').eq('key','google_maps_url').limit(1); peta = (data&&data[0]&&data[0].value)||''; }catch(e){} }
   document.getElementById('tstSum').innerHTML = sum ? `<b>${String(sum.rating).replace('.',',')}</b>${_stars(sum.rating)}<span>${sum.jumlah} ulasan${google?' di Google Maps':''}</span>` : '';
   document.getElementById('tstGrid').innerHTML = !rev.length ? '<div class="empty-state" style="grid-column:1/-1">Belum ada ulasan. Jadilah yang pertama membagikan pengalaman Anda.</div>' : rev.map(v=>{
+    if(!v.teks && v.tautan){
+      const hr = esc(normalizeLink(v.tautan));
+      return `<a class="tst tl rv" href="${hr}" target="_blank" rel="noopener"><span class="gm"><svg class="i"><use href="#i-pin"/></svg></span>${v.bintang?_stars(v.bintang):''}<b>${esc(v.nama||'Ulasan di Google Maps')}</b><p>${esc(v.waktu||'Baca ulasan lengkapnya langsung di Google Maps.')}</p><span class="go">Buka ulasan ${ic('arrow')}</span></a>`;
+    }
     const ini = esc((v.nama||'?').trim().charAt(0).toUpperCase());
     const nm = v.tautan ? `<a href="${esc(normalizeLink(v.tautan))}" target="_blank" rel="noopener">${esc(v.nama)}</a>` : esc(v.nama);
     const mdh = v.media ? `<div class="md">${v.mtipe==='video'?`<video src="${esc(v.media)}" controls preload="metadata" playsinline></video>`:`<img src="${esc(v.media)}" alt="Foto dari ${esc(v.nama)}" loading="lazy">`}</div>` : '';
