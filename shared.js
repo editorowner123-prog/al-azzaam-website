@@ -388,8 +388,65 @@ function typeWords(el, words){
   })();
 }
 
+
+// ---------- Pencarian di navbar ----------
+function initNavSearch(){
+  const Q = document.getElementById('navQ'), R = document.getElementById('navRes'), B = document.getElementById('navSBtn');
+  if(!Q || !R) return;
+  const nav = document.querySelector('.navbar');
+  const PAGES = [
+    ['Beranda','index.html','beranda utama home'],['Profil Pondok','profil.html','profil tentang sejarah'],['Sejarah','profil.html#sejarah','sejarah perjalanan'],
+    ['Visi & Misi','profil.html#visimisi','visi misi'],['Struktur Pengurus','profil.html#struktur','struktur pengurus ustadz'],['Program Pendidikan','program.html','program pendidikan formal non formal'],
+    ['Berita & Kegiatan','berita.html','berita kegiatan kabar'],['Galeri Foto & Video','galeri.html','galeri foto video dokumentasi'],
+    ['Pendaftaran Santri Baru','ppdb.html','ppdb pendaftaran daftar syarat biaya jadwal psb santri baru'],['Kontak & Alamat','index.html#kontak','kontak alamat telepon wa whatsapp lokasi'],
+    ['Jadwal Kegiatan Santri','index.html#jalan','jadwal kegiatan harian santri'],['Testimoni','index.html#testimoni','testimoni ulasan']
+  ];
+  let seq = 0, items = [], idx = -1;
+  const safe = s => String(s).replace(/[%,()]/g,' ');
+  function show(groups){
+    items = []; idx = -1;
+    const html = groups.filter(g=>g[1].length).map(g=>`<h6>${g[0]}</h6>` + g[1].map(x=>{ items.push(x.h); return `<a href="${esc(x.h)}">${esc(x.t)}${x.s?`<small>${esc(x.s)}</small>`:''}</a>`; }).join('')).join('');
+    R.innerHTML = html || '<div class="none">Tidak ada hasil. Coba kata kunci lain.</div>'; R.hidden = false;
+  }
+  async function run(){
+    const q = Q.value.trim(); const my = ++seq;
+    if(q.length < 2){ R.hidden = true; return; }
+    const ql = q.toLowerCase(), like = '%' + safe(q) + '%';
+    const pg = PAGES.filter(p=>(p[0]+' '+p[2]).toLowerCase().includes(ql)).slice(0,4).map(p=>({t:p[0],h:p[1]}));
+    const safeQ = async f => { try{ const r = await f; return r.data || []; }catch(e){ return []; } };
+    const [br, pr, gl, kg] = await Promise.all([
+      safeQ(sb.from('berita').select('slug,judul,kategori').eq('status','published').ilike('judul', like).limit(4)),
+      safeQ(sb.from('program').select('nama,jenjang').ilike('nama', like).limit(4)),
+      safeQ(sb.from('galeri').select('judul,kategori').ilike('judul', like).limit(4)),
+      safeQ(sb.from('kegiatan_santri').select('judul,jam_mulai').eq('status','published').ilike('judul', like).limit(3))
+    ]);
+    if(my !== seq) return;
+    show([
+      ['Halaman', pg],
+      ['Berita', br.map(b=>({t:b.judul,s:b.kategori,h:'berita.html?slug='+encodeURIComponent(b.slug)}))],
+      ['Program', pr.map(p=>({t:p.nama,s:p.jenjang,h:'program.html'+(p.jenjang?'?jenjang='+encodeURIComponent(p.jenjang):'')}))],
+      ['Galeri', gl.map(g=>({t:g.judul,s:g.kategori,h:'galeri.html'}))],
+      ['Jadwal kegiatan', kg.map(k=>({t:k.judul,s:k.jam_mulai,h:'index.html#jalan'}))]
+    ]);
+  }
+  let tm; Q.addEventListener('input', ()=>{ clearTimeout(tm); tm = setTimeout(run, 220); });
+  Q.addEventListener('focus', ()=>{ if(Q.value.trim().length >= 2) run(); });
+  Q.addEventListener('keydown', e=>{
+    const as = [...R.querySelectorAll('a')];
+    if(e.key === 'ArrowDown' && as.length){ e.preventDefault(); idx = (idx + 1) % as.length; }
+    else if(e.key === 'ArrowUp' && as.length){ e.preventDefault(); idx = (idx - 1 + as.length) % as.length; }
+    else if(e.key === 'Enter'){ e.preventDefault(); const a = as[idx >= 0 ? idx : 0]; if(a) location.href = a.getAttribute('href'); return; }
+    else if(e.key === 'Escape'){ R.hidden = true; Q.blur(); return; }
+    else return;
+    as.forEach((a,i)=>a.classList.toggle('f', i === idx));
+  });
+  document.addEventListener('click', e=>{ if(!e.target.closest('#navSearch') && !e.target.closest('#navSBtn')) R.hidden = true; });
+  if(B) B.addEventListener('click', ()=>{ nav.classList.toggle('sopen'); if(nav.classList.contains('sopen')) setTimeout(()=>Q.focus(), 50); else R.hidden = true; });
+}
+
 // ---------- Jalankan semua yang umum, di semua halaman ----------
 async function initSharedPage(){
+  try{ initNavSearch(); }catch(e){ console.error(e); }
   const isMaintenance = await checkMaintenanceMode();
   if(isMaintenance) return;
   setupNavToggle();
