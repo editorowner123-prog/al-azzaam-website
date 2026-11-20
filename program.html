@@ -79,6 +79,8 @@ section.band.alt{background:var(--bg2);}
 .tc .btn-outline-mini{margin-top:auto;align-self:flex-start;}
 @media(max-width:960px){.pg{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:620px){.pg{grid-template-columns:1fr;}.pg .tc{min-height:0;}}
+.pg .gh{grid-column:1/-1;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:2px solid var(--a);padding-bottom:10px;margin-top:18px;}
+.pg .gh:first-child{margin-top:0}.pg .gh h2{font-size:clamp(24px,3vw,34px);color:var(--pd);margin:0;font-weight:800;}.pg .gh span{color:var(--mu);font-size:14px;}
 .fl.three{grid-template-columns:repeat(3,minmax(0,1fr));}
 @media(max-width:860px){.fl.three{grid-template-columns:1fr;}}
 
@@ -136,7 +138,8 @@ section.band.alt{background:var(--bg2);}
   </header>
   <section class="band" id="daftarProgram">
     <div class="wrap">
-      <div class="chips rv" id="jenjangTabs" data-dyn><button class="chip jenjang-tab active" data-jenjang="Semua" type="button">Semua</button></div>
+      <div class="chips rv" id="jenisTabs"><button class="chip jenis-tab active" data-jenis="Semua" type="button">Semua Program</button><button class="chip jenis-tab" data-jenis="Formal" type="button">Formal</button><button class="chip jenis-tab" data-jenis="Non-Formal" type="button">Non-Formal</button></div>
+      <div class="chips rv" id="jenjangTabs" data-dyn style="margin-top:10px"></div>
       <div class="pg tilts" id="programGrid" data-dyn><div class="empty-state">Memuat program…</div></div>
     </div>
   </section>
@@ -195,38 +198,52 @@ section.band.alt{background:var(--bg2);}
 <script src="layout.js?v=3"></script>
 <script>
 
-let allProgram = [];
+let allProgram = [], fJenis = 'Semua', fJenjang = 'Semua';
 $$('.fc').forEach(f=>f.onclick=()=>f.classList.toggle('fp'));
 // konfeti, lalu lanjut ke halaman pendaftaran
 document.getElementById('cb').addEventListener('click', e=>{ e.preventDefault(); const h = e.currentTarget.href; confetti(e.clientX, e.clientY); setTimeout(()=>location.href = h, 900); });
+const jenisOf = p => p.jenis === 'Non-Formal' ? 'Non-Formal' : 'Formal';
 async function loadProgram(){
   const {data, error} = await sb.from('program').select('*').order('urutan');
   const grid = document.getElementById('programGrid');
   if(error || !data || data.length===0){ grid.innerHTML = '<div class="empty-state">Belum ada data program. Tambahkan lewat panel admin.</div>'; return; }
   allProgram = data;
-  // Tab jenjang dibuat otomatis dari data yang ada (bebas diisi apa saja lewat admin)
-  const set = [...new Set(data.map(p=>p.jenjang).filter(Boolean))];
-  const tabs = document.getElementById('jenjangTabs');
-  tabs.innerHTML = ['Semua'].concat(set).map((j,i)=>`<button type="button" class="chip jenjang-tab ${i===0?'active':''}" data-jenjang="${esc(j)}">${esc(j)}</button>`).join('');
-  $$('.jenjang-tab').forEach(t=>t.onclick=()=>filterJenjang(t.dataset.jenjang));
-  const j = new URLSearchParams(location.search).get('jenjang');
-  filterJenjang(j && set.includes(j) ? j : 'Semua');
+  $$('.jenis-tab').forEach(t=>t.onclick=()=>{ fJenis = t.dataset.jenis; fJenjang = 'Semua'; refresh(); });
+  const q = new URLSearchParams(location.search), j = q.get('jenjang'), k = q.get('jenis');
+  if(k === 'Formal' || k === 'Non-Formal') fJenis = k;
+  if(j){ const hit = data.find(p=>p.jenjang === j); if(hit){ fJenjang = j; fJenis = jenisOf(hit); } }
+  refresh();
 }
-function renderProgram(list){
-  const grid = document.getElementById('programGrid');
-  if(list.length===0){ grid.innerHTML = '<div class="empty-state">Belum ada program untuk jenjang ini.</div>'; return; }
-  grid.innerHTML = list.map(p=>`
+function refresh(){
+  $$('.jenis-tab').forEach(t=>t.classList.toggle('active', t.dataset.jenis===fJenis));
+  // chip jenjang menyesuaikan jenis yang dipilih (bebas diisi lewat admin)
+  const base = fJenis==='Semua' ? allProgram : allProgram.filter(p=>jenisOf(p)===fJenis);
+  const set = [...new Set(base.map(p=>p.jenjang).filter(Boolean))];
+  if(fJenjang !== 'Semua' && !set.includes(fJenjang)) fJenjang = 'Semua';
+  const tabs = document.getElementById('jenjangTabs');
+  tabs.style.display = set.length > 1 ? '' : 'none';
+  tabs.innerHTML = ['Semua'].concat(set).map(x=>`<button type="button" class="chip jenjang-tab ${x===fJenjang?'active':''}" data-jenjang="${esc(x)}">${esc(x)}</button>`).join('');
+  $$('.jenjang-tab').forEach(t=>t.onclick=()=>{ fJenjang = t.dataset.jenjang; refresh(); });
+  renderProgram(fJenjang==='Semua' ? base : base.filter(p=>p.jenjang===fJenjang));
+}
+function card(p){ return `
     <div class="tc rv">
       <div class="ic">${p.icon || ic('quran')}</div>
       ${p.jenjang ? `<span class="jt">${esc(p.jenjang)}</span>` : ''}
       <h3>${esc(p.nama)}</h3>
       <p>${esc(p.deskripsi || '')}</p>
       ${p.tombol_label ? `<a href="${esc(normalizeLink(p.tombol_link))}" class="btn-outline-mini" target="_blank" rel="noopener">${esc(p.tombol_label)} ${ic('arrow')}</a>` : ''}
-    </div>`).join('');
-}
-function filterJenjang(j){
-  $$('.jenjang-tab').forEach(t=>t.classList.toggle('active', t.dataset.jenjang===j));
-  renderProgram(j==='Semua' ? allProgram : allProgram.filter(p=>p.jenjang===j));
+    </div>`; }
+function renderProgram(list){
+  const grid = document.getElementById('programGrid');
+  if(list.length===0){ grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Belum ada program untuk pilihan ini.</div>'; return; }
+  const groups = [['Formal','Pendidikan Formal','Jenjang sekolah resmi yang berjalan di pondok.'],['Non-Formal','Pendidikan Non-Formal','Program pembinaan di luar sekolah formal.']];
+  const hasBoth = fJenis==='Semua' && groups.every(g=>list.some(p=>jenisOf(p)===g[0]));
+  if(!hasBoth){ grid.innerHTML = list.map(card).join(''); return; }
+  grid.innerHTML = groups.map(g=>{
+    const items = list.filter(p=>jenisOf(p)===g[0]);
+    return items.length ? `<div class="gh rv"><h2>${g[1]}</h2><span>${g[2]}</span></div>` + items.map(card).join('') : '';
+  }).join('');
 }
 loadProgram();
 
