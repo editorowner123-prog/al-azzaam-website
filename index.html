@@ -192,6 +192,20 @@ section.band.alt{background:var(--bg2);}
 .kgl .kx{right:18px;top:18px}.kgl .kp{left:16px}.kgl .kq{right:16px}.kgl .kx .i{width:20px;height:20px}
 @media(max-width:600px){.kf{grid-template-columns:repeat(2,1fr)}.stp .dot b{font-size:11.5px}}
 
+/* Layanan informasi: versi ringkas, menempel di bawah "Tentang kami" */
+.lay-s{padding-top:0!important;padding-bottom:34px!important;}
+.lay-s .eb{font-size:11.5px}
+.lay-t{font-size:clamp(20px,2.4vw,26px);color:var(--pd);margin:4px 0 0;font-weight:800;}
+.lay-s .layanan{margin-top:16px;gap:14px;}
+.lay-s .lay-card{align-content:center;display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:2px;align-items:center;padding:16px 18px;border-radius:18px;box-shadow:0 14px 26px -24px var(--p);}
+.lay-s .lay-card:hover{transform:translateY(-3px);box-shadow:0 18px 30px -22px var(--p);}
+.lay-s .lay-card .ic{grid-row:1/4;width:44px;height:44px;border-radius:14px;}
+.lay-s .lay-card .ic .i{width:22px;height:22px;}
+.lay-s .lay-card h3{font-size:17px;margin:0;}
+.lay-s .lay-card p{font-size:13px;line-height:1.45;}
+.lay-s .lay-card .go{padding-top:2px;font-size:12.5px;margin-top:0;}
+.lay-s .lay-card .go .i{width:14px;height:14px}
+
 </style>
 </head>
 <body>
@@ -278,20 +292,10 @@ section.band.alt{background:var(--bg2);}
     </div>
   </section>
 
-  <section class="band alt" id="jalan">
-    <div class="wrap">
-      <div class="eb rv">Jadwal kegiatan santri</div>
-      <h2 class="sec-t rv">Sehari di Al Azzaam</h2>
-      <p class="sub rv">Gulir ke bawah, ikuti perjalanan santri dari subuh hingga malam.</p>
-      <div class="jr" id="jr" data-dyn><div class="jf" id="jf"></div><div class="empty-state">Memuat jadwal kegiatan…</div></div>
-    </div>
-  </section>
-
-  <section class="band" id="layanan">
+  <section class="band lay-s" id="layanan">
     <div class="wrap">
       <div class="eb rv">Layanan informasi</div>
-      <h2 class="sec-t rv">Untuk Siapa Anda Berkunjung?</h2>
-      <p class="sub rv">Pilih jalur informasi yang sesuai dengan kebutuhan Anda.</p>
+      <h2 class="lay-t rv">Untuk Siapa Anda Berkunjung?</h2>
       <div class="layanan">
         <a class="lay-card rv" href="ppdb.html">
           <span class="ic"><svg class="i"><use href="#i-cap"/></svg></span>
@@ -312,6 +316,15 @@ section.band.alt{background:var(--bg2);}
           <span class="go">Lihat kontak kami <svg class="i"><use href="#i-arrow"/></svg></span>
         </a>
       </div>
+    </div>
+  </section>
+
+  <section class="band alt" id="jalan">
+    <div class="wrap">
+      <div class="eb rv">Jadwal kegiatan santri</div>
+      <h2 class="sec-t rv">Sehari di Al Azzaam</h2>
+      <p class="sub rv">Gulir ke bawah, ikuti perjalanan santri dari subuh hingga malam.</p>
+      <div class="jr" id="jr" data-dyn><div class="jf" id="jf"></div><div class="empty-state">Memuat jadwal kegiatan…</div></div>
     </div>
   </section>
 
