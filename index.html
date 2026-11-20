@@ -142,6 +142,39 @@ section.band.alt{background:var(--bg2);}
 .qs p{opacity:.9;max-width:50ch;margin:14px auto 26px;position:relative;}
 .qs .btn{position:relative;}
 
+.tst-sum{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:6px 0 26px;color:var(--mu);font-weight:600;}
+.tst-sum b{font-size:44px;color:var(--pd);font-family:var(--f-d,serif);line-height:1;}
+.stars{color:#f5a623;letter-spacing:2px;font-size:18px;white-space:nowrap;}
+.stars i{font-style:normal;color:color-mix(in srgb,var(--mu) 40%,transparent);}
+.tst-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:20px;}
+.tst{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:12px;box-shadow:0 22px 40px -34px var(--p);transition:transform .3s,box-shadow .3s;}
+.tst:hover{transform:translateY(-4px);}
+.tst p{margin:0;color:var(--ink);line-height:1.65;font-size:15px;display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden;}
+.tst .who{display:flex;align-items:center;gap:11px;margin-top:auto;}
+.tst .av{width:42px;height:42px;border-radius:50%;background:var(--p);color:var(--on);display:grid;place-items:center;font-weight:800;overflow:hidden;flex:none;}
+.tst .av img{width:100%;height:100%;object-fit:cover;}
+.tst .who b{display:block;color:var(--pd);font-size:14.5px;}.tst .who span{font-size:12.5px;color:var(--mu);}
+.tst-foot{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:26px;color:var(--mu);font-size:13px;}
+
+.tst-cta{margin-top:30px;display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--bg);border:1px dashed var(--a);border-radius:20px;padding:20px 24px;}
+.tst-cta b{display:block;color:var(--pd);font-size:17px}.tst-cta span{color:var(--mu);font-size:14px}
+.tst .md{margin:-6px -6px 0;border-radius:14px;overflow:hidden;background:#000;}
+.tst .md img,.tst .md video{width:100%;max-height:260px;object-fit:cover;display:block;}
+.tst .rl{font-size:12px;color:var(--mu);}
+.tm{position:fixed;inset:0;z-index:300;background:rgba(20,5,10,.66);backdrop-filter:blur(4px);display:grid;place-items:center;padding:16px;overflow:auto;}
+.tm[hidden]{display:none}
+.tf{position:relative;background:var(--bg);border-radius:22px;padding:28px;width:min(520px,100%);max-height:94vh;overflow:auto;display:grid;gap:14px;box-shadow:0 30px 80px -20px #000;}
+.tf h3{margin:0;font-size:26px;color:var(--pd)}.tf .tn{margin:-6px 0 0;color:var(--mu);font-size:14px}
+.tf label,.tf .fld{display:grid;gap:6px;font-size:13px;font-weight:700;color:var(--pd)}
+.tf input:not([type=checkbox]),.tf select,.tf textarea{font:inherit;font-weight:500;padding:11px 13px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);width:100%;box-sizing:border-box}
+.tf input:focus,.tf select:focus,.tf textarea:focus{outline:2px solid var(--a);border-color:var(--a)}
+.tf small{font-weight:500;color:var(--mu)}
+.tf .ck{display:flex;gap:10px;align-items:flex-start;font-weight:500;color:var(--mu);line-height:1.5}.tf .ck input{margin-top:3px}
+.tx{position:absolute;right:14px;top:14px;width:36px;height:36px;border-radius:50%;border:0;background:var(--bg2);color:var(--pd);display:grid;place-items:center;cursor:pointer}
+.rate{display:flex;gap:4px}.rate button{border:0;background:none;font-size:32px;line-height:1;cursor:pointer;color:color-mix(in srgb,var(--mu) 40%,transparent);padding:0 2px;transition:transform .15s}
+.rate button.on{color:#f5a623}.rate button:hover{transform:scale(1.15)}
+.tmsg{font-size:14px;font-weight:600;min-height:0}.tmsg.err{color:#b3261e}.tmsg.ok{color:#1b7a3d}
+
 </style>
 </head>
 <body>
@@ -292,6 +325,35 @@ section.band.alt{background:var(--bg2);}
     </div>
   </section>
 
+  <section class="band alt" id="testimoni">
+    <div class="wrap">
+      <div class="eb rv"><svg class="i" style="width:16px;height:16px;"><use href="#i-quote"/></svg> Kata Mereka</div>
+      <h2 class="sec-t rv">Testimoni Wali &amp; Alumni</h2>
+      <div class="tst-sum rv" id="tstSum" data-dyn></div>
+      <div class="tst-g" id="tstGrid" data-dyn></div>
+      <div class="tst-foot" id="tstFoot" data-dyn></div>
+      <div class="tst-cta rv"><div><b>Pernah bersama kami?</b><span>Bagikan pengalaman Anda — boleh dengan foto atau video. Ulasan tampil setelah disetujui admin.</span></div><button type="button" class="btn btn-a mg" id="tstOpen">Tulis ulasan</button></div>
+    </div>
+  </section>
+
+
+<div class="tm" id="tstModal" role="dialog" aria-modal="true" aria-labelledby="tstT" hidden>
+  <form class="tf" id="tstForm" novalidate>
+    <button type="button" class="tx" id="tstX" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button>
+    <h3 id="tstT">Tulis ulasan</h3>
+    <p class="tn">Ulasan akan kami tinjau dulu sebelum ditampilkan.</p>
+    <label>Nama<input name="nama" maxlength="80" required autocomplete="name"></label>
+    <label>Anda adalah<select name="peran"><option>Wali santri</option><option>Alumni</option><option>Santri</option><option>Tamu / pengunjung</option><option>Lainnya</option></select></label>
+    <div class="fld"><span>Penilaian</span><div class="rate" id="tstRate" role="radiogroup" aria-label="Bintang"></div></div>
+    <label>Ulasan Anda<textarea name="isi" rows="5" maxlength="1200" required placeholder="Ceritakan pengalaman Anda…"></textarea></label>
+    <label>Foto atau video (opsional)<input type="file" name="media" accept="image/*,video/mp4,video/webm,video/quicktime"><small>Foto otomatis diperkecil. Video maksimal 25 MB.</small></label>
+    <input type="text" name="situs" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0">
+    <label class="ck"><input type="checkbox" name="setuju" required> Saya setuju ulasan dan media ini ditampilkan di website setelah disetujui admin.</label>
+    <div class="tmsg" id="tstMsg" role="status"></div>
+    <button class="btn btn-a" id="tstSend" type="submit">Kirim ulasan</button>
+  </form>
+</div>
+
   <section class="band" id="ppdb">
     <div class="wrap">
       <div class="qs rv">
@@ -430,6 +492,78 @@ async function loadBerita(){
       <div class="bd"><div class="kt">${esc(b.kategori)}</div><h3>${esc(b.judul)}</h3><div class="tg">${fmtTanggal(b.tanggal_publish)}</div></div>
     </a>`).join('');
 }
+function _stars(n){ n=Math.max(0,Math.min(5,Math.round(n))); return '<span class="stars" aria-label="'+n+' dari 5">'+'★'.repeat(n)+'<i>'+'★'.repeat(5-n)+'</i></span>'; }
+async function loadTestimoni(){
+  const sec = document.getElementById('testimoni'); if(!sec) return;
+  let rev = [], sum = null, peta = '';
+  const google = false;
+  const {data} = await sb.from('testimoni').select('*').eq('status','published').order('urutan');
+  rev = (data||[]).map(v=>({nama:v.nama, foto:v.foto_url, bintang:v.bintang, teks:v.isi, waktu:v.waktu, tautan:v.link_url, media:v.media_url, mtipe:v.media_tipe, peran:v.peran}));
+  if(rev.length){ const avg = rev.reduce((a,b)=>a+(b.bintang||5),0)/rev.length; sum = {rating:Math.round(avg*10)/10, jumlah:rev.length}; }
+  if(!peta){ try{ const {data} = await sb.from('pengaturan_situs').select('value').eq('key','google_maps_url').limit(1); peta = (data&&data[0]&&data[0].value)||''; }catch(e){} }
+  document.getElementById('tstSum').innerHTML = sum ? `<b>${String(sum.rating).replace('.',',')}</b>${_stars(sum.rating)}<span>${sum.jumlah} ulasan${google?' di Google Maps':''}</span>` : '';
+  document.getElementById('tstGrid').innerHTML = !rev.length ? '<div class="empty-state" style="grid-column:1/-1">Belum ada ulasan. Jadilah yang pertama membagikan pengalaman Anda.</div>' : rev.map(v=>{
+    const ini = esc((v.nama||'?').trim().charAt(0).toUpperCase());
+    const nm = v.tautan ? `<a href="${esc(normalizeLink(v.tautan))}" target="_blank" rel="noopener">${esc(v.nama)}</a>` : esc(v.nama);
+    const mdh = v.media ? `<div class="md">${v.mtipe==='video'?`<video src="${esc(v.media)}" controls preload="metadata" playsinline></video>`:`<img src="${esc(v.media)}" alt="Foto dari ${esc(v.nama)}" loading="lazy">`}</div>` : '';
+    return `<article class="tst rv">${mdh}${_stars(v.bintang||5)}<p>${esc(v.teks)}</p><div class="who"><div class="av">${v.foto?`<img src="${esc(v.foto)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:ini}</div><div><b>${nm}</b><span>${esc([v.peran,v.waktu].filter(Boolean).join(' · '))}</span></div></div></article>`;
+  }).join('');
+  document.getElementById('tstFoot').innerHTML = (peta?`<a class="btn btn-line mg" href="${esc(normalizeLink(peta))}" target="_blank" rel="noopener">Lihat ulasan di Google Maps ${ic('arrow')}</a>`:'');
+}
+/* ---------- Kirim ulasan oleh pengunjung (menunggu persetujuan admin) ---------- */
+(function(){
+  const M = document.getElementById('tstModal'); if(!M) return;
+  const F = document.getElementById('tstForm'), msg = document.getElementById('tstMsg'), rate = document.getElementById('tstRate');
+  let star = 5;
+  rate.innerHTML = [1,2,3,4,5].map(n=>`<button type="button" role="radio" aria-label="${n} bintang" data-n="${n}">★</button>`).join('');
+  function paint(){ rate.querySelectorAll('button').forEach(b=>b.classList.toggle('on', +b.dataset.n <= star)); }
+  rate.onclick = e=>{ const b = e.target.closest('button'); if(b){ star = +b.dataset.n; paint(); } }; paint();
+  const open = ()=>{ M.hidden = false; document.body.style.overflow = 'hidden'; msg.textContent=''; msg.className='tmsg'; F.nama.focus(); };
+  const close = ()=>{ M.hidden = true; document.body.style.overflow = ''; };
+  document.getElementById('tstOpen').onclick = open;
+  document.getElementById('tstX').onclick = close;
+  M.addEventListener('click', e=>{ if(e.target === M) close(); });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !M.hidden) close(); });
+  const say = (t,c)=>{ msg.textContent = t; msg.className = 'tmsg ' + (c||''); };
+  function shrink(file){ return new Promise((ok,no)=>{
+    const img = new Image(), u = URL.createObjectURL(file);
+    img.onload = ()=>{ const k = Math.min(1, 1400/Math.max(img.width,img.height)), c = document.createElement('canvas');
+      c.width = Math.round(img.width*k); c.height = Math.round(img.height*k); c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(u); c.toBlob(b=>b?ok(b):no(new Error('gagal')),'image/jpeg',.82); };
+    img.onerror = ()=>no(new Error('Foto tidak dapat dibaca.')); img.src = u; }); }
+  F.addEventListener('submit', async e=>{
+    e.preventDefault();
+    if(F.situs.value) return;                                   // jebakan bot
+    const nama = F.nama.value.trim(), isi = F.isi.value.trim(), f = F.media.files[0];
+    if(nama.length < 2) return say('Nama minimal 2 huruf.','err');
+    if(isi.length < 10) return say('Ulasan minimal 10 karakter.','err');
+    if(!F.setuju.checked) return say('Mohon centang persetujuan tampil.','err');
+    let log = []; try{ log = JSON.parse(localStorage.getItem('pptq_ulasan')||'[]').filter(t=>Date.now()-t < 864e5); }catch(_){}
+    if(log.length >= 3) return say('Anda sudah mengirim beberapa ulasan hari ini. Silakan coba lagi besok.','err');
+    if(f && f.type.startsWith('video/') && f.size > 25*1024*1024) return say('Ukuran video maksimal 25 MB.','err');
+    const btn = document.getElementById('tstSend'); btn.disabled = true; say('Mengirim…');
+    try{
+      let url = null, tipe = null;
+      if(f){
+        const vid = f.type.startsWith('video/'); tipe = vid ? 'video' : 'foto';
+        const body = vid ? f : await shrink(f);
+        const ext = vid ? (f.type.split('/')[1].replace('quicktime','mov')) : 'jpg';
+        const path = 'kiriman/' + Date.now() + '-' + Math.random().toString(36).slice(2,8) + '.' + ext;
+        const up = await sb.storage.from('media-website').upload(path, body, {contentType: vid ? f.type : 'image/jpeg'});
+        if(up.error) throw up.error;
+        url = sb.storage.from('media-website').getPublicUrl(path).data.publicUrl;
+      }
+      const {error} = await sb.from('testimoni').insert({nama, peran:F.peran.value, bintang:star, isi, media_url:url, media_tipe:tipe, status:'menunggu'});
+      if(error) throw error;
+      log.push(Date.now()); try{ localStorage.setItem('pptq_ulasan', JSON.stringify(log)); }catch(_){}
+      F.reset(); star = 5; paint();
+      say('Terima kasih! Ulasan Anda sudah kami terima dan akan tampil setelah disetujui admin.','ok');
+      setTimeout(close, 3200);
+    }catch(err){ console.error(err); say('Maaf, ulasan belum terkirim. Coba lagi sebentar lagi.','err'); }
+    btn.disabled = false;
+  });
+})();
+loadTestimoni();
 loadPengaturan(); loadProgram(); loadPpdbLine(); loadGaleriMini(); loadBerita(); loadInstagramEmbeds('igGridHome', 6);
 
 </script>
