@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<link rel="stylesheet" href="shared.css?v=7">
+<link rel="stylesheet" href="shared.css?v=9">
 <style>
 
 :root{--hf:'Cormorant Garamond',Georgia,serif;}
@@ -43,7 +43,7 @@ body.dark{--bg:color-mix(in srgb,var(--pd) 26%,#050102);--bg2:color-mix(in srgb,
 body.dark .navbar,body.dark[data-nav="over"] .navbar,body.dark[data-nav="over"] .navbar.s{background:linear-gradient(180deg,rgba(4,0,2,.82),rgba(4,0,2,.55));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid color-mix(in srgb,var(--a) 70%,transparent);box-shadow:0 1px 0 color-mix(in srgb,var(--a) 40%,transparent),0 10px 34px -12px color-mix(in srgb,var(--a) 65%,transparent);}
 body.dark[data-nav="over"] .navbar:not(.s) .nav-brand,body.dark .nav-brand{color:#fff;text-shadow:0 0 6px var(--a),0 0 16px var(--a),0 0 32px color-mix(in srgb,var(--a) 70%,transparent);}
 body.dark .nav-brand .ring{background:#fff;color:var(--pd);box-shadow:0 0 0 2px var(--a),0 0 14px 2px var(--a),0 0 34px 4px color-mix(in srgb,var(--a) 70%,transparent);animation:neon 3.2s ease-in-out infinite;}
-body.dark .nav-brand>img{background:rgba(255,255,255,.94);padding:5px 14px;border-radius:14px;box-shadow:0 0 0 1.5px var(--a),0 0 18px 2px var(--a),0 0 40px color-mix(in srgb,var(--a) 60%,transparent);animation:neon 3.2s ease-in-out infinite;}
+body.dark .nav-brand>img{background:rgba(255,255,255,.94);padding:4px 12px;border-radius:14px;box-shadow:0 0 0 1.5px var(--a),0 0 18px 2px var(--a),0 0 40px color-mix(in srgb,var(--a) 60%,transparent);animation:neon 3.2s ease-in-out infinite;}
 @keyframes neon{50%{filter:brightness(1.12) drop-shadow(0 0 8px var(--a));}}
 body.dark[data-nav="over"] .navbar:not(.s) .nav-links>a,body.dark[data-nav="over"] .navbar:not(.s) .nav-top-link,body.dark .nav-links>a,body.dark .nav-top-link{color:#fff;text-shadow:0 0 8px color-mix(in srgb,var(--a) 80%,transparent),0 0 20px color-mix(in srgb,var(--a) 55%,transparent);}
 body.dark .nav-links>a::after,body.dark .nav-top-link::after{height:3px;border-radius:3px;box-shadow:0 0 10px var(--a),0 0 22px var(--a);}
@@ -214,8 +214,7 @@ section.band{padding:84px 0;}
       </div>
       <a href="berita.html">Berita</a>
       <a href="galeri.html" class="active">Galeri</a>
-      <a href="ppdb.html">Pendaftaran</a>
-      <a href="#kontak">Kontak</a>
+      <a href="ppdb.html" class="nav-cta-m">Daftar Santri Baru</a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
       <a href="ppdb.html" class="nav-cta mg">Daftar Santri Baru</a>
@@ -304,7 +303,7 @@ section.band{padding:84px 0;}
     <img id="flyerImage" src="" alt="Info" onclick="clickFlyer()">
   </div>
 </div>
-<script src="shared.js?v=7"></script>
+<script src="shared.js?v=9"></script>
 <script src="layout.js?v=3"></script>
 <script>
 
