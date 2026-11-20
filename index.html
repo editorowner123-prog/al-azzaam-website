@@ -175,6 +175,19 @@ section.band.alt{background:var(--bg2);}
 .rate button.on{color:#f5a623}.rate button:hover{transform:scale(1.15)}
 .tmsg{font-size:14px;font-weight:600;min-height:0}.tmsg.err{color:#b3261e}.tmsg.ok{color:#1b7a3d}
 
+.stp .dot b{font:800 13px var(--hf,sans-serif);letter-spacing:-.02em;}
+.stp .tgs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}.stp .tgs .tg{margin:0}.stp .tg.jm{background:var(--p);color:var(--on)}
+.kf{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px;}
+.kfi{position:relative;aspect-ratio:1;border:0;padding:0;border-radius:14px;overflow:hidden;cursor:zoom-in;background:var(--bg2);}
+.kfi img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}.kfi:hover img{transform:scale(1.1)}
+.kfi .more{position:absolute;inset:0;background:rgba(20,5,10,.6);color:#fff;font-weight:800;font-size:22px;display:grid;place-items:center;}
+.kgl{position:fixed;inset:0;z-index:400;background:rgba(8,2,4,.94);display:none;align-items:center;justify-content:center;}
+.kgl.open{display:flex}.kgl img{max-width:min(92vw,1100px);max-height:82vh;border-radius:12px;object-fit:contain;}
+.kgl .kc{position:absolute;bottom:22px;left:0;right:0;text-align:center;color:#fff;font-weight:600;font-size:14px;}
+.kgl .kx,.kgl .kn{position:absolute;border:1.5px solid var(--a);background:rgba(4,0,2,.6);color:var(--a);border-radius:50%;width:46px;height:46px;display:grid;place-items:center;cursor:pointer;font-size:28px;line-height:1;}
+.kgl .kx{right:18px;top:18px}.kgl .kp{left:16px}.kgl .kq{right:16px}.kgl .kx .i{width:20px;height:20px}
+@media(max-width:600px){.kf{grid-template-columns:repeat(2,1fr)}.stp .dot b{font-size:11.5px}}
+
 </style>
 </head>
 <body>
@@ -264,10 +277,10 @@ section.band.alt{background:var(--bg2);}
 
   <section class="band alt" id="jalan">
     <div class="wrap">
-      <div class="eb rv">Program pendidikan</div>
-      <h2 class="sec-t rv">Jalan Menghafal, Jalan Berilmu</h2>
-      <p class="sub rv">Gulir ke bawah, dan lihat jalurnya menyala satu per satu.</p>
-      <div class="jr" id="jr" data-dyn><div class="jf" id="jf"></div><div class="empty-state">Memuat program…</div></div>
+      <div class="eb rv">Jadwal kegiatan santri</div>
+      <h2 class="sec-t rv">Sehari di Al Azzaam</h2>
+      <p class="sub rv">Gulir ke bawah, ikuti perjalanan santri dari subuh hingga malam.</p>
+      <div class="jr" id="jr" data-dyn><div class="jf" id="jf"></div><div class="empty-state">Memuat jadwal kegiatan…</div></div>
     </div>
   </section>
 
@@ -433,26 +446,59 @@ async function loadPengaturan(){
 }
 async function loadProgram(){
   const {data, error} = await sb.from('program').select('*').order('urutan');
-  const jr = document.getElementById('jr');
   if(error || !data || data.length===0){
-    jr.innerHTML = '<div class="jf" id="jf"></div><div class="empty-state">Belum ada data program. Tambahkan lewat panel admin.</div>';
     document.getElementById('selProg').innerHTML = '<option>Belum ada program</option>';
     setStat('stProgram', 0);
     return;
   }
   PROG = data;
   setStat('stProgram', data.length);
-  jr.innerHTML = '<div class="jf" id="jf"></div>' + data.map((p,i)=>`
-    <div class="stp"><span class="dot">${i+1}</span>
-      ${p.jenjang ? `<span class="tg">${esc(p.jenjang)}</span>` : ''}
-      <h3>${esc(p.nama)}</h3>
-      <p>${esc(p.deskripsi || '')}</p>
-      ${p.tombol_label ? `<a href="${esc(normalizeLink(p.tombol_link))}" class="btn-outline-mini" target="_blank" rel="noopener">${esc(p.tombol_label)} ${ic('arrow')}</a>` : ''}
-    </div>`).join('');
   const sel = document.getElementById('selProg');
   sel.innerHTML = data.map((p,i)=>`<option value="${i}">${esc(p.nama)}</option>`).join('');
-  sel.onchange = showProg; showProg(); journey();
+  sel.onchange = showProg; showProg();
 }
+let KEG = [];
+async function loadKegiatan(){
+  const jr = document.getElementById('jr'); if(!jr) return;
+  const {data, error} = await sb.from('kegiatan_santri').select('*').eq('status','published').order('urutan');
+  if(error || !data || !data.length){ jr.innerHTML = '<div class="jf" id="jf"></div><div class="empty-state">Jadwal kegiatan belum diisi. Tambahkan lewat panel admin → Jadwal Kegiatan.</div>'; return; }
+  KEG = data;
+  jr.innerHTML = '<div class="jf" id="jf"></div>' + data.map((k,i)=>{
+    const fo = Array.isArray(k.foto_urls) ? k.foto_urls.filter(Boolean) : [];
+    const jam = [k.jam_mulai,k.jam_selesai].filter(Boolean).join(' – ');
+    return `<div class="stp"><span class="dot"><b>${esc(k.jam_mulai||i+1)}</b></span>
+      <div class="tgs">${k.hari?`<span class="tg">${esc(k.hari)}</span>`:''}${k.jam_selesai?`<span class="tg jm">${esc(jam)}</span>`:''}</div>
+      <h3>${esc(k.judul)}</h3>
+      ${k.deskripsi?`<p>${esc(k.deskripsi)}</p>`:''}
+      ${fo.length?`<div class="kf">${fo.slice(0,4).map((u,n)=>`<button type="button" class="kfi" data-k="${i}" data-n="${n}" aria-label="Lihat foto ${n+1}"><img src="${esc(u)}" alt="${esc(k.judul)}" loading="lazy">${n===3&&fo.length>4?`<span class="more">+${fo.length-4}</span>`:''}</button>`).join('')}</div>`:''}
+    </div>`;
+  }).join('');
+  jr.querySelectorAll('.kfi').forEach(b=>b.onclick=()=>kgOpen(+b.dataset.k,+b.dataset.n));
+  journey();
+}
+let kgK = 0, kgN = 0;
+function kgOpen(k,n){
+  kgK = k; kgN = n;
+  let L = document.getElementById('kgLb');
+  if(!L){
+    L = document.createElement('div'); L.id = 'kgLb'; L.className = 'kgl';
+    L.innerHTML = '<button class="kx" aria-label="Tutup"><svg class="i"><use href="#i-close"/></svg></button><button class="kn kp" aria-label="Sebelumnya">‹</button><img alt=""><button class="kn kq" aria-label="Berikutnya">›</button><div class="kc"></div>';
+    document.body.appendChild(L);
+    L.onclick = e=>{ if(e.target===L || e.target.closest('.kx')) L.classList.remove('open'); };
+    L.querySelector('.kp').onclick = e=>{ e.stopPropagation(); kgStep(-1); };
+    L.querySelector('.kq').onclick = e=>{ e.stopPropagation(); kgStep(1); };
+    addEventListener('keydown', e=>{ if(!L.classList.contains('open')) return; if(e.key==='Escape') L.classList.remove('open'); if(e.key==='ArrowLeft') kgStep(-1); if(e.key==='ArrowRight') kgStep(1); });
+  }
+  L.classList.add('open'); kgShow();
+}
+function kgStep(d){ const fo = KEG[kgK].foto_urls; kgN = (kgN + d + fo.length) % fo.length; kgShow(); }
+function kgShow(){
+  const L = document.getElementById('kgLb'), fo = KEG[kgK].foto_urls;
+  L.querySelector('img').src = fo[kgN];
+  L.querySelector('.kc').textContent = KEG[kgK].judul + ' · ' + (kgN+1) + '/' + fo.length;
+  L.querySelectorAll('.kn').forEach(b=>b.style.display = fo.length>1 ? '' : 'none');
+}
+
 function showProg(){
   const p = PROG[+document.getElementById('selProg').value]; if(!p) return;
   document.getElementById('progOut').innerHTML = `<b>${esc(p.nama)}</b>${esc((p.deskripsi||'').slice(0,140))}${(p.deskripsi||'').length>140?'…':''}<br><a href="program.html${p.jenjang?'?jenjang='+encodeURIComponent(p.jenjang):''}">Lihat detail program →</a>`;
@@ -564,7 +610,7 @@ async function loadTestimoni(){
   });
 })();
 loadTestimoni();
-loadPengaturan(); loadProgram(); loadPpdbLine(); loadGaleriMini(); loadBerita(); loadInstagramEmbeds('igGridHome', 6);
+loadPengaturan(); loadProgram(); loadKegiatan(); loadPpdbLine(); loadGaleriMini(); loadBerita(); loadInstagramEmbeds('igGridHome', 6);
 
 </script>
 </body>
