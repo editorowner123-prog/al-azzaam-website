@@ -95,7 +95,7 @@ async function applyLogo(){
 
   document.querySelectorAll('.nav-brand').forEach(el=>{
     if(type === 'full'){
-      el.innerHTML = `<img src="${map.logo_url}" style="height:46px;max-width:220px;object-fit:contain;display:block;">`;
+      el.innerHTML = `<img class="nav-logo" src="${map.logo_url}" alt="PPTQ Al Azzaam">`;
     } else {
       el.innerHTML = `<span class="ring" style="background-color:#fff;background-image:url('${map.logo_url}');background-size:contain;background-repeat:no-repeat;background-position:center;background-origin:content-box;background-clip:content-box;padding:5px;"></span><span>PPTQ Al Azzaam</span>`;
     }
@@ -166,19 +166,31 @@ function renderFooter(map){
 }
 
 // ---------- Running Text (kecepatan konstan px/detik, tidak terpengaruh panjang teks) ----------
+const _TKS = [{key:'instagram',ic:'ig',n:'Instagram'},{key:'facebook',ic:'fb',n:'Facebook'},{key:'youtube',ic:'yt',n:'YouTube'},{key:'tiktok',ic:'tt',n:'TikTok'}];
+function renderTickerSoc(map){
+  const wrap = document.getElementById('tickerWrap'); if(!wrap || !map) return;
+  const list = _TKS.filter(s=>map[s.key]);
+  let box = wrap.querySelector('.tk-soc');
+  if(!list.length){ if(box) box.remove(); return; }
+  if(!box){ box = document.createElement('div'); box.className = 'tk-soc'; wrap.insertBefore(box, wrap.firstChild); }
+  box.innerHTML = list.map(s=>`<a href="${normalizeLink(map[s.key])}" target="_blank" rel="noopener" title="${s.n}" aria-label="${s.n}">${ic(s.ic)}</a>`).join('');
+}
 async function loadTicker(){
   const wrap = document.getElementById('tickerWrap');
   if(!wrap) return;
   const track = document.getElementById('tickerTrack');
   const tc = _cget('pptq_ticker');
+  renderTickerSoc(_cget('pptq_situs'));
   if(tc && tc.items && tc.items.length){ track.textContent = tc.text; track.style.animationDuration = Math.max(tc.dur||20,4)+'s'; }
   const [{data: items}, {data: settings}] = await Promise.all([
     sb.from('running_text').select('teks').eq('status','published').order('urutan'),
-    sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height','ticker_speed']),
+    sb.from('pengaturan_situs').select('key,value').in('key',['ticker_bg','ticker_text_color','ticker_height','ticker_speed','instagram','facebook','youtube','tiktok']),
   ]);
   const map = {}; (settings||[]).forEach(r=>map[r.key]=r.value);
   wrap.style.background = map.ticker_bg || 'var(--a)';
   wrap.style.height = (map.ticker_height || '42') + 'px';
+  wrap.style.setProperty('--tkh', (map.ticker_height || '42') + 'px');
+  renderTickerSoc(map);
   track.style.color = map.ticker_text_color || 'var(--pd)';
 
   if(!items || items.length===0){
