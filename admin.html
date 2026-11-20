@@ -59,6 +59,10 @@ label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-b
 .item-meta{font-size:11.5px;color:var(--ink-600);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap;}
 .pill{font-size:10px;font-weight:800;padding:3px 9px;border-radius:10px;background:var(--cream-100);color:var(--gold-600);text-transform:uppercase;}
 .pill.published{background:#e6f6ea;color:var(--ok);}
+.multi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;margin:6px 0 10px;}
+.mg-i{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--cream-100);}
+.mg-i img{width:100%;height:100%;object-fit:cover;}
+.mg-i button{position:absolute;right:3px;top:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:11px;cursor:pointer;}
 .pill.menunggu{background:#fff3cd;color:#8a5a00;}
 .pill.draft{background:#fdf1e8;color:var(--ink-600);}
 .item-actions{display:flex;gap:6px;flex:none;}
@@ -286,6 +290,21 @@ const TABLES = {
       {key:'status', label:'Status — ubah ke "published" untuk MENYETUJUI & menampilkan', type:'select', options:['menunggu','draft','published']},
     ]
   },
+  kegiatan_santri: {
+    label: 'Jadwal Kegiatan', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'judul',
+    meta: r => [`${r.jam_mulai||''}${r.jam_selesai?' – '+r.jam_selesai:''}`, r.hari||'', `${(r.foto_urls||[]).length} foto`, `<span class="pill ${r.status}">${r.status}</span>`, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'judul', label:'Nama Kegiatan', type:'text', required:true},
+      {key:'jam_mulai', label:'Jam Mulai (misal 04.30)', type:'text'},
+      {key:'jam_selesai', label:'Jam Selesai (boleh kosong)', type:'text'},
+      {key:'hari', label:'Hari (misal: Setiap hari, Jumat, Senin–Kamis)', type:'text'},
+      {key:'deskripsi', label:'Keterangan Kegiatan', type:'textarea'},
+      {key:'foto_urls', label:'Foto-foto Kegiatan (bisa pilih banyak sekaligus)', type:'images', folder:'kegiatan'},
+      {key:'urutan', label:'Urutan Tampil (dari yang paling pagi)', type:'number'},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
+    ]
+  },
   running_text: {
     label: 'Running Text', pk: 'id', orderBy: 'urutan', ascending: true,
     titleField: 'teks',
@@ -466,6 +485,7 @@ function openForm(record){
   const area = document.getElementById('formArea');
   area.innerHTML = cfg.fields.map(f => renderField(f, record ? record[f.key] : '')).join('');
   document.getElementById('modalOverlay').classList.add('open');
+  cfg.fields.filter(f=>f.type==='images').forEach(f=>mgPaint('f_'+f.key));
 
   if(cfg.fields.some(f => f.type === 'dynamic-select-pengurus')){
     populateParentDropdown(record);
@@ -530,6 +550,15 @@ function renderField(f, value){
       <select id="${id}" data-current="${value||''}"><option value="">Memuat…</option></select>
     </div>`;
   }
+  if(f.type==='images'){
+    const arr = Array.isArray(value) ? value : [];
+    return `<div class="field"><label>${f.label}</label>
+      <input type="hidden" id="${id}" value='${JSON.stringify(arr).replace(/'/g,'&#39;')}'>
+      <div class="multi-grid" id="${id}_grid"></div>
+      <input type="file" accept="image/*" multiple onchange="uploadImages(this,'${id}','${f.folder}')">
+      <div class="upload-status" id="${id}_status">Foto dikecilkan otomatis. Klik ✕ pada foto untuk menghapusnya dari kegiatan.</div>
+    </div>`;
+  }
   if(f.type==='image'){
     return `<div class="field"><label>${f.label}</label>
       ${value ? `<img src="${value}" class="img-preview">` : ''}
@@ -542,6 +571,27 @@ function renderField(f, value){
 }
 
 let isUploading = false;
+function mgRead(id){ try{ return JSON.parse(document.getElementById(id).value||'[]'); }catch(e){ return []; } }
+function mgPaint(id){
+  const g = document.getElementById(id+'_grid'); if(!g) return;
+  g.innerHTML = mgRead(id).map((u,i)=>`<div class="mg-i"><img src="${u}" alt=""><button type="button" onclick="mgDel('${id}',${i})" title="Hapus foto">✕</button></div>`).join('') || '<div style="font-size:12px;color:var(--ink-600)">Belum ada foto.</div>';
+}
+function mgDel(id,i){ const arr = mgRead(id); arr.splice(i,1); document.getElementById(id).value = JSON.stringify(arr); mgPaint(id); }
+async function uploadImages(input, targetId, folder){
+  const files = [...input.files]; if(!files.length) return;
+  isUploading = true;
+  const st = document.getElementById(targetId+'_status'), arr = mgRead(targetId);
+  for(let k=0;k<files.length;k++){
+    st.textContent = `Mengunggah foto ${k+1} dari ${files.length}…`;
+    const c = await compressImage(files[k], 1600, 0.82);
+    const path = `${folder}/${Date.now()}-${k}-${files[k].name.replace(/\s+/g,'-')}`;
+    const {error} = await sb.storage.from('media-website').upload(path, c);
+    if(error){ st.textContent = 'Gagal unggah: ' + error.message; continue; }
+    arr.push(sb.storage.from('media-website').getPublicUrl(path).data.publicUrl);
+    document.getElementById(targetId).value = JSON.stringify(arr); mgPaint(targetId);
+  }
+  st.textContent = 'Selesai ✓ — jangan lupa klik Simpan.'; input.value = ''; isUploading = false;
+}
 
 // Mengecilkan gambar sebelum upload (dimensi maksimal + kompresi kualitas)
 // supaya website tidak lemot karena file foto asli kamera yang besar (bisa 3-5MB).
@@ -1056,6 +1106,7 @@ async function saveRecord(){
   cfg.fields.forEach(f => {
     const el = document.getElementById('f_'+f.key);
     let v = el.value;
+    if(f.type==='images'){ try{ v = JSON.parse(v||'[]'); }catch(e){ v = []; } payload[f.key] = v; return; }
     if(f.type==='number') v = v === '' ? null : Number(v);
     payload[f.key] = v === '' ? null : v;
   });
