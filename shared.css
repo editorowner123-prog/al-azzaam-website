@@ -94,6 +94,13 @@ body[data-nav="over"] .navbar.s{background:color-mix(in srgb,var(--bg) 92%,trans
 /* ---------- RUNNING TEXT ---------- */
 .ticker-wrap{overflow:hidden;white-space:nowrap;background:var(--a);height:42px;display:flex;align-items:center;}
 .ticker-track{display:inline-block;padding-left:100%;font-size:14px;font-weight:700;color:var(--pd);animation:ticker-scroll 22s linear infinite;letter-spacing:.02em;}
+/* ikon media sosial di kiri running text */
+.ticker-wrap{position:relative;}
+.tk-soc{position:relative;z-index:2;flex:none;align-self:stretch;display:flex;align-items:center;gap:4px;padding:0 14px 0 12px;background:var(--pd);box-shadow:6px 0 14px -6px rgba(0,0,0,.45);}
+.tk-soc a{display:grid;place-items:center;width:calc(var(--tkh,42px) * .8);height:calc(var(--tkh,42px) * .8);border-radius:50%;color:var(--a);transition:.25s;}
+.tk-soc a .i{width:70%;height:70%;}
+.tk-soc a:hover{background:var(--a);color:var(--pd);transform:translateY(-1px);}
+@media(max-width:600px){.tk-soc{padding:0 8px 0 8px;gap:2px}}
 @keyframes ticker-scroll{from{transform:translateX(0);}to{transform:translateX(-100%);}}
 
 /* ---------- FOOTER ---------- */
@@ -142,3 +149,23 @@ footer a:hover{color:var(--a);}
 
 /* ---------- Konfeti ---------- */
 canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:250;}
+
+/* ---------- Ukuran logo presisi per perangkat ---------- */
+.nav-brand .nav-logo{display:block;box-sizing:border-box;height:46px;width:auto;max-width:230px;object-fit:contain;}
+.nav-links>a.nav-cta-m{display:none;}
+@media(max-width:1020px){
+  .nav-brand .nav-logo{height:40px;max-width:200px;}
+  .nav-brand .ring{width:38px;height:38px;font-size:20px;}
+  .nav-brand{font-size:20px;gap:10px;}
+  .nav-links>a.nav-cta-m{display:flex;justify-content:center;margin-top:12px;background:var(--p);color:var(--on)!important;border:0;border-radius:99px;padding:13px 0;font-weight:800;}
+}
+@media(max-width:600px){
+  .navbar-inner{padding:0 16px;min-height:58px;gap:10px;}
+  .nav-brand .nav-logo{height:32px;max-width:min(56vw,170px);}
+  .nav-brand .ring{width:34px;height:34px;font-size:18px;}
+  .nav-brand{font-size:17px;gap:8px;min-width:0;}
+  .nav-brand span:last-child{overflow:hidden;text-overflow:ellipsis;}
+  .nav-toggle{padding:6px;}.nav-toggle .i{width:22px;height:22px;}
+  .nav-links{padding-left:16px;padding-right:16px;}
+}
+@media(max-width:360px){.nav-brand{font-size:15px}.nav-brand .nav-logo{height:28px}}
