@@ -59,6 +59,7 @@ label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-b
 .item-meta{font-size:11.5px;color:var(--ink-600);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap;}
 .pill{font-size:10px;font-weight:800;padding:3px 9px;border-radius:10px;background:var(--cream-100);color:var(--gold-600);text-transform:uppercase;}
 .pill.published{background:#e6f6ea;color:var(--ok);}
+.pill.menunggu{background:#fff3cd;color:#8a5a00;}
 .pill.draft{background:#fdf1e8;color:var(--ink-600);}
 .item-actions{display:flex;gap:6px;flex:none;}
 .empty{text-align:center;padding:40px 20px;color:var(--ink-600);font-size:13px;border:1.5px dashed var(--line);border-radius:var(--radius);}
@@ -265,6 +266,24 @@ const TABLES = {
       {key:'embed_code', label:'Kode Sematkan Instagram — buka postingan/Reels di Instagram → titik tiga (⋮) → "Sematkan"/"Embed" → copy semua kode, tempel di sini', type:'textarea-lg'},
       {key:'urutan', label:'Urutan Tampil', type:'number'},
       {key:'status', label:'Status', type:'select', options:['draft','published']},
+    ]
+  },
+  testimoni: {
+    label: 'Testimoni', pk: 'id', orderBy: 'created_at', ascending: false,
+    titleField: 'nama',
+    meta: r => ['★'.repeat(r.bintang||5), `<span class="pill ${r.status}">${r.status === 'menunggu' ? 'MENUNGGU PERSETUJUAN' : r.status}</span>`, r.media_url ? `<a href="${r.media_url}" target="_blank" rel="noopener">Lihat ${r.media_tipe||'media'}</a>` : '', `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'nama', label:'Nama Pemberi Ulasan', type:'text', required:true},
+      {key:'peran', label:'Peran (misal: Wali santri, Alumni)', type:'text'},
+      {key:'bintang', label:'Bintang (1–5)', type:'number'},
+      {key:'isi', label:'Isi Ulasan', type:'textarea'},
+      {key:'waktu', label:'Waktu (misal: 2 bulan lalu — boleh kosong)', type:'text'},
+      {key:'foto_url', label:'Foto Profil (opsional)', type:'image', folder:'testimoni'},
+      {key:'media_url', label:'Foto/Video kiriman pengunjung (link otomatis — hapus isinya jika tidak ingin ditampilkan)', type:'text'},
+      {key:'media_tipe', label:'Jenis media kiriman', type:'select', options:['','foto','video']},
+      {key:'link_url', label:'Link Ulasan di Google Maps (opsional)', type:'text'},
+      {key:'urutan', label:'Urutan Tampil', type:'number'},
+      {key:'status', label:'Status — ubah ke "published" untuk MENYETUJUI & menampilkan', type:'select', options:['menunggu','draft','published']},
     ]
   },
   running_text: {
