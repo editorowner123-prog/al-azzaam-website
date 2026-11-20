@@ -275,18 +275,18 @@ const TABLES = {
   },
   testimoni: {
     label: 'Testimoni', pk: 'id', orderBy: 'created_at', ascending: false,
-    titleField: 'nama',
-    meta: r => ['★'.repeat(r.bintang||5), `<span class="pill ${r.status}">${r.status === 'menunggu' ? 'MENUNGGU PERSETUJUAN' : r.status}</span>`, r.media_url ? `<a href="${r.media_url}" target="_blank" rel="noopener">Lihat ${r.media_tipe||'media'}</a>` : '', `Urutan: ${r.urutan ?? 0}`],
+    titleField: 'nama', titleAlt: 'link_url',
+    meta: r => [r.bintang ? '★'.repeat(r.bintang) : '', r.isi ? '' : 'link Google Maps', `<span class="pill ${r.status}">${r.status === 'menunggu' ? 'MENUNGGU PERSETUJUAN' : r.status}</span>`, r.media_url ? `<a href="${r.media_url}" target="_blank" rel="noopener">Lihat ${r.media_tipe||'media'}</a>` : '', `Urutan: ${r.urutan ?? 0}`],
     fields: [
-      {key:'nama', label:'Nama Pemberi Ulasan', type:'text', required:true},
+      {key:'link_url', label:'⭐ Link Ulasan Google Maps — cukup salin & tempel linknya di sini (boleh hanya ini yang diisi)', type:'text'},
+      {key:'nama', label:'Nama Pemberi Ulasan (opsional jika hanya link)', type:'text'},
       {key:'peran', label:'Peran (misal: Wali santri, Alumni)', type:'text'},
-      {key:'bintang', label:'Bintang (1–5)', type:'number'},
-      {key:'isi', label:'Isi Ulasan', type:'textarea'},
+      {key:'bintang', label:'Bintang (1–5, boleh kosong jika hanya link)', type:'number'},
+      {key:'isi', label:'Isi Ulasan (boleh kosong jika hanya link)', type:'textarea'},
       {key:'waktu', label:'Waktu (misal: 2 bulan lalu — boleh kosong)', type:'text'},
       {key:'foto_url', label:'Foto Profil (opsional)', type:'image', folder:'testimoni'},
       {key:'media_url', label:'Foto/Video kiriman pengunjung (link otomatis — hapus isinya jika tidak ingin ditampilkan)', type:'text'},
       {key:'media_tipe', label:'Jenis media kiriman', type:'select', options:['','foto','video']},
-      {key:'link_url', label:'Link Ulasan di Google Maps (opsional)', type:'text'},
       {key:'urutan', label:'Urutan Tampil', type:'number'},
       {key:'status', label:'Status — ubah ke "published" untuk MENYETUJUI & menampilkan', type:'select', options:['menunggu','draft','published']},
     ]
@@ -478,7 +478,7 @@ async function loadList(){
   area.innerHTML = logoHtml + data.map(r => `
     <div class="item-card">
       <div class="item-main">
-        <div class="item-title">${r[cfg.titleField] || '(tanpa judul)'}</div>
+        <div class="item-title">${r[cfg.titleField] || (cfg.titleAlt ? r[cfg.titleAlt] : '') || '(tanpa judul)'}</div>
         <div class="item-meta">${cfg.meta(r).filter(Boolean).join(' &bull; ')}</div>
       </div>
       <div class="item-actions">
