@@ -85,26 +85,21 @@ section.band.alt{background:var(--bg2);}
 .lvl.root .pn .nm{color:var(--on);} .lvl.root .pn .jb{color:var(--al);}
 @media(max-width:600px){.pn{width:calc(50% - 9px);padding:18px 10px;}.pn .av{width:72px;height:72px;font-size:26px;}.lvl.root .pn{width:80%;}}
 
-.sjh{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:28px;}
-.sjh .big{font:800 clamp(80px,11vw,150px)/0.8 var(--hf);color:color-mix(in srgb,var(--p) 18%,transparent);}
-.sjh h2{font-size:clamp(34px,4.6vw,58px);color:var(--pd);font-weight:800;margin:6px 0 0;}
-.sjc{display:flex;gap:10px}.sjc button{width:52px;height:52px;border-radius:50%;border:2px solid var(--p);background:#fff;color:var(--p);display:grid;place-items:center;cursor:pointer;transition:.25s}
-.sjc button:hover{background:var(--p);color:var(--on)}.sjc button:disabled{opacity:.35;cursor:default;background:#fff;color:var(--p)}
-.sjc #sjP .i{transform:rotate(180deg)}
-.sjw{margin:0 -24px;}
-.sjt{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:10px 24px 30px;scrollbar-width:none;cursor:grab;outline:none;}
+.sjr{min-width:0}
+.sjt{display:flex;align-items:flex-start;transition:height .35s;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;cursor:grab;outline:none;}
 .sjt::-webkit-scrollbar{display:none}.sjt.drag{scroll-snap-type:none;scroll-behavior:auto;cursor:grabbing;user-select:none}
-.sl1{flex:0 0 min(440px,86vw);scroll-snap-align:start;background:#fff;border-radius:26px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 26px 44px -34px var(--p);border:2px solid transparent;transition:border-color .3s,transform .3s;}
-.sl1:hover{border-color:var(--a);transform:translateY(-5px)}
-.sl1 .ph{aspect-ratio:16/10;background:linear-gradient(135deg,var(--p),var(--pd));overflow:hidden;position:relative;}
-.sl1 .ph img{width:100%;height:100%;object-fit:cover;pointer-events:none}
-.sl1 .yr{font:800 clamp(46px,6vw,68px)/1 var(--hf);color:var(--a);padding:18px 24px 0;}
-.sl1 .ph .yr{position:absolute;left:0;bottom:0;padding:0 22px 14px;color:#fff;text-shadow:0 2px 16px rgba(0,0,0,.6)}
-.sl1 .bd{padding:6px 26px 28px;display:flex;flex-direction:column;gap:8px}.sl1 h3{font-size:26px;color:var(--pd);margin:0}
-.sl1 p{margin:0;color:var(--mu);line-height:1.75;font-size:15.5px;white-space:pre-line}
-.sl1.wide{flex-basis:min(760px,90vw)}.sl1.wide p{font-size:17.5px}
-.sjd{display:flex;gap:8px;justify-content:center;margin-top:4px}.sjd button{width:10px;height:10px;border-radius:99px;border:0;background:color-mix(in srgb,var(--p) 25%,transparent);cursor:pointer;padding:0;transition:.3s}.sjd button.on{width:30px;background:var(--p)}
-@media(max-width:600px){.sjw{margin:0 -16px}.sjt{padding-left:16px;padding-right:16px}.sjc button{width:44px;height:44px}}
+.sl1{flex:0 0 100%;scroll-snap-align:start;padding-right:36px;box-sizing:border-box;}
+.sl1 .yr{font:800 clamp(44px,6vw,76px)/1 var(--hf);color:var(--a);margin:0 0 6px;}
+.sl1 h3{font-size:clamp(24px,3vw,34px);color:var(--pd);margin:0 0 14px;font-weight:800;}
+.sl1 .ph{border-radius:18px;overflow:hidden;margin:0 0 18px;aspect-ratio:16/9;max-width:480px;}
+.sl1 .ph img{width:100%;height:100%;object-fit:cover;pointer-events:none;display:block}
+.sl1 p{font-size:18px;color:var(--mu);margin:0 0 18px;line-height:1.8;white-space:pre-line}
+.sl1 p:first-of-type::first-letter{font:800 70px/0.8 var(--hf);float:left;padding:8px 12px 0 0;color:var(--p);}
+.sjb{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:10px}
+.sjd{display:flex;gap:8px}.sjd button{width:10px;height:10px;border-radius:99px;border:0;background:color-mix(in srgb,var(--p) 25%,transparent);cursor:pointer;padding:0;transition:.3s}.sjd button.on{width:30px;background:var(--p)}
+.sjc{display:flex;gap:8px}.sjc button{width:44px;height:44px;border-radius:50%;border:2px solid var(--p);background:none;color:var(--p);display:grid;place-items:center;cursor:pointer;transition:.25s}
+.sjc button:hover{background:var(--p);color:var(--on)}.sjc button:disabled{opacity:.3;cursor:default;background:none;color:var(--p)}
+.sjc #sjP .i{transform:rotate(180deg)}
 
 </style>
 </head>
@@ -160,11 +155,12 @@ section.band.alt{background:var(--bg2);}
     </div>
   </header>
   <section class="band" id="sejarah" style="scroll-margin-top:80px;">
-    <div class="wrap">
-      <div class="sjh rv"><div><div class="big">“</div><div class="eb">Sejarah</div><h2>Perjalanan kami</h2></div>
-        <div class="sjc" id="sjCtl"><button type="button" id="sjP" aria-label="Sebelumnya"><svg class="i"><use href="#i-arrow"/></svg></button><button type="button" id="sjN" aria-label="Berikutnya"><svg class="i"><use href="#i-arrow"/></svg></button></div></div>
-      <div class="sjw"><div class="sjt" id="sjTrack" data-dyn tabindex="0" aria-label="Slide sejarah"><div class="sej-txt" id="sejarahText">Memuat…</div></div></div>
-      <div class="sjd" id="sjDots"></div>
+    <div class="wrap sej">
+      <div class="rv"><div class="big">“</div><div class="eb">Sejarah</div><h2>Perjalanan kami</h2></div>
+      <div class="sjr rv">
+        <div class="sjt" id="sjTrack" data-dyn tabindex="0" aria-label="Slide sejarah"><div class="sej-txt" id="sejarahText">Memuat…</div></div>
+        <div class="sjb"><div class="sjd" id="sjDots"></div><div class="sjc" id="sjCtl"><button type="button" id="sjP" aria-label="Sebelumnya"><svg class="i"><use href="#i-arrow"/></svg></button><button type="button" id="sjN" aria-label="Berikutnya"><svg class="i"><use href="#i-arrow"/></svg></button></div></div>
+      </div>
     </div>
   </section>
   <section class="band alt" id="visimisi" style="scroll-margin-top:80px;">
@@ -235,22 +231,25 @@ async function loadSejarah(map){
   const {data} = await sb.from('sejarah_pondok').select('*').eq('status','published').order('urutan');
   if(data && data.length){
     T.innerHTML = data.map(k=>`<article class="sl1">
-      ${k.foto_url ? `<div class="ph"><img src="${esc(k.foto_url)}" alt="${esc(k.judul)}" loading="lazy" draggable="false">${k.tahun?`<div class="yr">${esc(k.tahun)}</div>`:''}</div>` : (k.tahun?`<div class="yr">${esc(k.tahun)}</div>`:'')}
-      <div class="bd"><h3>${esc(k.judul)}</h3>${k.isi?`<p>${esc(k.isi)}</p>`:''}</div></article>`).join('');
+      ${k.tahun?`<div class="yr">${esc(k.tahun)}</div>`:''}<h3>${esc(k.judul)}</h3>
+      ${k.foto_url?`<div class="ph"><img src="${esc(k.foto_url)}" alt="${esc(k.judul)}" loading="lazy" draggable="false"></div>`:''}
+      ${(k.isi||'').split(/\n\s*\n|\n/).map(x=>x.trim()).filter(Boolean).map(x=>`<p>${esc(x)}</p>`).join('')}</article>`).join('');
   } else {
     const paras = (map.profil_sejarah||'').split(/\n\s*\n|\n/).map(s=>s.trim()).filter(Boolean);
-    T.innerHTML = `<article class="sl1 wide"><div class="bd" style="padding-top:26px"><h3>Perjalanan kami</h3>${paras.length ? paras.map(p=>`<p>${esc(p)}</p>`).join('') : '<p>Sejarah belum diisi. Tambahkan lewat panel admin → Sejarah Pondok.</p>'}</div></article>`;
+    T.innerHTML = `<article class="sl1">${paras.length ? paras.map(p=>`<p>${esc(p)}</p>`).join('') : '<p>Sejarah belum diisi. Tambahkan lewat panel admin → Sejarah Pondok.</p>'}</article>`;
   }
   sjInit();
 }
 function sjInit(){
   const T = document.getElementById('sjTrack'), S = [...T.children], D = document.getElementById('sjDots');
   const P = document.getElementById('sjP'), N = document.getElementById('sjN'), C = document.getElementById('sjCtl');
-  C.style.display = S.length > 1 ? '' : 'none';
+  document.querySelector('.sjb').style.display = S.length > 1 ? '' : 'none';
   D.innerHTML = S.length > 1 ? S.map((_,i)=>`<button type="button" aria-label="Slide ${i+1}"></button>`).join('') : '';
-  const step = ()=> S[0] ? S[0].offsetWidth + 22 : 300;
+  const step = ()=> S[0] ? S[0].offsetWidth : 300;
   const cur = ()=> Math.min(S.length-1, Math.round(T.scrollLeft / step()));
-  function upd(){ const i = cur(), end = T.scrollLeft + T.clientWidth >= T.scrollWidth - 4;
+  function fit(){ const sl = S[cur()]; if(sl) T.style.height = sl.offsetHeight + 'px'; }
+  T.querySelectorAll('img').forEach(im=>im.addEventListener('load', fit));
+  function upd(){ fit(); const i = cur(), end = T.scrollLeft + T.clientWidth >= T.scrollWidth - 4;
     P.disabled = T.scrollLeft < 4; N.disabled = end;
     [...D.children].forEach((b,k)=>b.classList.toggle('on', end ? k===S.length-1 : k===i)); }
   P.onclick = ()=>T.scrollBy({left:-step()}); N.onclick = ()=>T.scrollBy({left:step()});
