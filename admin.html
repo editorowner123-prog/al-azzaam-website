@@ -305,6 +305,19 @@ const TABLES = {
       {key:'status', label:'Status', type:'select', options:['draft','published']},
     ]
   },
+  sejarah_pondok: {
+    label: 'Sejarah Pondok', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'judul',
+    meta: r => [r.tahun||'', `<span class="pill ${r.status}">${r.status}</span>`, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'tahun', label:'Tahun / Waktu (misal: 2015)', type:'text'},
+      {key:'judul', label:'Judul Tonggak (misal: Pondok Didirikan)', type:'text', required:true},
+      {key:'isi', label:'Cerita Singkat', type:'textarea-lg'},
+      {key:'foto_url', label:'Foto (opsional)', type:'image', folder:'sejarah'},
+      {key:'urutan', label:'Urutan Slide (dari yang paling awal)', type:'number'},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
+    ]
+  },
   running_text: {
     label: 'Running Text', pk: 'id', orderBy: 'urutan', ascending: true,
     titleField: 'teks',
