@@ -440,9 +440,11 @@ function initNavSearch(){
     else return;
     as.forEach((a,i)=>a.classList.toggle('f', i === idx));
   });
+  addEventListener('keydown', e=>{ if(e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test((document.activeElement||{}).tagName) && !(document.activeElement||{}).isContentEditable && getComputedStyle(document.getElementById('navSearch')).display !== 'none'){ e.preventDefault(); Q.focus(); } });
   document.addEventListener('click', e=>{ if(!e.target.closest('#navSearch') && !e.target.closest('#navSBtn')) R.hidden = true; });
   if(B) B.addEventListener('click', ()=>{ nav.classList.toggle('sopen'); if(nav.classList.contains('sopen')) setTimeout(()=>Q.focus(), 50); else R.hidden = true; });
 }
+
 
 // ---------- Jalankan semua yang umum, di semua halaman ----------
 async function initSharedPage(){
