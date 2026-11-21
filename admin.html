@@ -306,6 +306,18 @@ const TABLES = {
       {key:'status', label:'Status', type:'select', options:['draft','published']},
     ]
   },
+  ekstrakurikuler: {
+    label: 'Ekstrakurikuler', pk: 'id', orderBy: 'urutan', ascending: true,
+    titleField: 'nama',
+    meta: r => [`<span class="pill ${r.status}">${r.status}</span>`, `Urutan: ${r.urutan ?? 0}`],
+    fields: [
+      {key:'nama', label:'Nama Ekstrakurikuler (misal: Panahan)', type:'text', required:true},
+      {key:'deskripsi', label:'Deskripsi Singkat (1 kalimat)', type:'textarea'},
+      {key:'foto_url', label:'Foto (akan dipotong bulat; kosong = huruf awal)', type:'image', folder:'ekskul'},
+      {key:'urutan', label:'Urutan Tampil', type:'number'},
+      {key:'status', label:'Status', type:'select', options:['draft','published']},
+    ]
+  },
   sejarah_pondok: {
     label: 'Sejarah Pondok', pk: 'id', orderBy: 'urutan', ascending: true,
     titleField: 'judul',
