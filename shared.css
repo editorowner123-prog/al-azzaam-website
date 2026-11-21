@@ -211,3 +211,43 @@ body.dark .nav-sbtn{color:var(--a);border-color:var(--a)}
 .sres h6,body.dark .sres h6{color:#8a1530;}
 .sres a:hover,.sres a.f,body.dark .sres a:hover,body.dark .sres a.f{background:#fbe9bd;color:#4a0b19;}
 .sres .none,body.dark .sres .none{color:#6f5a5e}
+
+/* ---------- Navbar versi ramping (logo, tulisan, pencarian lebih kecil) ---------- */
+.navbar-inner{min-height:58px;gap:12px;}
+.nav-brand{font-size:17px;gap:9px;}
+.nav-brand .ring{width:34px;height:34px;font-size:17px;box-shadow:0 0 0 1.5px var(--bg),0 0 0 3px var(--a);}
+.nav-brand .nav-logo{height:34px;max-width:170px;}
+.nav-links{height:58px;font-size:13px;}
+.nav-links>a,.nav-top-link{padding:0 11px;}
+.nav-links>a::after,.nav-top-link::after{left:11px;right:11px;bottom:12px;}
+.nav-cta{font-size:13px;padding:8px 18px;}
+.nav-search{flex:1 1 200px;max-width:340px;min-width:140px;}
+.nav-search input{height:36px;font:500 13px var(--bf,inherit);padding:0 38px 0 38px;border:1px solid transparent;background:color-mix(in srgb,var(--p) 7%,var(--bg));}
+.nav-search input::placeholder{color:var(--mu);opacity:.85}
+.nav-search input:hover{background:color-mix(in srgb,var(--p) 11%,var(--bg));}
+.nav-search input:focus{background:#fff;border-color:color-mix(in srgb,var(--a) 80%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 30%,transparent);}
+.nav-search .si{left:13px;width:16px;height:16px;}
+.nav-search::after{content:"/";position:absolute;right:11px;top:50%;transform:translateY(-50%);font:700 11px var(--bf,inherit);color:var(--mu);border:1px solid color-mix(in srgb,var(--mu) 45%,transparent);border-radius:6px;width:20px;height:20px;display:grid;place-items:center;pointer-events:none;transition:opacity .2s;}
+.nav-search:focus-within::after{opacity:0}
+.sres{top:calc(100% + 8px);border-radius:16px;}
+.sres a{padding:8px 12px;font-size:13.5px;}
+@media(max-width:1020px){
+  .navbar-inner{min-height:54px;}
+  .nav-brand .nav-logo{height:30px;max-width:160px;}
+  .nav-brand .ring{width:30px;height:30px;font-size:15px;}
+  .nav-brand{font-size:16px}
+  .nav-search{max-width:none;padding:8px 14px;min-width:0}
+  .nav-search::after{display:none}
+  .nav-search .si{left:28px}
+  .nav-sbtn{padding:7px}.nav-sbtn svg{width:19px!important;height:19px!important}
+  .nav-links{font-size:15px;height:auto}
+}
+@media(max-width:600px){
+  .navbar-inner{min-height:50px;}
+  .nav-brand .nav-logo{height:26px;max-width:min(52vw,140px);}
+  .nav-brand .ring{width:28px;height:28px;font-size:14px;}
+  .nav-brand{font-size:14.5px;gap:7px}
+  .nav-toggle .i{width:20px;height:20px}
+}
+@media(max-width:360px){.nav-brand{font-size:13.5px}.nav-brand .nav-logo{height:24px}}
+body.dark .nav-search input{border:1px solid var(--a);}
