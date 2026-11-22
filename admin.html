@@ -2,10 +2,17 @@
 <html lang="id" data-no-tema>
 <head>
 <meta charset="UTF-8">
-<link id="faviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Ccircle cx=%2732%27 cy=%2732%27 r=%2730%27 fill=%27%232b0810%27/%3E%3Ctext x=%2732%27 y=%2743%27 font-family=%27Georgia,serif%27 font-size=%2732%27 font-weight=%27700%27 fill=%27%23d4af37%27 text-anchor=%27middle%27%3EA%3C/text%3E%3C/svg%3E">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link id="faviconLink" rel="icon" type="image/png" href="icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0709">
+<link rel="manifest" href="admin.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Admin Azzaam">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Panel Admin — PPTQ Al Azzaam</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 :root{
@@ -111,6 +118,98 @@ label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-b
 .sv-frame-wrap{background:#d9d3d5;border-radius:16px;padding:12px;display:flex;justify-content:center;overflow:auto;}
 .sv-frame{border:0;background:#f1eff0;border-radius:10px;box-shadow:0 10px 30px -10px rgba(0,0,0,.4);width:100%;height:calc(100vh - 300px);min-height:560px;transition:width .2s;}
 .btn[disabled]{opacity:.45;pointer-events:none;}
+
+/* =============== DESAIN BARU (kartu) =============== */
+:root{--n-bg:#f5f1ea;--n-sf:#fff;--n-ink:#1e1815;--n-mu:#7d7268;--n-ln:#e8e0d4;--n-ac:#8a1b2c;--n-as:#f6e4e3;--n-go:#c9962b;--n-gr:#2f6b3f;--n-grs:#e3efe0;--n-gs:#f8edd0}
+body{font-family:'Onest','Plus Jakarta Sans',system-ui,sans-serif;background:var(--n-bg);color:var(--n-ink);-webkit-tap-highlight-color:transparent}
+h1,h2,h3{font-family:'Onest',sans-serif;letter-spacing:-.02em}
+input,textarea,select{border:1.5px solid var(--n-ln);border-radius:12px;padding:11px 13px;font-size:14.5px}
+input:focus,textarea:focus,select:focus{border-color:var(--n-ac);box-shadow:0 0 0 4px var(--n-as)}
+input[type=checkbox],input[type=range],input[type=color],input[type=file]{width:auto;box-shadow:none}
+label{font-size:12.5px;font-weight:600;color:var(--n-mu)}
+.btn{font-weight:700;border-radius:13px;padding:11px 18px;font-size:13.5px}
+.btn-gold{background:var(--n-ac);color:#fff}
+.btn-outline{background:#fff;border:1.5px solid var(--n-ln);color:var(--n-ink)}
+.btn-danger{background:#fbe9e9;color:#a8283a}
+.btn-sm{padding:7px 12px;font-size:12.5px;border-radius:11px}
+.toast{background:var(--n-ink);border-radius:13px;bottom:calc(24px + env(safe-area-inset-bottom))}
+#loginScreen{background:var(--n-bg)}
+.login-card{border:1px solid var(--n-ln);box-shadow:0 30px 60px -40px rgba(60,30,10,.5);border-radius:26px}
+.login-ring{background:var(--n-ac);box-shadow:none;border-radius:18px;font:700 26px 'Onest';color:#fff}
+.login-card h1{font-family:'Onest';font-weight:700}
+.login-ico{width:84px;height:84px;border-radius:22%;display:block;margin:0 auto 16px;box-shadow:0 14px 26px -14px rgba(0,0,0,.6)}
+.tp .lg-ico{width:36px;height:36px;border-radius:22%;display:block}
+/* bar atas */
+.tp{position:sticky;top:0;z-index:50;background:rgba(245,241,234,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--n-ln);display:flex;align-items:center;gap:22px;padding:12px 40px}
+.tp .lg{display:flex;gap:10px;align-items:center;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.tp .lg i{width:34px;height:34px;border-radius:11px;background:var(--n-ac);color:#fff;display:grid;place-items:center;font-style:normal}
+.gtab{display:flex;gap:4px;background:#ebe4d8;padding:4px;border-radius:14px}
+.gtab button{border:0;background:none;padding:8px 18px;border-radius:11px;font-weight:600;color:var(--n-mu);font-size:14px;white-space:nowrap}
+.gtab button.on{background:#fff;color:var(--n-ink);box-shadow:0 1px 3px rgba(40,25,10,.15)}
+.tp .r{margin-left:auto;display:flex;gap:10px;align-items:center}
+.tp .sr{background:#fff;border:1px solid var(--n-ln);border-radius:12px;padding:0 12px;display:flex;gap:8px;align-items:center;color:var(--n-mu);width:240px}
+.tp .sr input{border:0;box-shadow:none!important;padding:9px 0;background:none;font-size:14px}
+.tp .nb{background:var(--n-ac);color:#fff;border:0;border-radius:12px;padding:10px 18px;font-weight:700;font-size:14px;white-space:nowrap}
+.tp .ip{display:none;background:var(--n-gs);color:#7a5200;border:0;border-radius:12px;padding:10px 14px;font-weight:700;font-size:13px}
+.tp .av{width:38px;height:38px;border-radius:50%;background:var(--n-go);border:0;color:var(--n-ink);font-weight:700;padding:0}
+.content{max-width:1240px;padding:26px 40px 80px}
+.tabs{background:none;border:0;padding:0;margin-bottom:20px;flex-wrap:wrap;overflow:visible;gap:8px}
+.tab-btn{background:#fff;border:1px solid var(--n-ln);border-radius:99px;padding:8px 16px;font-weight:600;font-size:13.5px;color:var(--n-mu)}
+.tab-btn.active{background:var(--n-ink);border-color:var(--n-ink);color:#fff}
+.tab-sep{display:none}
+.content-head{align-items:baseline;justify-content:flex-start;gap:14px}
+.content-head h2{font-size:32px;color:var(--n-ink)}
+.content-head .sub{color:var(--n-mu);font-size:14px}
+.content-head .ca2{margin-left:auto;display:flex;gap:8px}
+/* grid kartu */
+.gd{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+.cd{background:#fff;border:1px solid var(--n-ln);border-radius:22px;overflow:hidden;cursor:pointer;transition:.25s;display:flex;flex-direction:column}
+.cd:hover{transform:translateY(-4px);box-shadow:0 22px 34px -26px rgba(60,30,10,.6)}
+.cd .im{height:130px;background:color-mix(in srgb,var(--c) 16%,#fff);color:var(--c);display:grid;place-items:center;font:700 44px 'Onest';position:relative;overflow:hidden}
+.cd .im img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cd .im .pill{position:absolute;top:12px;left:12px;background:#fff;display:inline-flex;gap:5px;align-items:center;text-transform:none;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:99px}
+.cd .im .pill:before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.cd .bd{padding:14px 16px 12px;display:flex;flex-direction:column;flex:1}
+.cd .item-title{font-weight:600;line-height:1.3;font-size:14.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:38px}
+.cd .item-meta{color:var(--n-mu);font-size:12.5px;margin-top:6px;line-height:1.4}
+.cd .ca{display:flex;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--n-ln)}
+.cd .ca button{flex:1}
+.cd.new{border:2px dashed #cdbfa9;background:none;display:grid;place-items:center;min-height:210px;color:var(--n-mu);font-weight:600;font-size:14.5px}
+.cd.new:hover{color:var(--n-ac);border-color:var(--n-ac);transform:none;box-shadow:none}
+.pill.published{background:var(--n-grs);color:var(--n-gr)}.pill.menunggu{background:var(--n-gs);color:#8a5d00}.pill.draft{background:#ece6db;color:var(--n-mu)}
+.item-card{border:1px solid var(--n-ln);border-radius:22px;box-shadow:none}
+.empty{border-radius:22px;border-color:#d9cdb9}
+/* form modal */
+.modal-overlay{background:rgba(30,20,15,.5);align-items:center;padding:20px}
+.modal{border-radius:26px;background:var(--n-bg);margin-top:0;max-height:92vh;overflow:auto}
+.modal.two{display:grid;grid-template-columns:.8fr 1.2fr;max-width:920px;padding:0;overflow:hidden}
+.modal .pv{background:color-mix(in srgb,var(--c,#8a1b2c) 14%,#fff);color:var(--c,#8a1b2c);display:grid;place-items:center;font:700 90px 'Onest';position:relative;min-height:340px}
+.modal .pv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.modal .fm{padding:28px 30px;overflow:auto;max-height:92vh}
+.modal .mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.modal h3{font-size:22px;color:var(--n-ink);margin:0}
+.modal .x{width:38px;height:38px;border-radius:50%;border:1px solid var(--n-ln);background:#fff;font-size:15px;color:var(--n-mu)}
+.modal-actions{position:sticky;bottom:-28px;background:var(--n-bg);padding:14px 0 4px;margin-top:10px;border-top:1px solid var(--n-ln)}
+.sv-bar,.sv-theme{border-radius:18px;box-shadow:none;border:1px solid var(--n-ln)}
+.sv-pill.active{background:var(--n-ink);border-color:var(--n-ink)}
+@media(max-width:900px){
+ .tp{flex-wrap:wrap;padding:10px 14px;gap:10px 8px}
+ .tp .lg span{display:none}.tp .sr{display:none}
+ .gtab{order:3;width:100%;overflow-x:auto;scrollbar-width:none}.gtab button{flex:1;padding:8px 12px}
+ .tp .r{gap:8px}.tp .nb{padding:9px 14px}
+ .content{padding:16px 14px calc(70px + env(safe-area-inset-bottom))}
+ .tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -14px 16px;padding:0 14px}.tab-btn{white-space:nowrap}
+ .content-head h2{font-size:26px}
+ .gd{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .cd{border-radius:18px}.cd .im{height:96px;font-size:34px}.cd .bd{padding:11px 12px 10px}.cd .item-title{font-size:13.5px;min-height:36px}.cd .ca{margin-top:8px}
+ .cd.new{min-height:150px}
+ .modal-overlay{padding:0;align-items:flex-end}
+ .modal,.modal.two{border-radius:24px 24px 0 0;max-width:none;width:100%;max-height:94vh;display:block;overflow:auto}
+ .modal .pv{display:none}.modal .fm{padding:20px 18px;max-height:none}
+ .modal-actions{bottom:-20px;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+ .modal-actions .btn{flex:1;justify-content:center}
+ .siteview{padding:10px}
+}
 </style>
 </head>
 <body>
@@ -118,7 +217,7 @@ label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-b
 <!-- ================= LOGIN ================= -->
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-ring">A</div>
+    <img class="login-ico" src="icon-192.png" alt="Admin Azzaam">
     <h1>Panel Admin</h1>
     <p>PPTQ Al Azzaam — Website Informasi</p>
     <div class="field" style="text-align:left"><label>Email</label><input type="email" id="loginEmail" placeholder="admin@email.com"></div>
@@ -130,18 +229,21 @@ label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-b
 
 <!-- ================= APP ================= -->
 <div id="app">
-  <div class="topbar">
-    <div class="topbar-brand"><span class="ring">A</span> Panel Admin</div>
-    <button class="btn btn-outline btn-sm" onclick="doLogout()">Keluar</button>
-  </div>
-  <div class="tabs" id="tabBar"></div>
+  <header class="tp">
+    <div class="lg"><img src="icon-192.png" alt="" class="lg-ico"><span>Al Azzaam</span></div>
+    <div class="gtab" id="gTabs"></div>
+    <div class="r">
+      <div class="sr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4a7 7 0 100 14 7 7 0 000-14zM20 20l-4-4"/></svg><input id="qBox" placeholder="Cari di daftar ini…" oninput="filterCards(this.value)"></div>
+      <button class="ip" id="instBtn" onclick="installPwa()">Pasang aplikasi</button>
+      <button class="nb" id="addBtn" onclick="openForm()">+ Tambah</button>
+      <button class="av" onclick="if(confirm('Keluar dari panel admin?'))doLogout()" title="Keluar">E</button>
+    </div>
+  </header>
   <div class="content">
+    <div class="tabs" id="tabBar"></div>
     <div class="content-head">
-      <h2 id="contentTitle">—</h2>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-outline btn-sm" id="bulkBtn" style="display:none;" onclick="openBulkForm()">⚡ Tambah Massal</button>
-        <button class="btn btn-gold btn-sm" id="addBtn" onclick="openForm()">+ Tambah</button>
-      </div>
+      <h2 id="contentTitle">—</h2><span class="sub" id="contentSub"></span>
+      <div class="ca2"><button class="btn btn-outline btn-sm" id="bulkBtn" style="display:none;" onclick="openBulkForm()">⚡ Tambah Massal</button></div>
     </div>
     <div id="listArea"></div>
   </div>
@@ -161,12 +263,15 @@ label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-b
 </div>
 
 <div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <h3 id="modalTitle">Tambah Data</h3>
-    <div id="formArea"></div>
-    <div class="modal-actions">
-      <button class="btn btn-outline" onclick="closeForm()">Batal</button>
-      <button class="btn btn-gold" onclick="saveRecord()">Simpan</button>
+  <div class="modal two">
+    <div class="pv" id="formPv"></div>
+    <div class="fm">
+      <div class="mh"><h3 id="modalTitle">Tambah Data</h3><button class="x" onclick="closeForm()" aria-label="Tutup">✕</button></div>
+      <div id="formArea"></div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeForm()">Batal</button>
+        <button class="btn btn-gold" onclick="saveRecord()">Simpan</button>
+      </div>
     </div>
   </div>
 </div>
@@ -385,24 +490,44 @@ function showApp(){
 }
 
 // ---------- TABS ----------
+const TAB_GROUPS = {
+  'Konten': ['berita','galeri','testimoni','instagram_embed','running_text'],
+  'Pondok': ['program','kegiatan_santri','ekstrakurikuler','sejarah_pondok','struktur_pengurus'],
+  'PPDB':   ['info_ppdb','flyer_popup'],
+  'Situs':  ['pengaturan_situs','__preview','__live']
+};
+const SPECIAL_LABEL = {__preview:'Preview halaman', __live:'Live'};
+let curGroup = 'Konten';
+function tabLabel(k){ return SPECIAL_LABEL[k] || (TABLES[k] && TABLES[k].label) || k; }
+function groupOf(k){
+  for(const g in TAB_GROUPS){ if(TAB_GROUPS[g].includes(k)) return g; }
+  return 'Situs';
+}
 function renderTabs(){
-  const bar = document.getElementById('tabBar');
-  bar.innerHTML = Object.keys(TABLES).map(k =>
-    `<button class="tab-btn" id="tab-${k}" onclick="switchTab('${k}')">${TABLES[k].label}</button>`
-  ).join('') +
-    `<span class="tab-sep"></span>` +
-    `<button class="tab-btn special" id="tab-__preview" onclick="switchTab('__preview')">Preview</button>` +
-    `<button class="tab-btn special" id="tab-__live" onclick="switchTab('__live')">Live</button>`;
+  // tab yang belum terdaftar di grup mana pun masuk ke "Situs"
+  Object.keys(TABLES).forEach(k=>{ if(!Object.values(TAB_GROUPS).some(a=>a.includes(k))) TAB_GROUPS['Situs'].splice(1,0,k); });
+  renderGroupTabs();
+}
+function renderGroupTabs(){
+  document.getElementById('gTabs').innerHTML = Object.keys(TAB_GROUPS).map(g =>
+    `<button class="${g===curGroup?'on':''}" onclick="switchTab('${TAB_GROUPS[g][0]}')">${g}</button>`).join('');
+  document.getElementById('tabBar').innerHTML = TAB_GROUPS[curGroup].map(k =>
+    `<button class="tab-btn" id="tab-${k}" onclick="switchTab('${k}')">${tabLabel(k)}</button>`).join('');
 }
 function switchTab(key){
   if(key !== '__preview' && key !== '__live' && svDirty() && !confirm('Ada perubahan di Preview yang belum disimpan. Tetap pindah menu?')) return;
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+key).classList.add('active');
-  if(key === '__preview' || key === '__live'){
+  curGroup = groupOf(key);
+  renderGroupTabs();
+  const q = document.getElementById('qBox'); if(q) q.value = '';
+  const el = document.getElementById('tab-'+key); if(el) el.classList.add('active');
+  const isSv = (key === '__preview' || key === '__live');
+  document.getElementById('addBtn').style.display = isSv ? 'none' : '';
+  if(isSv){
     document.querySelector('.content').style.display = 'none';
     document.getElementById('siteViewArea').style.display = 'block';
     svMode = key === '__preview' ? 'preview' : 'live';
     openSiteView();
+    window.scrollTo(0,0);
     return;
   }
   document.querySelector('.content').style.display = '';
@@ -410,8 +535,14 @@ function switchTab(key){
   svFrameUnload();
   currentTab = key;
   document.getElementById('contentTitle').textContent = TABLES[key].label;
+  document.getElementById('contentSub').textContent = '';
   document.getElementById('bulkBtn').style.display = (key === 'galeri' || key === 'instagram_embed') ? 'inline-flex' : 'none';
+  window.scrollTo(0,0);
   loadList();
+}
+function filterCards(v){
+  v = (v||'').toLowerCase().trim();
+  document.querySelectorAll('#listArea .cd[data-q]').forEach(c=>{ c.style.display = (!v || c.dataset.q.includes(v)) ? '' : 'none'; });
 }
 
 // ---------- TAMBAH MASSAL (YouTube di Galeri, atau Instagram) ----------
@@ -461,6 +592,15 @@ async function submitBulk(){
 }
 
 // ---------- LIST ----------
+const NTONE = ['#8a1b2c','#b07a1d','#2f6b3f','#3a5a85','#6d3b66','#2c6b6b'];
+function esc2(t){ return String(t).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function thumbOf(r){
+  let u = r.foto_url || r.media_url || '';
+  if(!u && Array.isArray(r.foto_urls) && r.foto_urls[0]) u = r.foto_urls[0];
+  if(!u && r.youtube_url){ const m = String(r.youtube_url).match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/); if(m) u = 'https://img.youtube.com/vi/'+m[1]+'/mqdefault.jpg'; }
+  if(u && /\.(mp4|webm|mov)(\?|$)/i.test(u)) u = '';
+  return u ? esc2(u) : '';
+}
 async function loadList(){
   const cfg = TABLES[currentTab];
   const area = document.getElementById('listArea');
@@ -487,18 +627,19 @@ async function loadList(){
     if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); }
     return;
   }
-  area.innerHTML = logoHtml + data.map(r => `
-    <div class="item-card">
-      <div class="item-main">
-        <div class="item-title">${r[cfg.titleField] || (cfg.titleAlt ? r[cfg.titleAlt] : '') || '(tanpa judul)'}</div>
-        <div class="item-meta">${cfg.meta(r).filter(Boolean).join(' &bull; ')}</div>
-      </div>
-      <div class="item-actions">
-        <button class="btn btn-outline btn-sm" onclick='openForm(${JSON.stringify(r).replace(/'/g,"&apos;")})'>Edit</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteRecord('${r[cfg.pk]}')">Hapus</button>
-      </div>
-    </div>
-  `).join('');
+  window.__rows = data;
+  area.innerHTML = logoHtml + '<div class="gd">' + data.map((r,i) => {
+    const title = r[cfg.titleField] || (cfg.titleAlt ? r[cfg.titleAlt] : '') || '(tanpa judul)';
+    const meta = cfg.meta(r).filter(x => x && !String(x).includes('class="pill'));
+    const th = thumbOf(r);
+    const st = r.status ? `<span class="pill ${r.status}">${r.status==='published'?'Terbit':r.status==='draft'?'Draf':r.status==='menunggu'?'Menunggu':r.status}</span>` : '';
+    const q = (String(title)+' '+meta.join(' ')).replace(/<[^>]*>/g,'').toLowerCase().replace(/"/g,'&quot;');
+    return `<div class="cd" data-q="${q}" onclick="openForm(window.__rows[${i}])">
+      <div class="im" style="--c:${NTONE[(i+String(title).length)%6]}">${th ? `<img src="${th}" alt="" loading="lazy" onerror="this.remove()">` : ''}<span>${esc2(String(title).trim().charAt(0).toUpperCase()||'?')}</span>${st}</div>
+      <div class="bd"><div class="item-title">${title}</div><div class="item-meta">${meta.join(' &bull; ')}</div>
+        <div class="ca"><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();openForm(window.__rows[${i}])">Edit</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteRecord('${r[cfg.pk]}')">Hapus</button></div></div></div>`;
+  }).join('') + `<div class="cd new" onclick="openForm()">+ Tambah ${cfg.label.toLowerCase()}</div></div>`;
+  document.getElementById('contentSub').textContent = data.length + ' item';
   if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); }
 }
 
@@ -510,7 +651,13 @@ function openForm(record){
   document.getElementById('modalTitle').textContent = record ? `Edit ${cfg.label}` : `Tambah ${cfg.label}`;
   const area = document.getElementById('formArea');
   area.innerHTML = cfg.fields.map(f => renderField(f, record ? record[f.key] : '')).join('');
+  const pvT = record ? (record[cfg.titleField] || '') : '';
+  const pvU = record ? thumbOf(record) : '';
+  const pv = document.getElementById('formPv');
+  pv.style.setProperty('--c', NTONE[(pvT.length)%6]);
+  pv.innerHTML = (pvU ? `<img src="${pvU}" alt="" onerror="this.remove()">` : '') + `<span>${record ? esc2(String(pvT).trim().charAt(0).toUpperCase()||'•') : '+'}</span>`;
   document.getElementById('modalOverlay').classList.add('open');
+  document.querySelector('#modalOverlay .fm').scrollTop = 0;
   cfg.fields.filter(f=>f.type==='images').forEach(f=>mgPaint('f_'+f.key));
 
   if(cfg.fields.some(f => f.type === 'dynamic-select-pengurus')){
@@ -1366,6 +1513,17 @@ async function svUnpublish(){
   await loadLayoutRows(); renderSiteView(); showToast('Tata letak live dicabut.');
 }
 window.addEventListener('beforeunload', e=>{ if(svDirty()){ e.preventDefault(); e.returnValue = ''; } });
+
+// ---------- PWA (bisa dipasang di HP) ----------
+let _pwaEvt = null;
+window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); _pwaEvt = e; const b=document.getElementById('instBtn'); if(b) b.style.display='inline-block'; });
+window.addEventListener('appinstalled', ()=>{ _pwaEvt = null; const b=document.getElementById('instBtn'); if(b) b.style.display='none'; showToast('Aplikasi terpasang ✓'); });
+async function installPwa(){
+  if(!_pwaEvt){ showToast('Buka menu browser → Tambahkan ke layar utama'); return; }
+  _pwaEvt.prompt(); await _pwaEvt.userChoice; _pwaEvt = null;
+  document.getElementById('instBtn').style.display = 'none';
+}
+if('serviceWorker' in navigator){ window.addEventListener('load', ()=>navigator.serviceWorker.register('sw.js').catch(()=>{})); }
 
 checkSession();
 
