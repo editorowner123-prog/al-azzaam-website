@@ -1,7 +1,7 @@
 // Service worker panel admin: hanya menyimpan cangkang halaman admin.
 // Data (Supabase) dan halaman publik TIDAK disentuh, jadi tidak ada data basi.
-const CACHE = 'admin-azzaam-v2';
-const SHELL = ['/admin', '/icon-192.png', '/icon-512.png'];
+const CACHE = 'admin-azzaam-v3';
+const SHELL = ['/admin', '/icon-192.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).catch(()=>{})); self.skipWaiting(); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener('fetch', e => {
