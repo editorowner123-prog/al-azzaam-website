@@ -179,6 +179,12 @@ label{font-size:12.5px;font-weight:600;color:var(--n-mu)}
 .pill.published{background:var(--n-grs);color:var(--n-gr)}.pill.menunggu{background:var(--n-gs);color:#8a5d00}.pill.draft{background:#ece6db;color:var(--n-mu)}
 .item-card{border:1px solid var(--n-ln);border-radius:22px;box-shadow:none}
 .empty{border-radius:22px;border-color:#d9cdb9}
+/* pratinjau Instagram */
+.cd .im.ig{height:250px;background:#fff;place-items:start}
+.cd .im.ig iframe,.modal .pv.ig iframe{position:absolute;top:0;left:0;width:500px;height:780px;border:0;transform-origin:0 0;pointer-events:none;background:#fff}
+.cd .im .no{position:absolute;top:12px;right:12px;background:var(--n-ink);color:#fff;font:700 11.5px 'Onest';padding:3px 9px;border-radius:99px}
+.modal .pv.ig{min-height:460px;background:#fff;place-items:start}
+@media(max-width:900px){.cd .im.ig{height:190px}}
 /* form modal */
 .modal-overlay{background:rgba(30,20,15,.5);align-items:center;padding:20px}
 .modal{border-radius:26px;background:var(--n-bg);margin-top:0;max-height:92vh;overflow:auto}
@@ -599,6 +605,23 @@ async function submitBulk(){
 }
 
 // ---------- LIST ----------
+function igPermalink(code){ const m = String(code||'').match(/data-instgrm-permalink="([^"?]+)/); return m ? m[1].replace(/\/?$/,'/') : ''; }
+function igCaption(code){
+  try{
+    const d = new DOMParser().parseFromString(String(code||''),'text/html');
+    const t = [...d.querySelectorAll('a')].map(x=>x.textContent.trim()).filter(x=>x.length>12 && !/^(View this|Lihat )/i.test(x));
+    return t[0] ? t[0].slice(0,70) : '';
+  }catch(e){ return ''; }
+}
+function igFrame(code){ const p = igPermalink(code); return p ? `<iframe src="${p}embed/" loading="lazy" scrolling="no" tabindex="-1" title="Pratinjau Instagram"></iframe>` : ''; }
+function igScale(){ document.querySelectorAll('.im.ig, .pv.ig').forEach(el=>{ const f = el.querySelector('iframe'); if(f && el.clientWidth) f.style.transform = 'scale(' + (el.clientWidth/500) + ')'; }); }
+window.addEventListener('resize', igScale);
+document.addEventListener('input', e=>{
+  if(e.target && e.target.id === 'f_embed_code'){
+    const pv = document.getElementById('formPv'); const fr = igFrame(e.target.value);
+    pv.className = fr ? 'pv ig' : 'pv'; pv.innerHTML = fr || '<span>+</span>'; igScale();
+  }
+});
 const NTONE = ['#8a1b2c','#b07a1d','#2f6b3f','#3a5a85','#6d3b66','#2c6b6b'];
 function esc2(t){ return String(t).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function thumbOf(r){
@@ -636,17 +659,20 @@ async function loadList(){
   }
   window.__rows = data;
   area.innerHTML = logoHtml + '<div class="gd">' + data.map((r,i) => {
-    const title = r[cfg.titleField] || (cfg.titleAlt ? r[cfg.titleAlt] : '') || '(tanpa judul)';
+    const isIg = currentTab === 'instagram_embed';
+    const igF = isIg ? igFrame(r.embed_code) : '';
+    const title = r[cfg.titleField] || (cfg.titleAlt ? r[cfg.titleAlt] : '') || (isIg ? (igCaption(r.embed_code) || 'Postingan Instagram') : '(tanpa judul)');
     const meta = cfg.meta(r).filter(x => x && !String(x).includes('class="pill'));
     const th = thumbOf(r);
     const st = r.status ? `<span class="pill ${r.status}">${r.status==='published'?'Terbit':r.status==='draft'?'Draf':r.status==='menunggu'?'Menunggu':r.status}</span>` : '';
     const q = (String(title)+' '+meta.join(' ')).replace(/<[^>]*>/g,'').toLowerCase().replace(/"/g,'&quot;');
     return `<div class="cd" data-q="${q}" onclick="openForm(window.__rows[${i}])">
-      <div class="im" style="--c:${NTONE[(i+String(title).length)%6]}">${th ? `<img src="${th}" alt="" loading="lazy" onerror="this.remove()">` : ''}<span>${esc2(String(title).trim().charAt(0).toUpperCase()||'?')}</span>${st}</div>
+      <div class="im${igF?' ig':''}" style="--c:${NTONE[(i+String(title).length)%6]}">${igF ? igF : (th ? `<img src="${th}" alt="" loading="lazy" onerror="this.remove()">` : '')}${igF ? '' : `<span>${esc2(String(title).trim().charAt(0).toUpperCase()||'?')}</span>`}${st}${r.urutan != null ? `<span class="no">#${r.urutan}</span>` : ''}</div>
       <div class="bd"><div class="item-title">${title}</div><div class="item-meta">${meta.join(' &bull; ')}</div>
         <div class="ca"><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();openForm(window.__rows[${i}])">Edit</button>${currentTab==='berita' && r.slug ? `<button class="btn btn-outline btn-sm" onclick="event.stopPropagation();copyShare(${i})">Salin tautan</button>` : ''}<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteRecord('${r[cfg.pk]}')">Hapus</button></div></div></div>`;
   }).join('') + `<div class="cd new" onclick="openForm()">+ Tambah ${cfg.label.toLowerCase()}</div></div>`;
   document.getElementById('contentSub').textContent = data.length + ' item';
+  igScale(); setTimeout(igScale, 300);
   if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); }
 }
 
@@ -662,7 +688,10 @@ function openForm(record){
   const pvU = record ? thumbOf(record) : '';
   const pv = document.getElementById('formPv');
   pv.style.setProperty('--c', NTONE[(pvT.length)%6]);
-  pv.innerHTML = (pvU ? `<img src="${pvU}" alt="" onerror="this.remove()">` : '') + `<span>${record ? esc2(String(pvT).trim().charAt(0).toUpperCase()||'•') : '+'}</span>`;
+  const pvIg = (currentTab === 'instagram_embed' && record) ? igFrame(record.embed_code) : '';
+  pv.className = pvIg ? 'pv ig' : 'pv';
+  pv.innerHTML = pvIg ? pvIg : ((pvU ? `<img src="${pvU}" alt="" onerror="this.remove()">` : '') + `<span>${record ? esc2(String(pvT).trim().charAt(0).toUpperCase()||'•') : '+'}</span>`);
+  if(pvIg) setTimeout(igScale, 50);
   document.getElementById('modalOverlay').classList.add('open');
   document.querySelector('#modalOverlay .fm').scrollTop = 0;
   cfg.fields.filter(f=>f.type==='images').forEach(f=>mgPaint('f_'+f.key));
