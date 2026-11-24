@@ -540,6 +540,13 @@ function switchTab(key){
   window.scrollTo(0,0);
   loadList();
 }
+function copyShare(i){
+  const r = window.__rows[i]; let h=0; const t=(r.judul||'')+'|'+(r.foto_url||'');
+  for(let k=0;k<t.length;k++) h=(h*31+t.charCodeAt(k))>>>0;
+  const url = location.origin + '/berita?slug=' + encodeURIComponent(r.slug) + '&v=' + h.toString(36);
+  const done = ()=>showToast('Tautan berita disalin — siap dibagikan');
+  if(navigator.clipboard) navigator.clipboard.writeText(url).then(done, ()=>prompt('Salin tautan:', url)); else prompt('Salin tautan:', url);
+}
 function filterCards(v){
   v = (v||'').toLowerCase().trim();
   document.querySelectorAll('#listArea .cd[data-q]').forEach(c=>{ c.style.display = (!v || c.dataset.q.includes(v)) ? '' : 'none'; });
@@ -637,7 +644,7 @@ async function loadList(){
     return `<div class="cd" data-q="${q}" onclick="openForm(window.__rows[${i}])">
       <div class="im" style="--c:${NTONE[(i+String(title).length)%6]}">${th ? `<img src="${th}" alt="" loading="lazy" onerror="this.remove()">` : ''}<span>${esc2(String(title).trim().charAt(0).toUpperCase()||'?')}</span>${st}</div>
       <div class="bd"><div class="item-title">${title}</div><div class="item-meta">${meta.join(' &bull; ')}</div>
-        <div class="ca"><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();openForm(window.__rows[${i}])">Edit</button><button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteRecord('${r[cfg.pk]}')">Hapus</button></div></div></div>`;
+        <div class="ca"><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();openForm(window.__rows[${i}])">Edit</button>${currentTab==='berita' && r.slug ? `<button class="btn btn-outline btn-sm" onclick="event.stopPropagation();copyShare(${i})">Salin tautan</button>` : ''}<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteRecord('${r[cfg.pk]}')">Hapus</button></div></div></div>`;
   }).join('') + `<div class="cd new" onclick="openForm()">+ Tambah ${cfg.label.toLowerCase()}</div></div>`;
   document.getElementById('contentSub').textContent = data.length + ' item';
   if(currentTab === 'pengaturan_situs'){ updateLogoPreview(); updateTickerPreview(); }
