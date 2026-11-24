@@ -1,10 +1,14 @@
 {
   "cleanUrls": true,
   "functions": {
-    "api/berita.js": { "includeFiles": "berita.html" }
+    "api/berita.js": { "includeFiles": "berita-page.html" }
   },
+  "redirects": [
+    { "source": "/berita.html", "destination": "/berita", "permanent": true },
+    { "source": "/berita-page", "destination": "/berita", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/berita", "has": [{ "type": "query", "key": "slug" }], "destination": "/api/berita" },
+    { "source": "/berita", "destination": "/api/berita" },
     { "source": "/sitemap.xml", "destination": "/api/sitemap" }
   ]
 }
