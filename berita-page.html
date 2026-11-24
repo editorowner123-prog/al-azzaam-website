@@ -398,7 +398,9 @@ async function openArticle(slug, push){
   $('#oe').textContent = b.kategori + ' · ' + tgl(b);
   $('#ot').textContent = b.judul;
   $('#ob').innerHTML = isiHtml(b.isi);
-  const url = location.origin + NEWSPATH + '?slug=' + encodeURIComponent(slug);
+  // tautan berbagi diberi kode versi otomatis (berubah bila judul/foto berubah) supaya WhatsApp selalu membaca pratinjau terbaru
+  const vh = (()=>{ let h=0; const t=(b.judul||'')+'|'+(b.foto_url||''); for(let i=0;i<t.length;i++) h=(h*31+t.charCodeAt(i))>>>0; return h.toString(36); })();
+  const url = location.origin + NEWSPATH + '?slug=' + encodeURIComponent(slug) + '&v=' + vh;
   $('#shWa').href = 'https://wa.me/?text=' + encodeURIComponent(b.judul + ' — ' + url);
   $('#shCp').onclick = async ()=>{ try{ await navigator.clipboard.writeText(url); $('#shCp').textContent = 'Tersalin ✓'; setTimeout(()=>$('#shCp').textContent = 'Salin tautan', 1800); }catch(e){ prompt('Salin tautan:', url); } };
   $('#relGrid').innerHTML = ALL.filter(x=>x.slug !== slug).slice(0, 3).map(card).join('');
