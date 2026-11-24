@@ -1,3 +1,10 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "functions": {
+    "api/berita.js": { "includeFiles": "berita.html" }
+  },
+  "rewrites": [
+    { "source": "/berita", "has": [{ "type": "query", "key": "slug" }], "destination": "/api/berita" },
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" }
+  ]
 }
