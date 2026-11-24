@@ -1,4 +1,4 @@
-// Menyajikan berita.html dengan judul, deskripsi, foto, dan data terstruktur milik berita yang dibuka (?slug=...)
+// Menyajikan berita-page.html dengan judul, deskripsi, foto, dan data terstruktur milik berita yang dibuka (?slug=...)
 // supaya pratinjau WhatsApp/Facebook/Google menampilkan berita yang benar, bukan tampilan umum.
 const fs = require("fs");
 const path = require("path");
@@ -18,10 +18,10 @@ function setMeta(html, re, tag) {
 module.exports = async (req, res) => {
   let html;
   try {
-    html = fs.readFileSync(path.join(process.cwd(), "berita.html"), "utf8");
+    html = fs.readFileSync(path.join(process.cwd(), "berita-page.html"), "utf8");
   } catch (e) {
     res.statusCode = 500;
-    return res.end("berita.html tidak ditemukan");
+    return res.end("berita-page.html tidak ditemukan");
   }
   const slug = String((req.query && req.query.slug) || "").slice(0, 200);
   res.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -36,8 +36,8 @@ module.exports = async (req, res) => {
     } catch (e) { b = null; }
   }
   if (!b) {
-    // tidak ditemukan / draf: tampilkan halaman biasa, jangan di-cache
-    res.setHeader("Cache-Control", "no-store");
+    // daftar berita (tanpa slug) disimpan sebentar; slug tidak ditemukan / draf tidak di-cache
+    res.setHeader("Cache-Control", slug ? "no-store" : "public, s-maxage=300, stale-while-revalidate=86400");
     return res.end(html);
   }
 
