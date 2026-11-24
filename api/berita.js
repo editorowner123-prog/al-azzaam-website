@@ -44,7 +44,10 @@ module.exports = async (req, res) => {
   const url = SITE + "/berita?slug=" + encodeURIComponent(b.slug);
   const title = b.judul + " — PPTQ Al Azzaam";
   const desc = cut(b.ringkasan || plain(b.isi), 160);
-  const img = b.foto_url || SITE + "/og-image.jpg";
+  // WhatsApp menolak gambar besar (foto HP bisa beberapa MB): kecilkan jadi 1200x630 lewat wsrv.nl (gratis, ber-cache).
+  const img = b.foto_url
+    ? "https://wsrv.nl/?url=" + encodeURIComponent(b.foto_url) + "&w=1200&h=630&fit=cover&output=jpg&q=80"
+    : SITE + "/og-image.jpg";
   const tgl = b.tanggal_publish ? new Date(b.tanggal_publish).toISOString() : undefined;
 
   html = html.replace(/<title id="pageTitle">[\s\S]*?<\/title>/, '<title id="pageTitle">' + esc(title) + "</title>");
@@ -56,6 +59,7 @@ module.exports = async (req, res) => {
   html = setMeta(html, /<meta property="og:description" content="[^"]*">/, '<meta property="og:description" content="' + esc(desc) + '">');
   html = setMeta(html, /<meta property="og:image" content="[^"]*">/, '<meta property="og:image" content="' + esc(img) + '">');
   html = html.replace(/<meta property="og:image:(width|height)" content="[^"]*">\n?/g, "");
+  html = html.replace('<meta property="og:image" content="' + esc(img) + '">', '<meta property="og:image" content="' + esc(img) + '">\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">');
   html = setMeta(html, /<meta name="twitter:title" content="[^"]*">/, '<meta name="twitter:title" content="' + esc(title) + '">');
   html = setMeta(html, /<meta name="twitter:description" content="[^"]*">/, '<meta name="twitter:description" content="' + esc(desc) + '">');
   html = setMeta(html, /<meta name="twitter:image" content="[^"]*">/, '<meta name="twitter:image" content="' + esc(img) + '">');
