@@ -8,6 +8,7 @@ const PAGES = [
   ["/ppdb", "monthly", "0.9"],
   ["/berita", "daily", "0.7"],
   ["/galeri", "monthly", "0.6"],
+  ["/live", "weekly", "0.5"],
 ];
 
 module.exports = async (req, res) => {
