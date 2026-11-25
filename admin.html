@@ -70,8 +70,9 @@ label{font-size:12px;font-weight:700;color:var(--ink-600);display:block;margin-b
 .mg-i{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--cream-100);}
 .mg-i img{width:100%;height:100%;object-fit:cover;}
 .mg-i button{position:absolute;right:3px;top:3px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:11px;cursor:pointer;}
-.pill.menunggu{background:#fff3cd;color:#8a5a00;}
+.pill.live{background:#e11d2e;color:#fff}.pill.terjadwal{background:var(--n-gs);color:#8a5d00}.pill.selesai{background:#ece6db;color:#554}.pill.menunggu{background:#fff3cd;color:#8a5a00;}
 .pill.draft{background:#fdf1e8;color:var(--ink-600);}
+.pill.live{background:#e11d2e;color:#fff}.pill.terjadwal{background:#fff4d6;color:#8a5d00}.pill.selesai{background:#e8eaf0;color:#445}
 .item-actions{display:flex;gap:6px;flex:none;}
 .empty{text-align:center;padding:40px 20px;color:var(--ink-600);font-size:13px;border:1.5px dashed var(--line);border-radius:var(--radius);}
 
@@ -172,8 +173,9 @@ label{font-size:12.5px;font-weight:600;color:var(--n-mu)}
 .cd .bd{padding:14px 16px 12px;display:flex;flex-direction:column;flex:1}
 .cd .item-title{font-weight:600;line-height:1.3;font-size:14.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:38px}
 .cd .item-meta{color:var(--n-mu);font-size:12.5px;margin-top:6px;line-height:1.4}
-.cd .ca{display:flex;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--n-ln)}
-.cd .ca button{flex:1}
+.cd .ca{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--n-ln)}
+.cd .ca button{flex:1 1 auto;min-width:0}
+.cd .im .pill.live{background:#e11d2e;color:#fff}
 .cd.new{border:2px dashed #cdbfa9;background:none;display:grid;place-items:center;min-height:210px;color:var(--n-mu);font-weight:600;font-size:14.5px}
 .cd.new:hover{color:var(--n-ac);border-color:var(--n-ac);transform:none;box-shadow:none}
 .pill.published{background:var(--n-grs);color:var(--n-gr)}.pill.menunggu{background:var(--n-gs);color:#8a5d00}.pill.draft{background:#ece6db;color:var(--n-mu)}
@@ -417,6 +419,18 @@ const TABLES = {
       {key:'status', label:'Status', type:'select', options:['draft','published']},
     ]
   },
+  live_stream: {
+    label: 'Live Streaming', pk: 'id', orderBy: 'created_at', ascending: false,
+    titleField: 'judul',
+    meta: r => [`<span class="pill ${r.status}">${r.status==='live'?'● LIVE':r.status}</span>`, r.jadwal ? new Date(r.jadwal).toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : ''],
+    fields: [
+      {key:'judul', label:'Judul Live (misal: Wisuda Tahfidz 2026)', type:'text', required:true},
+      {key:'youtube_url', label:'Link YouTube Live (tempel dari YouTube, boleh link live / watch / youtu.be)', type:'text', required:true},
+      {key:'jadwal', label:'Jadwal Tayang (opsional, untuk hitung mundur)', type:'datetime'},
+      {key:'deskripsi', label:'Keterangan (opsional)', type:'textarea'},
+      {key:'status', label:'Status — draft: disembunyikan · terjadwal: akan tayang · live: SEDANG LIVE (muncul banner di semua halaman) · selesai: jadi rekaman', type:'select', options:['draft','terjadwal','live','selesai']},
+    ]
+  },
   ekstrakurikuler: {
     label: 'Ekstrakurikuler', pk: 'id', orderBy: 'urutan', ascending: true,
     titleField: 'nama',
@@ -497,7 +511,7 @@ function showApp(){
 
 // ---------- TABS ----------
 const TAB_GROUPS = {
-  'Konten': ['berita','galeri','testimoni','instagram_embed','running_text'],
+  'Konten': ['live_stream','berita','galeri','testimoni','instagram_embed','running_text'],
   'Pondok': ['program','kegiatan_santri','ekstrakurikuler','sejarah_pondok','struktur_pengurus'],
   'PPDB':   ['info_ppdb','flyer_popup'],
   'Situs':  ['pengaturan_situs','__preview','__live']
@@ -552,6 +566,16 @@ function copyShare(i){
   const url = location.origin + '/berita?slug=' + encodeURIComponent(r.slug) + '&v=' + h.toString(36);
   const done = ()=>showToast('Tautan berita disalin — siap dibagikan');
   if(navigator.clipboard) navigator.clipboard.writeText(url).then(done, ()=>prompt('Salin tautan:', url)); else prompt('Salin tautan:', url);
+}
+async function setLive(id,st){
+  if(st==='live' && !confirm('Tayangkan sekarang? Banner "SEDANG LIVE" akan muncul di semua halaman website.')) return;
+  const {error}=await sb.from('live_stream').update({status:st}).eq('id',id);
+  if(error){ showToast('Gagal: '+error.message); return; }
+  showToast(st==='live'?'Live ditayangkan ✓':'Live diakhiri, jadi rekaman ✓'); loadList();
+}
+function copyLive(id){
+  const url=location.origin+'/live?id='+id, done=()=>showToast('Tautan live disalin');
+  if(navigator.clipboard) navigator.clipboard.writeText(url).then(done,()=>prompt('Salin tautan:',url)); else prompt('Salin tautan:',url);
 }
 function filterCards(v){
   v = (v||'').toLowerCase().trim();
@@ -669,7 +693,7 @@ async function loadList(){
     return `<div class="cd" data-q="${q}" onclick="openForm(window.__rows[${i}])">
       <div class="im${igF?' ig':''}" style="--c:${NTONE[(i+String(title).length)%6]}">${igF ? igF : (th ? `<img src="${th}" alt="" loading="lazy" onerror="this.remove()">` : '')}${igF ? '' : `<span>${esc2(String(title).trim().charAt(0).toUpperCase()||'?')}</span>`}${st}${r.urutan != null ? `<span class="no">#${r.urutan}</span>` : ''}</div>
       <div class="bd"><div class="item-title">${title}</div><div class="item-meta">${meta.join(' &bull; ')}</div>
-        <div class="ca"><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();openForm(window.__rows[${i}])">Edit</button>${currentTab==='berita' && r.slug ? `<button class="btn btn-outline btn-sm" onclick="event.stopPropagation();copyShare(${i})">Salin tautan</button>` : ''}<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteRecord('${r[cfg.pk]}')">Hapus</button></div></div></div>`;
+        <div class="ca"><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();openForm(window.__rows[${i}])">Edit</button>${currentTab==='berita' && r.slug ? `<button class="btn btn-outline btn-sm" onclick="event.stopPropagation();copyShare(${i})">Salin tautan</button>` : ''}${currentTab==='live_stream' ? (r.status==='live' ? `<button class="btn btn-sm" style="background:#444;color:#fff" onclick="event.stopPropagation();setLive('${r.id}','selesai')">Akhiri</button>` : (r.status!=='selesai' ? `<button class="btn btn-sm" style="background:#e11d2e;color:#fff" onclick="event.stopPropagation();setLive('${r.id}','live')">● Tayangkan</button>` : '')) + `<button class="btn btn-outline btn-sm" onclick="event.stopPropagation();copyLive('${r.id}')">Salin tautan</button>` : ''}<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteRecord('${r[cfg.pk]}')">Hapus</button></div></div></div>`;
   }).join('') + `<div class="cd new" onclick="openForm()">+ Tambah ${cfg.label.toLowerCase()}</div></div>`;
   document.getElementById('contentSub').textContent = data.length + ' item';
   igScale(); setTimeout(igScale, 300);
@@ -749,6 +773,10 @@ function renderField(f, value){
   }
   if(f.type==='number'){
     return `<div class="field"><label>${f.label}</label><input type="number" id="${id}" value="${value}"></div>`;
+  }
+  if(f.type==='datetime'){
+    let d=''; if(value){ const x=new Date(value); x.setMinutes(x.getMinutes()-x.getTimezoneOffset()); d=x.toISOString().slice(0,16); }
+    return `<div class="field"><label>${f.label}</label><input type="datetime-local" id="${id}" value="${d}"></div>`;
   }
   if(f.type==='date'){
     const d = value ? new Date(value).toISOString().slice(0,10) : '';
@@ -1317,6 +1345,7 @@ async function saveRecord(){
     let v = el.value;
     if(f.type==='images'){ try{ v = JSON.parse(v||'[]'); }catch(e){ v = []; } payload[f.key] = v; return; }
     if(f.type==='number') v = v === '' ? null : Number(v);
+    if(f.type==='datetime' && v) v = new Date(v).toISOString();
     payload[f.key] = v === '' ? null : v;
   });
 
