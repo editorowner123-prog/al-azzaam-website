@@ -251,3 +251,14 @@ body.dark .nav-sbtn{color:var(--a);border-color:var(--a)}
 }
 @media(max-width:360px){.nav-brand{font-size:13.5px}.nav-brand .nav-logo{height:24px}}
 body.dark .nav-search input{border:1px solid var(--a);}
+
+/* ===== Banner Live ===== */
+.live-pill{position:fixed;left:16px;bottom:16px;z-index:95;display:flex;align-items:center;gap:9px;max-width:min(360px,calc(100vw - 32px));padding:10px 16px;border-radius:99px;background:rgba(4,0,2,.92);color:#fff;text-decoration:none;font:600 13px 'Plus Jakarta Sans',sans-serif;border:1.5px solid var(--a,#d4a017);box-shadow:0 8px 28px rgba(0,0,0,.45)}
+.live-pill i{flex:none;width:9px;height:9px;border-radius:50%;background:var(--a,#d4a017)}
+.live-pill.on{border-color:#e11d2e;box-shadow:0 0 18px #e11d2e88,0 8px 28px rgba(0,0,0,.45)}
+.live-pill.on i{background:#e11d2e;animation:lpp 1.1s infinite}
+.live-pill b{flex:none;font-size:11px;letter-spacing:.1em;color:var(--a,#d4a017)}
+.live-pill.on b{color:#ff5a68}
+.live-pill span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.9}
+@keyframes lpp{50%{opacity:.25}}
+@media(max-width:600px){.live-pill{left:10px;bottom:10px;padding:9px 13px}}
