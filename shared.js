@@ -395,7 +395,7 @@ function initNavSearch(){
   if(!Q || !R) return;
   const nav = document.querySelector('.navbar');
   const PAGES = [
-    ['Beranda','index.html','beranda utama home'],['Profil Pondok','profil.html','profil tentang sejarah'],['Sejarah','profil.html#sejarah','sejarah perjalanan'],
+    ['Beranda','index.html','beranda utama home'],['Live Streaming','live.html','live siaran langsung youtube tonton rekaman'],['Profil Pondok','profil.html','profil tentang sejarah'],['Sejarah','profil.html#sejarah','sejarah perjalanan'],
     ['Visi & Misi','profil.html#visimisi','visi misi'],['Struktur Pengurus','profil.html#struktur','struktur pengurus ustadz'],['Program Pendidikan','program.html','program pendidikan formal non formal'],
     ['Berita & Kegiatan','berita.html','berita kegiatan kabar'],['Galeri Foto & Video','galeri.html','galeri foto video dokumentasi'],
     ['Pendaftaran Santri Baru','ppdb.html','ppdb pendaftaran daftar syarat biaya jadwal psb santri baru'],['Kontak & Alamat','index.html#kontak','kontak alamat telepon wa whatsapp lokasi'],
@@ -446,6 +446,28 @@ function initNavSearch(){
 }
 
 
+
+// ---------- Banner "Sedang Live" (YouTube) ----------
+async function loadLiveBanner(){
+  try{
+    if(/\/live(\.html)?$/.test(location.pathname)) return;
+    let rows=null; const K='liveBn';
+    try{ const c=JSON.parse(sessionStorage.getItem(K)||'null'); if(c && Date.now()-c.t<60000) rows=c.r; }catch(e){}
+    if(!rows){
+      const q=await sb.from('live_stream').select('id,judul,jadwal,status').in('status',['live','terjadwal']).order('created_at',{ascending:false}).limit(5);
+      rows=q.data||[];
+      try{ sessionStorage.setItem(K,JSON.stringify({t:Date.now(),r:rows})); }catch(e){}
+    }
+    let r=rows.find(x=>x.status==='live');
+    if(!r) r=rows.filter(x=>x.status==='terjadwal'&&x.jadwal&&(new Date(x.jadwal)-Date.now())<864e5&&(new Date(x.jadwal)-Date.now())>-36e5).sort((a,b)=>new Date(a.jadwal)-new Date(b.jadwal))[0];
+    if(!r) return;
+    const a=document.createElement('a'); a.className='live-pill'+(r.status==='live'?' on':''); a.href='live?id='+r.id;
+    const i=document.createElement('i'); const b=document.createElement('b'); const sp=document.createElement('span');
+    b.textContent = r.status==='live' ? 'SEDANG LIVE' : 'LIVE SEGERA'; sp.textContent = r.judul;
+    a.append(i,b,sp); document.body.appendChild(a);
+  }catch(e){}
+}
+
 // ---------- Jalankan semua yang umum, di semua halaman ----------
 async function initSharedPage(){
   try{ initNavSearch(); }catch(e){ console.error(e); }
@@ -459,5 +481,6 @@ async function initSharedPage(){
   loadTicker();
   populateProgramDropdown();
   loadFlyer();
+  loadLiveBanner();
 }
 initSharedPage();
